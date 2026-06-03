@@ -209,10 +209,17 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
           </div>
 
           {/* EKSISTERENDE LINJER */}
+          {skjema.materialer.some(m => !m.antall || m.antall == 0) && (
+            <p className="mat-mal-hint">Linjer uten antall er lagrede maler — fylles ikke inn i tilbudet før du setter antall.</p>
+          )}
           {skjema.materialer.map(m => (
-            <div key={m.id} className="mat-rad">
+            <div key={m.id} className={`mat-rad${(!m.antall || m.antall == 0) ? ' mat-rad-mal' : ''}`}>
               <span className="mat-fast-navn">{m.navn}</span>
-              <input type="number" min="0" step="1" className="mat-ant" value={m.antall||1}
+              <input type="number" min="0" step="1"
+                className={`mat-ant${(!m.antall || m.antall == 0) ? ' mat-ant-tom' : ''}`}
+                value={(!m.antall || m.antall == 0) ? '' : m.antall}
+                placeholder="1"
+                onFocus={e => e.target.select()}
                 onChange={e => oppdaterMaterial(m.id, 'antall', e.target.value)} />
               <input type="number" min="0" className="mat-pris" value={m.pris}
                 onChange={e => oppdaterMaterial(m.id, 'pris', e.target.value)} />

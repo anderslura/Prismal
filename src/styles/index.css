@@ -988,3 +988,19 @@ textarea { resize: vertical; }
   font-style: italic;
   margin-top: 4px;
 }
+
+/* Lagrede malmaterialer uten antall */
+.mat-rad-mal { opacity: 0.6; }
+.mat-rad-mal .mat-fast-navn { font-style: italic; }
+.mat-ant-tom { color: #aaa !important; }
+.mat-ant-tom::placeholder { color: #bbb; }
+.mat-mal-hint {
+  font-size: 11px;
+  color: var(--tekst-sekundaer);
+  font-style: italic;
+  margin-bottom: 6px;
+  background: #f8f9ff;
+  border-left: 3px solid var(--blaa-lys);
+  padding: 4px 8px;
+  border-radius: 0 4px 4px 0;
+}
