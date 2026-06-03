@@ -949,3 +949,35 @@ textarea { resize: vertical; }
   min-width: 0;
   width: 100%;
 }
+
+/* === LAGREDE MATERIALLINJER === */
+.mat-lagrede-linjer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.mat-hurtig-chip {
+  display: inline-flex;
+  align-items: center;
+  background: var(--blaa-lys);
+  border: 1px solid var(--blaa);
+  border-radius: 20px;
+  font-size: 12px;
+  color: var(--blaa-mork);
+  padding: 3px 8px 3px 10px;
+  gap: 4px;
+  cursor: pointer;
+}
+.mat-hurtig-chip > span:first-child:hover { text-decoration: underline; }
+.chip-fjern {
+  background: none;
+  border: none;
+  color: var(--blaa);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  opacity: 0.6;
+}
+.chip-fjern:hover { opacity: 1; }

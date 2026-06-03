@@ -6,6 +6,9 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
   const [nyAnt, setNyAnt] = useState('1')
   const [nyPris, setNyPris] = useState('')
   const [nyHasPaaslag, setNyHasPaaslag] = useState(true)
+  const [lagredeLinjer, setLagredeLinjer] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('materialLinjer') || '[]') } catch { return [] }
+  })
 
   function leggTilArbeider() {
     const lagretPris = (() => { try { return localStorage.getItem('timepris') || '' } catch { return '' } })()
@@ -24,7 +27,25 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
     const ant = parseFloat(nyAnt) || 1
     const pris = parseFloat(nyPris) || 0
     oppdater('materialer', [...skjema.materialer, { id: Date.now(), navn: nyNavn, antall: ant, pris: pris, sum: pris * ant, hasPaaslag: nyHasPaaslag }])
+    // Lagre linje til bibliotek
+    try {
+      const eksisterende = JSON.parse(localStorage.getItem('materialLinjer') || '[]')
+      const finnes = eksisterende.some(l => l.navn.toLowerCase() === nyNavn.toLowerCase())
+      if (!finnes) {
+        const oppdatert = [...eksisterende, { navn: nyNavn, pris: pris, hasPaaslag: nyHasPaaslag }]
+        localStorage.setItem('materialLinjer', JSON.stringify(oppdatert))
+        setLagredeLinjer(oppdatert)
+      }
+    } catch {}
     setNyNavn(''); setNyPris(''); setNyAnt('1')
+  }
+
+  function fjernLagretLinje(navn) {
+    try {
+      const oppdatert = lagredeLinjer.filter(l => l.navn !== navn)
+      localStorage.setItem('materialLinjer', JSON.stringify(oppdatert))
+      setLagredeLinjer(oppdatert)
+    } catch {}
   }
 
   function oppdaterMaterial(id, felt, verdi) {
@@ -204,7 +225,17 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
           ))}
 
           {/* NY LINJE */}
-          <p className="mat-info-tekst">Linjer og priser huskes til neste tilbud — raskere for hver gang. Alt kan endres eller fjernes.</p>
+          {lagredeLinjer.length > 0 && (
+            <div className="mat-lagrede-linjer">
+              {lagredeLinjer.map(l => (
+                <span key={l.navn} className="mat-hurtig-chip">
+                  <span onClick={() => { setNyNavn(l.navn); setNyPris(String(l.pris)); setNyHasPaaslag(l.hasPaaslag) }}>{l.navn}{l.pris ? ` – ${l.pris} kr` : ''}</span>
+                  <button className="chip-fjern" onClick={() => fjernLagretLinje(l.navn)} title="Fjern">×</button>
+                </span>
+              ))}
+            </div>
+          )}
+          <p className="mat-info-tekst">Linjer huskes til neste tilbud. Klikk for å fylle inn, × for å slette.</p>
           <div className="mat-rad mat-ny-rad">
             <input type="text" placeholder="Beskrivelse" value={nyNavn} onChange={e => setNyNavn(e.target.value)}
               className="mat-ny-navn" onKeyDown={e => e.key==='Enter' && leggTilMaterial()} />
