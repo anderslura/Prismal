@@ -55,7 +55,7 @@ INSTRUKSJONER:
 - IKKE bruk plassholdere som [Telefonnummer] eller [E-postadresse]
 - Ren løpende tekst, ingen overskrifter
 - Profesjonell, varm og norsk tone
-- Maks 180 ord`
+- Maks 60 ord, 3 korte avsnitt`
 
   try {
     const respons = await fetch('https://api.anthropic.com/v1/messages', {
@@ -67,7 +67,7 @@ INSTRUKSJONER:
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
-        max_tokens: 600,
+        max_tokens: 350,
         messages: [{ role: 'user', content: prompt }],
       }),
     })

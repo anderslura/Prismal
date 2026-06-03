@@ -102,11 +102,11 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
           <div className="felt-rad">
             <div className="felt-gruppe">
               <label>Org.nr</label>
-              <input type="text" placeholder="123 456 789" value={skjema.firmaOrgnr||''} onChange={e => oppdater('firmaOrgnr', e.target.value)} />
+              <input type="text" placeholder="123456789" maxLength={9} value={skjema.firmaOrgnr||''} onChange={e => oppdater('firmaOrgnr', e.target.value.replace(/\D/g, '').slice(0,9))} />
             </div>
             <div className="felt-gruppe">
               <label>Nettside</label>
-              <input type="text" placeholder="www.firma.no" value={skjema.firmaNettside||''} onChange={e => oppdater('firmaNettside', e.target.value)} />
+              <input type="text" placeholder="www.firma.no" value={skjema.firmaNettside||''} onFocus={e => { if(!skjema.firmaNettside) oppdater('firmaNettside', 'www.') }} onChange={e => oppdater('firmaNettside', e.target.value)} />
             </div>
           </div>
           <div className="felt-gruppe">
@@ -209,7 +209,6 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
           <div className="mat-header">
             <span>Beskrivelse</span>
             <span>Ant.</span>
-            <span>Enhet</span>
             <span>Kr/enhet</span>
             <span>Sum</span>
             <span title="Inkluder i påslag">Påslag</span>
@@ -290,9 +289,6 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
             <input type="text" placeholder="Beskrivelse" value={nyNavn} onChange={e => setNyNavn(e.target.value)}
               className="mat-ny-navn" onKeyDown={e => e.key==='Enter' && leggTilMaterial()} />
             <input type="number" min="1" step="1" placeholder="1" value={nyAnt} onChange={e => setNyAnt(e.target.value)} className="mat-ant" />
-            <select value={nyEnhet} onChange={e => setNyEnhet(e.target.value)} className="mat-enhet-select">
-              {ENHETER.map(e => <option key={e} value={e}>{e}</option>)}
-            </select>
             <input type="number" min="0" placeholder="kr/enhet" value={nyPris} onChange={e => setNyPris(e.target.value)}
               className="mat-pris" onKeyDown={e => e.key==='Enter' && leggTilMaterial()} />
             <span className="mat-sum">{nyPris && nyAnt ? formaterKr((parseFloat(nyPris)||0)*(parseFloat(nyAnt)||1)) : ''}</span>
