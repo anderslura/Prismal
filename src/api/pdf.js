@@ -106,7 +106,7 @@ export function lastNedPDF(skjema) {
   // --- PRISTABELL ---
   const totalArbeid = (skjema.arbeidere || []).reduce((s, a) => s + (parseFloat(a.timer)||0)*(parseFloat(a.timepris)||0), 0)
   const totalMaterialer = skjema.materialer.reduce((s, m) => s + (parseFloat(m.pris) || 0), 0)
-  const materialerMedPaaslag = skjema.materialer.reduce((s, m) => s + (m.hasPaaslag ? (parseFloat(m.pris) || 0) : 0), 0)
+  const materialerMedPaaslag = skjema.materialer.reduce((s, m) => s + (m.hasPaaslag ? (parseFloat(m.sum)||parseFloat(m.pris)||0) : 0), 0)
   const paaslag = materialerMedPaaslag * (parseFloat(skjema.paaslagProsent) || 0) / 100
   const totalEksMva = totalArbeid + totalMaterialer + paaslag
   const mva = totalEksMva * 0.25

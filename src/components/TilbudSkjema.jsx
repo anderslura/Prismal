@@ -1,16 +1,10 @@
 import { useState } from 'react'
 
-const ENHETER = [
-  'stk','m','m²','m³','km','kg','tonn','L','spann',
-  'rull','pk','sekk','sett','dag','time','uke','leie'
-]
-
 export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil, prisliste, setPrisliste, isPro }) {
 
-  const [nyEnhet, setNyEnhet] = useState('stk')
   const [nyNavn, setNyNavn] = useState('')
-  const [nyPris, setNyPris] = useState('')
   const [nyAnt, setNyAnt] = useState('1')
+  const [nyPris, setNyPris] = useState('')
   const [nyHasPaaslag, setNyHasPaaslag] = useState(true)
 
   function leggTilArbeider() {
@@ -29,48 +23,26 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
     if (!nyNavn) return
     const ant = parseFloat(nyAnt) || 1
     const pris = parseFloat(nyPris) || 0
-    const navn = ant > 1 ? `${nyNavn} (${ant} ${nyEnhet})` : nyNavn
-    oppdater('materialer', [...skjema.materialer, { id: Date.now(), navn, pris: pris * ant, hasPaaslag: nyHasPaaslag }])
+    oppdater('materialer', [...skjema.materialer, { id: Date.now(), navn: nyNavn, antall: ant, pris: pris, sum: pris * ant, hasPaaslag: nyHasPaaslag }])
     setNyNavn(''); setNyPris(''); setNyAnt('1')
   }
 
-  function oppdaterMaterialPris(id, verdi) {
-    oppdater('materialer', skjema.materialer.map(m => m.id === id ? { ...m, pris: parseFloat(verdi) || 0 } : m))
+  function oppdaterMaterial(id, felt, verdi) {
+    oppdater('materialer', skjema.materialer.map(m => {
+      if (m.id !== id) return m
+      const oppdatert = { ...m, [felt]: verdi }
+      oppdatert.sum = (parseFloat(oppdatert.antall) || 1) * (parseFloat(oppdatert.pris) || 0)
+      return oppdatert
+    }))
   }
 
   function fjernMaterial(id) {
     oppdater('materialer', skjema.materialer.filter(m => m.id !== id))
   }
 
-  // Transport og bom: finn eller null
-  const harTransport = skjema.materialer.some(m => m._type === 'transport')
-  const harBom = skjema.materialer.some(m => m._type === 'bom')
-
-  function oppdaterRask(type, felt, verdi) {
-    const idx = skjema.materialer.findIndex(m => m._type === type)
-    if (idx === -1) return
-    const ny = [...skjema.materialer]
-    ny[idx] = { ...ny[idx], [felt]: verdi, pris: type === 'transport'
-      ? (felt === 'ant' ? (parseFloat(verdi)||0) * (parseFloat(ny[idx].sats)||0) : (parseFloat(ny[idx].ant)||0) * (parseFloat(verdi)||0))
-      : (felt === 'sats' ? parseFloat(verdi)||0 : ny[idx].pris)
-    }
-    if (felt === 'sats' || felt === 'ant') {
-      ny[idx].pris = (parseFloat(ny[idx].ant)||0) * (parseFloat(ny[idx].sats)||0)
-    }
-    oppdater('materialer', ny)
-  }
-
-  function leggTilRask(type) {
-    if (type === 'transport') {
-      oppdater('materialer', [...skjema.materialer, { id: Date.now(), _type: 'transport', navn: 'Transport', ant: '', sats: '', pris: 0, hasPaaslag: false }])
-    } else {
-      oppdater('materialer', [...skjema.materialer, { id: Date.now(), _type: 'bom', navn: 'Bompenger', ant: '', sats: '', pris: 0, hasPaaslag: false }])
-    }
-  }
-
   const totalArbeid = (skjema.arbeidere || []).reduce((s, a) => s + (parseFloat(a.timer)||0)*(parseFloat(a.timepris)||0), 0)
-  const totalMaterialer = skjema.materialer.reduce((s, m) => s + (parseFloat(m.pris)||0), 0)
-  const materialerMedPaaslag = skjema.materialer.reduce((s, m) => s + (m.hasPaaslag ? (parseFloat(m.pris)||0) : 0), 0)
+  const totalMaterialer = skjema.materialer.reduce((s, m) => s + (parseFloat(m.sum)||0), 0)
+  const materialerMedPaaslag = skjema.materialer.reduce((s, m) => s + (m.hasPaaslag ? (parseFloat(m.sum)||0) : 0), 0)
   const paaslag = materialerMedPaaslag * (parseFloat(skjema.paaslagProsent)||0) / 100
   const totalSum = totalArbeid + totalMaterialer + paaslag
 
@@ -106,7 +78,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
             </div>
             <div className="felt-gruppe">
               <label>Nettside</label>
-              <input type="text" placeholder="www.firma.no" value={skjema.firmaNettside||''} onFocus={e => { if(!skjema.firmaNettside) oppdater('firmaNettside', 'www.') }} onChange={e => oppdater('firmaNettside', e.target.value)} />
+              <input type="text" placeholder="www.firma.no" value={skjema.firmaNettside||''} onFocus={() => { if(!skjema.firmaNettside) oppdater('firmaNettside', 'www.') }} onChange={e => oppdater('firmaNettside', e.target.value)} />
             </div>
           </div>
           <div className="felt-gruppe">
@@ -151,7 +123,8 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
             <h2 className="seksjon-tittel">Kunde</h2>
             <button className="btn-lenke roed" onClick={() => {
               ;['kundenavn','kundeAdresse','kundeEpost','beskrivelse'].forEach(f => oppdater(f, ''))
-              oppdater('materialer', []); oppdater('arbeidere', [{id:Date.now(), timer:'', timepris: (() => { try { return localStorage.getItem('timepris')||'' } catch { return '' } })()}])
+              oppdater('materialer', [])
+              oppdater('arbeidere', [{id:Date.now(), timer:'', timepris: (() => { try { return localStorage.getItem('timepris')||'' } catch { return '' } })()}])
             }}>Nullstill kunde/jobb</button>
           </div>
           <div className="felt-gruppe">
@@ -211,73 +184,19 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
             <span>Ant.</span>
             <span>Kr/enhet</span>
             <span>Sum</span>
-            <span title="Inkluder i påslag">Påslag</span>
+            <span title="Påslag">Påslag</span>
             <span></span>
           </div>
 
-          {/* TRANSPORT — alltid synlig */}
-          {!harTransport ? (
-            <div className="mat-rad mat-rad-rask">
-              <span className="mat-fast-navn">Transport</span>
-              <input type="number" min="0" step="1" placeholder="0" className="mat-ant"
-                onChange={e => { if(e.target.value) leggTilRask('transport'); setTimeout(()=>oppdaterRask('transport','ant',e.target.value),50) }} />
-              <span className="mat-fast-enhet">km</span>
-              <input type="number" min="0" placeholder="kr/km" className="mat-pris"
-                onChange={e => oppdaterRask('transport','sats',e.target.value)} />
-              <span className="mat-sum"></span>
-              <input type="checkbox" className="mat-paaslag-cb" defaultChecked={false} disabled title="Transport inkluderes ikke i påslag" />
-              <span></span>
-            </div>
-          ) : skjema.materialer.filter(m => m._type === 'transport').map(m => (
-            <div key={m.id} className="mat-rad">
-              <span className="mat-fast-navn">Transport</span>
-              <input type="number" min="0" step="1" placeholder="0" className="mat-ant" value={m.ant||''}
-                onChange={e => oppdaterRask('transport','ant',e.target.value)} />
-              <span className="mat-fast-enhet">km</span>
-              <input type="number" min="0" placeholder="kr/km" className="mat-pris" value={m.sats||''}
-                onChange={e => oppdaterRask('transport','sats',e.target.value)} />
-              <span className="mat-sum">{m.pris > 0 ? formaterKr(m.pris) : ''}</span>
-              <input type="checkbox" className="mat-paaslag-cb" checked={m.hasPaaslag}
-                onChange={e => oppdater('materialer', skjema.materialer.map(x => x.id===m.id ? {...x, hasPaaslag: e.target.checked} : x))} />
-              <button className="btn-fjern" onClick={() => fjernMaterial(m.id)}>×</button>
-            </div>
-          ))}
-
-          {/* BOM — alltid synlig */}
-          {!harBom ? (
-            <div className="mat-rad mat-rad-rask">
-              <span className="mat-fast-navn">Bompenger</span>
-              <span className="mat-ant"></span>
-              <span className="mat-fast-enhet">kr</span>
-              <input type="number" min="0" placeholder="beløp" className="mat-pris"
-                onChange={e => { if(e.target.value) { leggTilRask('bom'); setTimeout(()=>oppdaterRask('bom','sats',e.target.value),50) } }} />
-              <span className="mat-sum"></span>
-              <input type="checkbox" className="mat-paaslag-cb" defaultChecked={false} disabled />
-              <span></span>
-            </div>
-          ) : skjema.materialer.filter(m => m._type === 'bom').map(m => (
-            <div key={m.id} className="mat-rad">
-              <span className="mat-fast-navn">Bompenger</span>
-              <span className="mat-ant"></span>
-              <span className="mat-fast-enhet">kr</span>
-              <input type="number" min="0" placeholder="beløp" className="mat-pris" value={m.sats||''}
-                onChange={e => { const v = parseFloat(e.target.value)||0; oppdater('materialer', skjema.materialer.map(x => x.id===m.id ? {...x, sats:e.target.value, pris:v} : x)) }} />
-              <span className="mat-sum">{m.pris > 0 ? formaterKr(m.pris) : ''}</span>
-              <input type="checkbox" className="mat-paaslag-cb" checked={m.hasPaaslag}
-                onChange={e => oppdater('materialer', skjema.materialer.map(x => x.id===m.id ? {...x, hasPaaslag:e.target.checked} : x))} />
-              <button className="btn-fjern" onClick={() => fjernMaterial(m.id)}>×</button>
-            </div>
-          ))}
-
-          {/* ØVRIGE MATERIALER */}
-          {skjema.materialer.filter(m => !m._type).map(m => (
+          {/* EKSISTERENDE LINJER */}
+          {skjema.materialer.map(m => (
             <div key={m.id} className="mat-rad">
               <span className="mat-fast-navn">{m.navn}</span>
-              <span className="mat-ant"></span>
-              <span></span>
+              <input type="number" min="0" step="1" className="mat-ant" value={m.antall||1}
+                onChange={e => oppdaterMaterial(m.id, 'antall', e.target.value)} />
               <input type="number" min="0" className="mat-pris" value={m.pris}
-                onChange={e => oppdaterMaterialPris(m.id, e.target.value)} />
-              <span className="mat-sum">{formaterKr(m.pris)}</span>
+                onChange={e => oppdaterMaterial(m.id, 'pris', e.target.value)} />
+              <span className="mat-sum">{formaterKr(m.sum||m.pris||0)}</span>
               <input type="checkbox" className="mat-paaslag-cb" checked={m.hasPaaslag}
                 onChange={e => oppdater('materialer', skjema.materialer.map(x => x.id===m.id ? {...x, hasPaaslag:e.target.checked} : x))} />
               <button className="btn-fjern" onClick={() => fjernMaterial(m.id)}>×</button>
@@ -292,7 +211,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
             <input type="number" min="0" placeholder="kr/enhet" value={nyPris} onChange={e => setNyPris(e.target.value)}
               className="mat-pris" onKeyDown={e => e.key==='Enter' && leggTilMaterial()} />
             <span className="mat-sum">{nyPris && nyAnt ? formaterKr((parseFloat(nyPris)||0)*(parseFloat(nyAnt)||1)) : ''}</span>
-            <input type="checkbox" className="mat-paaslag-cb" checked={nyHasPaaslag} onChange={e => setNyHasPaaslag(e.target.checked)} title="Inkluder i påslag" />
+            <input type="checkbox" className="mat-paaslag-cb" checked={nyHasPaaslag} onChange={e => setNyHasPaaslag(e.target.checked)} />
             <button className="btn btn-secondary btn-sm" onClick={leggTilMaterial}>Legg til</button>
           </div>
         </section>
