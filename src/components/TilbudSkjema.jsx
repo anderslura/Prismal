@@ -3,7 +3,7 @@ import { useState } from 'react'
 export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil, prisliste, setPrisliste, isPro }) {
 
   const [nyNavn, setNyNavn] = useState('')
-  const [nyAnt, setNyAnt] = useState('1')
+  const [nyAnt, setNyAnt] = useState('')
   const [nyPris, setNyPris] = useState('')
   const [nyHasPaaslag, setNyHasPaaslag] = useState(true)
 
@@ -235,7 +235,10 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
           <div className="mat-rad mat-ny-rad">
             <input type="text" placeholder="Beskrivelse" value={nyNavn} onChange={e => setNyNavn(e.target.value)}
               className="mat-ny-navn" onKeyDown={e => e.key==='Enter' && leggTilMaterial()} />
-            <input type="number" min="1" step="1" placeholder="1" value={nyAnt} onChange={e => setNyAnt(e.target.value)} className="mat-ant" />
+            <input type="number" min="1" step="1" placeholder="1" value={nyAnt}
+              className={`mat-ant${!nyAnt ? ' mat-ant-tom' : ''}`}
+              onFocus={e => e.target.select()}
+              onChange={e => setNyAnt(e.target.value)} />
             <input type="number" min="0" placeholder="kr" value={nyPris} onChange={e => setNyPris(e.target.value)}
               className="mat-pris" onKeyDown={e => e.key==='Enter' && leggTilMaterial()} />
             <span className="mat-sum">{nyPris && nyAnt ? formaterKr((parseFloat(nyPris)||0)*(parseFloat(nyAnt)||1)) : ''}</span>
