@@ -35,7 +35,7 @@ function hentLagretMaterialMal() {
   try {
     const lagret = localStorage.getItem('materialMal')
     if (!lagret) return []
-    return JSON.parse(lagret).map(m => ({ ...m, id: Date.now() + Math.random(), antall: 1, sum: parseFloat(m.pris) || 0 }))
+    return JSON.parse(lagret).map(m => ({ ...m, id: Date.now() + Math.random(), antall: 0, sum: 0 }))
   } catch { return [] }
 }
 
