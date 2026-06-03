@@ -146,7 +146,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
           <h2 className="seksjon-tittel">Jobben</h2>
           <div className="felt-gruppe">
             <label>Beskrivelse <span className="paakrevd">*</span></label>
-            <textarea rows={5} placeholder="Beskriv hva som skal gjøres, omfang, adresse, spesielle forhold osv." value={skjema.beskrivelse} onChange={e => oppdater('beskrivelse', e.target.value)} />
+            <textarea rows={10} placeholder="Beskriv hva som skal gjøres, omfang, adresse, spesielle forhold osv." value={skjema.beskrivelse} onChange={e => oppdater('beskrivelse', e.target.value)} />
           </div>
         </section>
 
