@@ -47,7 +47,16 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
   }
 
   function fjernMaterial(id) {
+    const fjernet = skjema.materialer.find(m => m.id === id)
     oppdater('materialer', skjema.materialer.filter(m => m.id !== id))
+    // Fjern også fra localStorage-biblioteket
+    if (fjernet) {
+      try {
+        const oppdatert = JSON.parse(localStorage.getItem('materialLinjer') || '[]')
+          .filter(l => l.navn !== fjernet.navn)
+        localStorage.setItem('materialLinjer', JSON.stringify(oppdatert))
+      } catch {}
+    }
   }
 
   const totalArbeid = (skjema.arbeidere || []).reduce((s, a) => s + (parseFloat(a.timer)||0)*(parseFloat(a.timepris)||0), 0)
