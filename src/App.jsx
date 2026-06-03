@@ -129,7 +129,7 @@ export default function App() {
 
   function nullstill() {
     const lagredeMat = (() => { try { return JSON.parse(localStorage.getItem('materialLinjer') || '[]') } catch { return [] } })()
-    const forhandslagte = lagredeMat.map(l => ({ id: Date.now() + Math.random(), navn: l.navn, antall: 1, pris: Number(l.pris) || 0, sum: Number(l.pris) || 0, hasPaaslag: l.hasPaaslag }))
+    const forhandslagte = lagredeMat.map(l => ({ id: Date.now() + Math.random(), navn: l.navn, antall: 0, pris: Number(l.pris) || 0, sum: 0, hasPaaslag: l.hasPaaslag }))
     setSkjema({
       ...TOM_SKJEMA,
       ...hentLagretFirma(),
