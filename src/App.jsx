@@ -128,11 +128,14 @@ export default function App() {
   }
 
   function nullstill() {
+    const lagredeMat = (() => { try { return JSON.parse(localStorage.getItem('materialLinjer') || '[]') } catch { return [] } })()
+    const forhandslagte = lagredeMat.map(l => ({ id: Date.now() + Math.random(), navn: l.navn, antall: 1, pris: l.pris, sum: l.pris, hasPaaslag: l.hasPaaslag }))
     setSkjema({
       ...TOM_SKJEMA,
       ...hentLagretFirma(),
       logoUrl: hentLagretLogo(),
       arbeidere: [{ id: Date.now(), navn: 'Fagarbeider', timer: '', timepris: hentLagretTimepris() }],
+      materialer: forhandslagte,
       tilbudsnummer: genererTilbudsnummer(),
     })
     setSteg('skjema')
