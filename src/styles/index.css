@@ -981,3 +981,10 @@ textarea { resize: vertical; }
   opacity: 0.6;
 }
 .chip-fjern:hover { opacity: 1; }
+
+.felt-hint {
+  font-size: 11px;
+  color: var(--tekst-sekundaer);
+  font-style: italic;
+  margin-top: 4px;
+}
