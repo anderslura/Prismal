@@ -95,8 +95,8 @@ export default function App() {
   }
 
   async function generer() {
-    if (!skjema.jobbtype || !skjema.kundenavn) {
-      setFeil('Fyll inn minst kundenavn og jobbtype.')
+    if (!skjema.kundenavn || !skjema.beskrivelse) {
+      setFeil('Fyll inn kundenavn og beskrivelse av jobben.')
       return
     }
     setFeil('')
