@@ -213,7 +213,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
               className="mat-pris" onKeyDown={e => e.key==='Enter' && leggTilMaterial()} />
             <span className="mat-sum">{nyPris && nyAnt ? formaterKr((parseFloat(nyPris)||0)*(parseFloat(nyAnt)||1)) : ''}</span>
             <input type="checkbox" className="mat-paaslag-cb" checked={nyHasPaaslag} onChange={e => setNyHasPaaslag(e.target.checked)} />
-            <button className="btn btn-secondary btn-sm" onClick={leggTilMaterial}>Legg til</button>
+            <button onClick={leggTilMaterial} style={{padding:"0 12px",height:"34px",border:"1.5px solid var(--blaa)",borderRadius:"6px",background:"var(--hvit)",color:"var(--blaa)",fontWeight:600,fontSize:"13px",cursor:"pointer",whiteSpace:"nowrap"}}>Legg til</button>
           </div>
         </section>
 
