@@ -182,7 +182,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
           <div className="mat-header">
             <span>Beskrivelse</span>
             <span>Ant.</span>
-            <span>Kr/enhet</span>
+            <span>Kr</span>
             <span>Sum</span>
             <span title="Påslag">Påslag</span>
             <span></span>
@@ -204,11 +204,12 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
           ))}
 
           {/* NY LINJE */}
+          <p className="mat-info-tekst">Linjer og priser huskes til neste tilbud — raskere for hver gang. Alt kan endres eller fjernes.</p>
           <div className="mat-rad mat-ny-rad">
             <input type="text" placeholder="Beskrivelse" value={nyNavn} onChange={e => setNyNavn(e.target.value)}
               className="mat-ny-navn" onKeyDown={e => e.key==='Enter' && leggTilMaterial()} />
             <input type="number" min="1" step="1" placeholder="1" value={nyAnt} onChange={e => setNyAnt(e.target.value)} className="mat-ant" />
-            <input type="number" min="0" placeholder="kr/enhet" value={nyPris} onChange={e => setNyPris(e.target.value)}
+            <input type="number" min="0" placeholder="kr" value={nyPris} onChange={e => setNyPris(e.target.value)}
               className="mat-pris" onKeyDown={e => e.key==='Enter' && leggTilMaterial()} />
             <span className="mat-sum">{nyPris && nyAnt ? formaterKr((parseFloat(nyPris)||0)*(parseFloat(nyAnt)||1)) : ''}</span>
             <input type="checkbox" className="mat-paaslag-cb" checked={nyHasPaaslag} onChange={e => setNyHasPaaslag(e.target.checked)} />

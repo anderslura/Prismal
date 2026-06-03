@@ -903,3 +903,34 @@ textarea { resize: vertical; }
   align-self: flex-end;
   padding-bottom: 1px;
 }
+
+.mat-info-tekst {
+  font-size: 11px;
+  color: var(--tekst-sekundaer);
+  font-style: italic;
+  margin: 8px 0 6px 0;
+}
+
+/* Sum-felt som boks */
+.mat-sum {
+  background: var(--bakgrunn);
+  border: 1px solid var(--kant);
+  border-radius: var(--radius-liten);
+  padding: 5px 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--blaa-mork);
+  text-align: right;
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Legg til knapp - ikke presset */
+.mat-ny-rad .btn {
+  white-space: nowrap;
+  padding: 8px 14px;
+  font-size: 13px;
+  height: 36px;
+}
