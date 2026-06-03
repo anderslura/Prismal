@@ -1004,3 +1004,12 @@ textarea { resize: vertical; }
   padding: 4px 8px;
   border-radius: 0 4px 4px 0;
 }
+
+.aksept-klausul {
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: #f8f9ff;
+  border-left: 3px solid var(--blaa);
+  border-radius: 0 4px 4px 0;
+  font-size: 12px;
+}

@@ -132,7 +132,11 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
         {/* BUNNTEKST */}
         <div className="dok-footer">
           <p>Tilbudet er gyldig i 30 dager fra utstedelsesdato.</p>
-          <p>Ved aksept av tilbud, vennligst ta kontakt på {skjema.firmaEpost || skjema.firmaTelefon || 'angitt kontaktinformasjon'}.</p>
+          <p className="aksept-klausul">
+            <strong>Aksept av tilbud:</strong> For å godta dette tilbudet må skriftlig aksept sendes til{' '}
+            <strong>{skjema.firmaEpost || 'e-post oppgitt i kontaktinformasjon'}</strong>{' '}
+            innen tilbudets gyldighetsperiode. Muntlig aksept er ikke bindende.
+          </p>
         </div>
       </div>
     </div>
