@@ -944,3 +944,8 @@ textarea { resize: vertical; }
   justify-content: center;
   white-space: nowrap;
 }
+
+.mat-ny-navn {
+  min-width: 0;
+  width: 100%;
+}

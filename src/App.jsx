@@ -31,6 +31,14 @@ function hentLagretFirma() {
   } catch { return {} }
 }
 
+function hentLagretMaterialMal() {
+  try {
+    const lagret = localStorage.getItem('materialMal')
+    if (!lagret) return []
+    return JSON.parse(lagret).map(m => ({ ...m, id: Date.now() + Math.random(), antall: 1, sum: parseFloat(m.pris) || 0 }))
+  } catch { return [] }
+}
+
 function hentLagretTimepris() {
   try { return localStorage.getItem('timepris') || '' } catch { return '' }
 }
@@ -53,6 +61,7 @@ export default function App() {
     ...hentLagretFirma(),
     logoUrl: hentLagretLogo(),
     arbeidere: [{ id: 1, navn: 'Fagarbeider', timer: '', timepris: hentLagretTimepris() }],
+    materialer: hentLagretMaterialMal(),
     tilbudsnummer: genererTilbudsnummer(),
   }))
   const [prisliste, setPrisliste] = useState(hentLagretPrisliste)
@@ -77,6 +86,12 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('logoUrl', skjema.logoUrl || '')
   }, [skjema.logoUrl])
+
+  useEffect(() => {
+    // Lagre materiallinjer som mal (uten antall/sum)
+    const mal = skjema.materialer.map(m => ({ navn: m.navn, pris: m.pris, hasPaaslag: m.hasPaaslag }))
+    localStorage.setItem('materialMal', JSON.stringify(mal))
+  }, [skjema.materialer])
 
   useEffect(() => {
     // Lagre timepris fra første arbeider som default
