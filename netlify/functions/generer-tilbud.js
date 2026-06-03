@@ -23,9 +23,10 @@ exports.handler = async (event) => {
   }
 
   const { firmanavn, kundenavn, kundeAdresse, beskrivelse, arbeidere, materialer } = data
+  const totalArbeid2 = (arbeidere||[]).reduce((s,a) => s+(parseFloat(a.timer)||0)*(parseFloat(a.timepris)||0), 0)
 
   // Bygg prompt
-  const totalArbeid = (parseFloat(timer) || 0) * (parseFloat(timepris) || 0)
+  const totalArbeid = totalArbeid2
   const totalMaterialer = (materialer || []).reduce((s, m) => s + (parseFloat(m.pris) || 0), 0)
   const totalSum = totalArbeid + totalMaterialer
 
@@ -39,7 +40,7 @@ DETALJER OM OPPDRAGET:
 - Firma: ${firmanavn || 'Håndverkerbedrift'}
 - Kunde: ${kundenavn}${kundeAdresse ? `, ${kundeAdresse}` : ''}
 - Oppdrag: ${beskrivelse || 'Se prisoversikt'}
-- Estimert arbeidstid: ${timer ? `${timer} timer à ${timepris} kr/t` : 'Se prisoversikt'}
+- Arbeid: ${(arbeidere||[]).filter(a=>a.timer).map(a=>`${a.timer}t à ${a.timepris}kr/t`).join(', ') || 'Se prisoversikt'}
 - Materialer:
 ${materialListe}
 - Estimert totalsum eks. mva: ${totalSum.toLocaleString('no-NO')} kr
