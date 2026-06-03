@@ -934,3 +934,13 @@ textarea { resize: vertical; }
   font-size: 13px;
   height: 36px;
 }
+
+.mat-ny-rad .btn.btn-secondary.btn-sm {
+  padding: 0 14px;
+  height: 36px;
+  line-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
