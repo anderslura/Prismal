@@ -4,7 +4,7 @@
  * API-nøkkel holdes server-side og eksponeres aldri til klienten.
  */
 
-export const handler = async (event) => {
+exports.handler = async (event) => {
   // Kun POST tillatt
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: JSON.stringify({ feil: 'Metode ikke tillatt' }) }
