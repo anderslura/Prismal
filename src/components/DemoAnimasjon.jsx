@@ -1,126 +1,244 @@
 import { useState, useEffect } from 'react'
 
-const STEG = [
-  { id: 'kunde', label: 'Fyll inn kunde', duration: 2200 },
-  { id: 'jobb',  label: 'Beskriv jobben', duration: 2000 },
-  { id: 'pris',  label: 'Legg til priser', duration: 2200 },
-  { id: 'pdf',   label: 'Last ned PDF',    duration: 2800 },
+// Fase-tidslinje (ms)
+const FASER = [
+  { id: 'kunde',    slutt: 3000  },  // skriver kundenavn
+  { id: 'jobb',     slutt: 6500  },  // skriver jobbeskrivelse
+  { id: 'timer',    slutt: 8500  },  // fyller inn timer
+  { id: 'material', slutt: 12000 },  // legger til materiallinje
+  { id: 'generer',  slutt: 13500 },  // klikker generer
+  { id: 'laster',   slutt: 15500 },  // AI laster...
+  { id: 'preview',  slutt: 20000 },  // forhåndsvisning med tekst
+  { id: 'pdf',      slutt: 25000 },  // PDF-visning
+  { id: 'pause',    slutt: 27000 },  // kort pause før loop
 ]
-const TOTAL = STEG.reduce((s, x) => s + x.duration, 0) + 1800
+const TOTAL = 27000
+
+function fase(ms) {
+  for (const f of FASER) if (ms < f.slutt) return f.id
+  return 'pause'
+}
+function progress(ms, fraId, tilId) {
+  const fra = fraId === 'start' ? 0 : FASER.find(f => f.id === fraId)?.slutt || 0
+  const til = FASER.find(f => f.id === tilId)?.slutt || fra + 1000
+  return Math.min(1, Math.max(0, (ms - fra) / (til - fra)))
+}
+
+function typeText(full, ms, startMs, endMs) {
+  const p = Math.min(1, Math.max(0, (ms - startMs) / (endMs - startMs)))
+  return full.slice(0, Math.round(p * full.length))
+}
+
+const KUNDE_NAVN   = 'Kari Nordmann'
+const JOBB_TEKST   = 'terrassebord 20kvm, trykkimpregnert furu'
+const AI_TEKST     = `Hei Kari,\n\nVi sender herved tilbud på levering og legging av trykkimpregnert terrassebord på 20 kvm. Arbeidet utføres fagmessig med kvalitetsmaterialer, og vi sørger for ryddig og grundig gjennomføring.\n\nDersom det oppstår uforutsette forhold underveis, varsler vi deg umiddelbart. Ta kontakt om du har spørsmål.`
 
 export default function DemoAnimasjon() {
   const [ms, setMs] = useState(0)
 
   useEffect(() => {
-    let start = null
-    let raf
+    let start = null, raf
     function tick(ts) {
       if (!start) start = ts
-      setMs((ts - start) % (TOTAL))
+      setMs((ts - start) % TOTAL)
       raf = requestAnimationFrame(tick)
     }
     raf = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(raf)
   }, [])
 
-  // Beregn aktivt steg
-  let acc = 0
-  let aktivt = 0
-  let progress = 0
-  for (let i = 0; i < STEG.length; i++) {
-    if (ms >= acc && ms < acc + STEG[i].duration) {
-      aktivt = i
-      progress = (ms - acc) / STEG[i].duration
-      break
-    }
-    acc += STEG[i].duration
-  }
-  const visPDF = aktivt === 3 && progress > 0.3
+  const aktivFase = fase(ms)
+  const visSide   = ['preview','pdf','pause'].includes(aktivFase) ? 'preview' : 'skjema'
 
-  // Skriveanimasjon
-  const kundeNavn = 'Kari Nordmann'
-  const jobTekst = 'Legge terrassebord i trykkimpregnert furu'
-  const typedKunde = aktivt >= 0 ? kundeNavn.slice(0, aktivt === 0 ? Math.round(progress * kundeNavn.length) : kundeNavn.length) : ''
-  const typedJobb = aktivt >= 1 ? jobTekst.slice(0, aktivt === 1 ? Math.round(progress * jobTekst.length) : jobTekst.length) : ''
+  // Typed verdier
+  const kundeTyped   = typeText(KUNDE_NAVN, ms, 300, 3000)
+  const jobbTyped    = typeText(JOBB_TEKST, ms, 3000, 6500)
+  const timerTyped   = ms > 7000 ? typeText('10', ms, 7000, 8500) : ''
+  const matTyped     = ms > 9000 ? typeText('Terrassebord', ms, 9000, 11000) : ''
+  const matLagt      = ms > 11500
+  const visKnapp     = aktivFase === 'generer'
+  const visLaster    = aktivFase === 'laster'
+  const aiTyped      = aktivFase === 'preview' ? typeText(AI_TEKST, ms, FASER.find(f=>f.id==='laster').slutt, FASER.find(f=>f.id==='preview').slutt) : aktivFase === 'pdf' || aktivFase === 'pause' ? AI_TEKST : ''
+  const visPdf       = aktivFase === 'pdf' || aktivFase === 'pause'
+  const pdfOpacity   = progress(ms, 'preview', 'pdf')
 
   return (
     <div className="demo-wrapper">
       <div className="demo-skjerm">
 
-        {/* STEG-INDIKATORER */}
-        <div className="demo-steg-rad">
-          {STEG.map((s, i) => (
-            <div key={s.id} className={`demo-steg ${i === aktivt ? 'aktiv' : ''} ${i < aktivt ? 'ferdig' : ''}`}>
-              <span className="demo-steg-dot">{i < aktivt ? '✓' : i + 1}</span>
-              <span className="demo-steg-label">{s.label}</span>
-            </div>
-          ))}
+        {/* ─── HEADER ─── */}
+        <div className="demo-header">
+          <span className="demo-logo">Prismal</span>
+          <span className="demo-tagline">Din mal. Din pris. Din tid.</span>
+          {visSide === 'preview' && <span className="demo-btn-sm demo-btn-gronn">+ Nytt tilbud</span>}
+          {visSide === 'skjema' && <span style={{fontSize:10,color:'#6b7280'}}>Hjelpeportalen AS</span>}
         </div>
 
-        {/* SKJEMA-MOCKUP */}
-        {!visPDF && (
-          <div className="demo-skjema">
-            <div className="demo-felt-gruppe">
-              <div className="demo-label">Kundenavn</div>
-              <div className="demo-input">
-                {typedKunde}
-                {aktivt === 0 && <span className="demo-cursor">|</span>}
+        {/* ─── SKJEMA-SIDE ─── */}
+        {visSide === 'skjema' && (
+          <div className="demo-to-kol">
+
+            {/* VENSTRE */}
+            <div className="demo-kol-venstre">
+              <div className="demo-seksjon">
+                <div className="demo-seksjon-tittel">Kunde</div>
+                <div className="demo-felt-liten">
+                  <div className="demo-label">Kundenavn *</div>
+                  <div className="demo-input-boks">
+                    {kundeTyped || <span className="demo-placeholder">Kari Nordmann</span>}
+                    {aktivFase === 'kunde' && <span className="demo-cursor">|</span>}
+                  </div>
+                </div>
+                <div className="demo-felt-liten">
+                  <div className="demo-label">Adresse</div>
+                  <div className="demo-input-boks demo-graa">Hjemveien 5, 0002 Oslo</div>
+                </div>
+              </div>
+
+              <div className="demo-seksjon">
+                <div className="demo-seksjon-tittel">Jobben</div>
+                <div className="demo-felt-liten">
+                  <div className="demo-label">Beskrivelse av jobben *</div>
+                  <div className="demo-input-boks demo-textarea-boks">
+                    {jobbTyped || <span className="demo-placeholder">Eks: male stue, bytte vinduer...</span>}
+                    {aktivFase === 'jobb' && <span className="demo-cursor">|</span>}
+                  </div>
+                  {ms > 3000 && <div className="demo-hint-tekst">AI skriver profesjonelt tilbudsspråk basert på dette.</div>}
+                </div>
               </div>
             </div>
-            <div className="demo-felt-gruppe">
-              <div className="demo-label">Beskriv jobben</div>
-              <div className="demo-input demo-textarea">
-                {typedJobb}
-                {aktivt === 1 && <span className="demo-cursor">|</span>}
+
+            {/* HØYRE */}
+            <div className="demo-kol-hoyre">
+              <div className="demo-seksjon">
+                <div className="demo-seksjon-tittel">Arbeid</div>
+                <div className="demo-to-felt">
+                  <div className="demo-felt-liten">
+                    <div className="demo-label">Timer</div>
+                    <div className="demo-input-boks">
+                      {timerTyped || <span className="demo-placeholder">eks. 8</span>}
+                      {aktivFase === 'timer' && <span className="demo-cursor">|</span>}
+                    </div>
+                  </div>
+                  <div className="demo-felt-liten">
+                    <div className="demo-label">Kr/time</div>
+                    <div className="demo-input-boks demo-graa">650</div>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="demo-felt-gruppe">
-              <div className="demo-label">Materialer & utgifter</div>
-              <div className="demo-material-rad" style={{opacity: aktivt >= 2 ? 1 : 0.2}}>
-                <span>Terrassebord</span>
-                <span>×{aktivt >= 2 ? Math.round(progress * 18 + 1) : 0}</span>
-                <span style={{color:'var(--blaa)', fontWeight:600}}>
-                  {aktivt >= 2 ? `${Math.round((progress * 17 + 1) * 85)} kr` : '—'}
-                </span>
+
+              <div className="demo-seksjon">
+                <div className="demo-seksjon-tittel">Materialer & utgifter</div>
+                <div className="demo-mat-header">
+                  <span>Beskrivelse</span><span>Ant.</span><span>Kr</span><span>Sum</span>
+                </div>
+                {matLagt && (
+                  <div className="demo-mat-rad demo-mat-rad-aktiv">
+                    <span>Terrassebord</span><span>18</span><span>85</span><span style={{color:'var(--blaa)',fontWeight:600}}>1 530 kr</span>
+                  </div>
+                )}
+                <div className="demo-mat-ny-rad">
+                  <div className="demo-input-boks demo-mat-input">
+                    {matTyped && !matLagt ? matTyped : <span className="demo-placeholder">Beskrivelse</span>}
+                    {(aktivFase === 'material') && !matLagt && <span className="demo-cursor">|</span>}
+                  </div>
+                  <span className="demo-input-boks demo-mat-liten">{!matLagt && ms > 10500 ? '18' : ''}</span>
+                  <span className="demo-input-boks demo-mat-liten">{!matLagt && ms > 11000 ? '85' : ''}</span>
+                  <button className={`demo-legg-til ${ms > 11200 && !matLagt ? 'demo-legg-til-aktiv' : ''}`}>Legg til</button>
+                </div>
               </div>
-            </div>
-            <div className={`demo-knapp ${aktivt === 2 && progress > 0.8 ? 'demo-knapp-aktiv' : ''}`}>
-              Generer profesjonelt tilbud
+
+              <button className={`demo-generer-knapp ${visKnapp ? 'demo-generer-aktiv' : ''} ${visLaster ? 'demo-generer-laster' : ''}`}>
+                {visLaster ? '⏳ AI genererer tekst...' : 'Generer profesjonelt tilbud'}
+              </button>
             </div>
           </div>
         )}
 
-        {/* PDF-PREVIEW */}
-        {visPDF && (
-          <div className="demo-pdf" style={{opacity: Math.min(1, (progress - 0.3) / 0.3)}}>
-            <div className="demo-pdf-header">
-              <div>
-                <div className="demo-pdf-firma">Hjelpeportalen AS</div>
-                <div className="demo-pdf-sub">kontakt@hjelpeportalen.no</div>
-              </div>
-              <div className="demo-pdf-tittel">TILBUD</div>
+        {/* ─── FORHÅNDSVISNING ─── */}
+        {visSide === 'preview' && !visPdf && (
+          <div className="demo-preview">
+            <div className="demo-preview-tittel-rad">
+              <span className="demo-preview-tittel">Forhåndsvisning av tilbud</span>
+              <span className="demo-btn-sm">⬇ Last ned PDF</span>
             </div>
-            <div className="demo-pdf-til">Til: Kari Nordmann</div>
-            <div className="demo-pdf-tekst">
-              Takk for henvendelsen, Kari. Vi sender herved tilbud på levering og legging av trykkimpregnert terrassebord...
+            <div className="demo-doc">
+              <div className="demo-doc-header">
+                <div>
+                  <div className="demo-doc-firma">Hjelpeportalen AS</div>
+                  <div className="demo-doc-sub">Hegglandsdalsvegen 350b · Tlf: 56301234</div>
+                  <div className="demo-doc-sub">kontakt@hjelpeportalen.no</div>
+                </div>
+                <div style={{textAlign:'right'}}>
+                  <div className="demo-doc-tilbud-label">TILBUD</div>
+                  <div className="demo-doc-sub">Nr: T2606-321</div>
+                  <div className="demo-doc-sub">Dato: 4.6.2026</div>
+                  <div className="demo-doc-sub">Gyldig til: 4.7.2026</div>
+                </div>
+              </div>
+              <div className="demo-doc-til">
+                <div style={{fontSize:9,color:'#6b7280',textTransform:'uppercase',letterSpacing:'0.5px'}}>Tilbud til</div>
+                <div style={{fontWeight:700,fontSize:13}}>Kari Nordmann</div>
+              </div>
+              <div className="demo-doc-ai-tekst">
+                <div style={{fontWeight:700,fontSize:11,color:'var(--blaa)',marginBottom:4}}>Tilbud</div>
+                <div style={{fontSize:10,lineHeight:1.55,whiteSpace:'pre-line',color:'#374151'}}>
+                  {aiTyped}
+                  {aktivFase === 'preview' && <span className="demo-cursor">|</span>}
+                </div>
+              </div>
             </div>
-            <div className="demo-pdf-tabell">
-              <div className="demo-pdf-rad demo-pdf-header-rad">
-                <span>Beskrivelse</span><span>Ant.</span><span>Sum</span>
-              </div>
-              <div className="demo-pdf-rad">
-                <span>Arbeid</span><span>8 t</span><span>5 200 kr</span>
-              </div>
-              <div className="demo-pdf-rad">
-                <span>Terrassebord</span><span>18 stk</span><span>1 530 kr</span>
-              </div>
-              <div className="demo-pdf-rad demo-pdf-total">
-                <span>Totalt inkl. mva</span><span></span><span>8 413 kr</span>
-              </div>
-            </div>
-            <div className="demo-pdf-nedlast">⬇ Last ned PDF</div>
           </div>
         )}
+
+        {/* ─── PDF ─── */}
+        {visPdf && (
+          <div className="demo-pdf-full" style={{opacity: Math.min(1, pdfOpacity * 3)}}>
+            <div className="demo-pdf-hdr">
+              <div className="demo-pdf-hdr-venstre">
+                <div className="demo-pdf-logo-boks">H</div>
+                <div>
+                  <div style={{fontWeight:800,fontSize:13,color:'white'}}>Hjelpeportalen AS</div>
+                  <div style={{fontSize:9,color:'rgba(255,255,255,0.8)'}}>Hegglandsdalsvegen 350b</div>
+                  <div style={{fontSize:9,color:'rgba(255,255,255,0.8)'}}>kontakt@hjelpeportalen.no</div>
+                </div>
+              </div>
+              <div style={{textAlign:'right'}}>
+                <div style={{fontSize:13,fontWeight:700,color:'white',letterSpacing:2}}>TILBUD</div>
+                <div style={{fontSize:9,color:'rgba(255,255,255,0.9)'}}>Nr: T2606-321</div>
+                <div style={{fontSize:9,color:'rgba(255,255,255,0.9)'}}>Dato: 4.6.2026 · Gyldig til: 4.7.2026</div>
+              </div>
+            </div>
+            <div className="demo-pdf-body">
+              <div className="demo-pdf-til-blokk">
+                <div style={{fontSize:8,color:'#6b7280',textTransform:'uppercase'}}>Tilbud til</div>
+                <div style={{fontWeight:700,fontSize:12}}>Kari Nordmann</div>
+              </div>
+              <div style={{borderBottom:'1px solid #e5e7eb',marginBottom:8}}/>
+              <div style={{fontWeight:700,fontSize:10,color:'var(--blaa)',marginBottom:4}}>Tilbud</div>
+              <div style={{fontSize:9,lineHeight:1.5,color:'#374151',marginBottom:10}}>
+                Hei Kari, vi sender herved tilbud på levering og legging av trykkimpregnert terrassebord på 20 kvm. Arbeidet utføres fagmessig med kvalitetsmaterialer og grundig gjennomføring.
+              </div>
+              <table className="demo-pdf-tabell">
+                <thead>
+                  <tr><th>Beskrivelse</th><th>Antall</th><th>Enhetspris</th><th>Sum</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Arbeid</td><td>10 t</td><td>650 kr</td><td>6 500 kr</td></tr>
+                  <tr><td>Terrassebord</td><td>18 stk</td><td>85 kr</td><td>1 530 kr</td></tr>
+                  <tr className="demo-pdf-sum-rad"><td colSpan={3}>Sum eks. mva</td><td>8 030 kr</td></tr>
+                  <tr className="demo-pdf-sum-rad"><td colSpan={3}>MVA 25%</td><td>2 008 kr</td></tr>
+                  <tr className="demo-pdf-total-rad"><td colSpan={3}><strong>Totalt inkl. mva</strong></td><td><strong>10 038 kr</strong></td></tr>
+                </tbody>
+              </table>
+              <div className="demo-pdf-aksept">
+                <strong>Aksept av tilbud:</strong> Skriftlig aksept sendes til kontakt@hjelpeportalen.no innen tilbudets gyldighetsperiode.
+              </div>
+              <div className="demo-pdf-footer-linje">⬇ Klar for nedlasting</div>
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   )
