@@ -1327,3 +1327,25 @@ textarea { resize: vertical; }
 .demo-pdf-aksept { font-size:7.5px; color:var(--tekst-sekundaer); padding:5px 7px; border-left:2px solid var(--blaa); background:#f8f9ff; margin-bottom:6px; }
 .demo-pdf-footer-linje { text-align:center; font-size:10px; color:var(--blaa); font-weight:600; padding:6px; border:1.5px solid var(--blaa); border-radius:5px; transition:all 0.5s; }
 .demo-nedlastet { background:var(--groen); border-color:var(--groen); color:white; }
+
+/* Last ned-knapp i demo */
+.demo-btn-lastned {
+  font-size:10px; padding:4px 10px;
+  background: var(--blaa); color:white;
+  border:none; border-radius:5px; font-weight:600; cursor:pointer;
+  transition: transform 0.15s, opacity 0.2s;
+}
+.demo-btn-lastned-aktiv { transform:scale(0.94); opacity:0.8; }
+
+/* Mini prisoversikt i forhåndsvisning */
+.demo-preview-pris-mini {
+  margin-top:8px; border:1px solid var(--kant); border-radius:5px; overflow:hidden;
+  animation: fadeIn 0.4s ease;
+}
+.demo-preview-pris-rad {
+  display:flex; justify-content:space-between; padding:3px 8px; font-size:8.5px;
+  border-bottom:1px solid var(--kant); color:var(--tekst-sekundaer);
+}
+.demo-preview-pris-rad:last-child { border-bottom:none; }
+.demo-preview-paaslag { color:var(--blaa); }
+.demo-preview-total { font-weight:700; font-size:9px; color:var(--tekst); background:var(--blaa-lys); }
