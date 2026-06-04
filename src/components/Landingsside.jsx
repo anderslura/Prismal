@@ -1,3 +1,40 @@
+function IkonRakett() {
+  return (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16 3C16 3 22 8 22 16H10C10 8 16 3 16 3Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"/>
+      <rect x="10" y="16" width="12" height="6" rx="1" stroke="currentColor" strokeWidth="1.8"/>
+      <path d="M13 22L11 27M19 22L21 27" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+      <circle cx="16" cy="12" r="2" stroke="currentColor" strokeWidth="1.8"/>
+    </svg>
+  )
+}
+function IkonAI() {
+  return (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="8" width="24" height="16" rx="3" stroke="currentColor" strokeWidth="1.8"/>
+      <path d="M9 18L12 13L15 17L18 14L23 18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+      <circle cx="9" cy="18" r="1" fill="currentColor"/>
+    </svg>
+  )
+}
+function IkonHusk() {
+  return (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="6" y="4" width="20" height="24" rx="3" stroke="currentColor" strokeWidth="1.8"/>
+      <path d="M11 11H21M11 16H21M11 21H17" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+    </svg>
+  )
+}
+function IkonPDF() {
+  return (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M8 4H20L26 10V28H8V4Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"/>
+      <path d="M20 4V10H26" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"/>
+      <path d="M12 16H20M12 20H17" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+    </svg>
+  )
+}
+
 export default function Landingsside({ onStart }) {
   return (
     <div className="landing-wrapper">
@@ -6,7 +43,7 @@ export default function Landingsside({ onStart }) {
       <section className="landing-hero">
         <h1 className="landing-tittel">Profesjonelle tilbud på minutter</h1>
         <p className="landing-undertittel">
-          Fyll inn jobb og priser — AI skriver tilbudsteksten. Last ned ferdig PDF. Ingen abonnement for å komme i gang.
+          Fyll inn jobb og priser — AI skriver tilbudsteksten. Last ned ferdig PDF.
         </p>
         <button className="btn btn-primary landing-cta" onClick={onStart}>
           Lag ditt første tilbud gratis →
@@ -14,60 +51,88 @@ export default function Landingsside({ onStart }) {
         <p className="landing-cta-hint">Ingen registrering. Ingen kredittkort.</p>
       </section>
 
-      {/* FEATURES */}
+      {/* FEATURES — kompakt strip */}
       <section className="landing-features">
         <div className="feature-kort">
-          <span className="feature-ikon">⚡</span>
-          <h3>Raskt</h3>
-          <p>Fra blankt skjema til ferdig PDF på under 2 minutter.</p>
+          <span className="feature-ikon"><IkonRakett /></span>
+          <div>
+            <h3>Raskt</h3>
+            <p>Fra blankt skjema til ferdig PDF på under 2 minutter.</p>
+          </div>
         </div>
         <div className="feature-kort">
-          <span className="feature-ikon">🤖</span>
-          <h3>AI-tekst</h3>
-          <p>Beskriv jobben kort — AI formulerer profesjonelt tilbudsspråk automatisk.</p>
+          <span className="feature-ikon"><IkonAI /></span>
+          <div>
+            <h3>AI-tekst</h3>
+            <p>Beskriv kort — AI formulerer profesjonelt tilbudsspråk.</p>
+          </div>
         </div>
         <div className="feature-kort">
-          <span className="feature-ikon">📋</span>
-          <h3>Husker prisene dine</h3>
-          <p>Materialer og timepriser lagres lokalt. Neste tilbud går enda raskere.</p>
+          <span className="feature-ikon"><IkonHusk /></span>
+          <div>
+            <h3>Husker prisene</h3>
+            <p>Materialer og timepriser lagres. Neste tilbud går raskere.</p>
+          </div>
         </div>
         <div className="feature-kort">
-          <span className="feature-ikon">📄</span>
-          <h3>Klar PDF</h3>
-          <p>Med logo, firmainfo, prisoversikt og akseptklausul — klar til å sende.</p>
+          <span className="feature-ikon"><IkonPDF /></span>
+          <div>
+            <h3>Klar PDF</h3>
+            <p>Med logo, prisoversikt og akseptklausul — klar til å sende.</p>
+          </div>
         </div>
       </section>
 
       {/* PRIS */}
       <section className="landing-pris">
-        <h2 className="landing-seksjon-tittel">Enkel prising</h2>
+        <h2 className="landing-seksjon-tittel">Velg din plan</h2>
         <div className="pris-grid">
-          <div className="pris-kort">
+
+          <div className="pris-kort pris-kort-gratis">
             <h3>Gratis</h3>
             <p className="pris-beloep">0 kr</p>
             <ul className="pris-liste">
               <li>✓ 3 tilbud totalt</li>
               <li>✓ AI-generert tekst</li>
               <li>✓ PDF-nedlasting</li>
-              <li>✓ Lagrede prislinjer</li>
+              <li className="pris-nei">✗ Ingen logo i PDF</li>
+              <li className="pris-nei">✗ "Laget med Prismal" i footer</li>
+              <li className="pris-nei">✗ Ingen tilbudshistorikk</li>
             </ul>
-            <button className="btn btn-secondary" onClick={onStart}>Prøv gratis</button>
+            <button className="btn btn-secondary btn-full" onClick={onStart}>Prøv gratis</button>
           </div>
-          <div className="pris-kort pris-kort-pro">
-            <div className="pro-badge">Populær</div>
-            <h3>Pro</h3>
-            <p className="pris-beloep">99 kr<span>/mnd</span></p>
+
+          <div className="pris-kort pris-kort-anbefalt">
+            <div className="pro-badge">Anbefalt</div>
+            <h3>Basis</h3>
+            <p className="pris-beloep">59 kr<span>/mnd</span></p>
             <ul className="pris-liste">
-              <li>✓ Ubegrenset antall tilbud</li>
+              <li>✓ Ubegrenset tilbud</li>
               <li>✓ AI-generert tekst</li>
               <li>✓ PDF med firmalogo</li>
               <li>✓ Lagrede prislinjer</li>
               <li>✓ Påslagskalkulator</li>
+              <li className="pris-nei">✗ Ingen tilbudshistorikk</li>
             </ul>
-            <button className="btn btn-primary" onClick={onStart}>Start med Pro</button>
+            <button className="btn btn-primary btn-full" onClick={onStart}>Velg Basis</button>
           </div>
+
+          <div className="pris-kort pris-kort-pro">
+            <div className="pro-badge pro-badge-gull">Pro</div>
+            <h3>Pro</h3>
+            <p className="pris-beloep">99 kr<span>/mnd</span></p>
+            <ul className="pris-liste">
+              <li>✓ Alt i Basis</li>
+              <li>✓ Ingen Prismal-branding i PDF</li>
+              <li>✓ Tilbudshistorikk</li>
+              <li>✓ Send tilbud på e-post</li>
+              <li>✓ Tidlig tilgang til nye funksjoner</li>
+            </ul>
+            <button className="btn btn-primary btn-full btn-gull" onClick={onStart}>Velg Pro</button>
+          </div>
+
         </div>
-        <p className="pris-sammenligning">ProTilbud.no koster 499 kr/mnd for tilsvarende funksjoner.</p>
+        <p className="pris-sammenligning">Konkurrenten ProTilbud.no koster 499 kr/mnd for tilsvarende.</p>
       </section>
 
     </div>

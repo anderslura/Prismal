@@ -1014,132 +1014,150 @@ textarea { resize: vertical; }
   font-size: 12px;
 }
 
+
 /* ===========================
    LANDINGSSIDE
    =========================== */
 .landing-wrapper {
-  max-width: 900px;
+  max-width: 960px;
   margin: 0 auto;
-  padding: 40px 20px 80px;
+  padding: 20px 20px 60px;
 }
 
-/* HERO */
+/* HERO — kompakt */
 .landing-hero {
   text-align: center;
-  padding: 60px 20px 50px;
+  padding: 36px 20px 28px;
 }
 .landing-tittel {
-  font-size: clamp(28px, 5vw, 48px);
+  font-size: clamp(24px, 4vw, 42px);
   font-weight: 800;
   color: var(--tekst);
   line-height: 1.2;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 .landing-undertittel {
-  font-size: clamp(15px, 2.5vw, 20px);
+  font-size: clamp(14px, 2vw, 17px);
   color: var(--tekst-sekundaer);
-  max-width: 560px;
-  margin: 0 auto 32px;
+  max-width: 480px;
+  margin: 0 auto 24px;
   line-height: 1.6;
 }
 .landing-cta {
-  font-size: 17px;
-  padding: 14px 32px;
+  font-size: 16px;
+  padding: 13px 28px;
   border-radius: 50px;
 }
 .landing-cta-hint {
-  margin-top: 10px;
-  font-size: 12px;
+  margin-top: 8px;
+  font-size: 11px;
   color: var(--tekst-sekundaer);
 }
 
-/* FEATURES */
+/* FEATURES — horisontal strip */
 .landing-features {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 20px;
-  margin-bottom: 60px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 32px;
 }
 .feature-kort {
   background: var(--hvit);
   border: 1px solid var(--kant);
   border-radius: var(--radius);
-  padding: 24px 20px;
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
+  gap: 8px;
   box-shadow: var(--skygge);
 }
 .feature-ikon {
-  font-size: 28px;
-  display: block;
-  margin-bottom: 10px;
+  color: var(--blaa);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .feature-kort h3 {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 700;
-  margin-bottom: 6px;
   color: var(--tekst);
+  margin: 0 0 3px;
 }
 .feature-kort p {
-  font-size: 13px;
+  font-size: 12px;
   color: var(--tekst-sekundaer);
-  line-height: 1.5;
+  line-height: 1.4;
+  margin: 0;
 }
 
 /* PRIS */
 .landing-seksjon-tittel {
   text-align: center;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   color: var(--tekst);
 }
 .pris-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  max-width: 600px;
-  margin: 0 auto 16px;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 14px;
 }
 .pris-kort {
   background: var(--hvit);
   border: 1px solid var(--kant);
   border-radius: var(--radius);
-  padding: 28px 24px;
+  padding: 24px 20px 20px;
   text-align: center;
-  box-shadow: var(--skygge);
   position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.pris-kort-gratis {
+  opacity: 0.75;
+}
+.pris-kort-anbefalt {
+  border-color: var(--blaa);
+  box-shadow: 0 4px 24px rgba(30,80,200,0.13);
 }
 .pris-kort-pro {
-  border-color: var(--blaa);
-  box-shadow: 0 4px 24px rgba(30,80,200,0.15);
+  border-color: #b8860b;
+  box-shadow: 0 4px 24px rgba(184,134,11,0.12);
 }
 .pris-kort h3 {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
+  color: var(--tekst);
 }
 .pris-beloep {
-  font-size: 36px;
+  font-size: 32px;
   font-weight: 800;
   color: var(--blaa);
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
+.pris-kort-pro .pris-beloep { color: #b8860b; }
 .pris-beloep span {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 400;
   color: var(--tekst-sekundaer);
 }
 .pris-liste {
   list-style: none;
   padding: 0;
-  margin: 0 0 20px;
+  margin: 0 0 18px;
   text-align: left;
-  font-size: 13px;
+  font-size: 12px;
   color: var(--tekst-sekundaer);
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
+  flex: 1;
 }
+.pris-nei { color: #bbb; }
 .pro-badge {
   position: absolute;
   top: -12px;
@@ -1147,19 +1165,28 @@ textarea { resize: vertical; }
   transform: translateX(-50%);
   background: var(--blaa);
   color: white;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   padding: 3px 12px;
   border-radius: 20px;
+  white-space: nowrap;
 }
+.pro-badge-gull { background: #b8860b; }
+.btn-full { width: 100%; }
+.btn-gull {
+  background: #b8860b !important;
+  border-color: #b8860b !important;
+}
+.btn-gull:hover { background: #9a7009 !important; }
 .pris-sammenligning {
   text-align: center;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--tekst-sekundaer);
   font-style: italic;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 640px) {
   .pris-grid { grid-template-columns: 1fr; }
   .landing-features { grid-template-columns: 1fr 1fr; }
+  .pris-kort-gratis { display: none; }
 }
