@@ -22,6 +22,9 @@ exports.handler = async (event) => {
     return { statusCode: 400, body: JSON.stringify({ feil: 'Ugyldig JSON i forespørsel' }) }
   }
 
+  const brukModell = process.env.CLAUDE_MODEL || 'claude-haiku-4-5-20251001'
+  console.log('Bruker modell:', brukModell)
+
   const { firmanavn, kundenavn, kundeAdresse, beskrivelse, arbeidere, materialer } = data
   const totalArbeid2 = (arbeidere||[]).reduce((s,a) => s+(parseFloat(a.timer)||0)*(parseFloat(a.timepris)||0), 0)
 
@@ -66,7 +69,7 @@ INSTRUKSJONER:
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: process.env.CLAUDE_MODEL || 'claude-haiku-4-5-20251001',
+        model: brukModell,
         max_tokens: 350,
         messages: [{ role: 'user', content: prompt }],
       }),
