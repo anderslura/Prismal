@@ -3,6 +3,7 @@ import TilbudSkjema from './components/TilbudSkjema.jsx'
 import TilbudPreview from './components/TilbudPreview.jsx'
 import { genererTilbudstekst } from './api/claude.js'
 import { lastNedPDF } from './api/pdf.js'
+import Landingsside from './components/Landingsside.jsx'
 
 const TOM_SKJEMA = {
   firmanavn: '',
@@ -68,7 +69,7 @@ export default function App() {
   const [isPro, setIsPro] = useState(true) // TODO: koble til Stripe ved Fase 2
   const [laster, setLaster] = useState(false)
   const [feil, setFeil] = useState('')
-  const [steg, setSteg] = useState('skjema')
+  const [steg, setSteg] = useState('landing')
 
   // Lagre firmainformasjon automatisk når den endres
   useEffect(() => {
@@ -160,15 +161,24 @@ export default function App() {
                 ← Tilbake til skjema
               </button>
             )}
-            <button className="btn btn-secondary" style={{borderColor:'#16a34a', color:'#16a34a'}} onClick={nullstill}>
-              + Nytt tilbud
-            </button>
+            {steg !== 'landing' && (
+              <button className="btn btn-secondary" style={{borderColor:'#16a34a', color:'#16a34a'}} onClick={nullstill}>
+                + Nytt tilbud
+              </button>
+            )}
+            {steg === 'landing' && (
+              <button className="btn btn-primary" onClick={() => setSteg('skjema')}>
+                Lag tilbud →
+              </button>
+            )}
           </div>
         </div>
       </header>
 
       <main className="app-main">
-        {steg === 'skjema' ? (
+        {steg === 'landing' ? (
+          <Landingsside onStart={() => setSteg('skjema')} />
+        ) : steg === 'skjema' ? (
           <TilbudSkjema
             skjema={skjema}
             oppdater={oppdater}

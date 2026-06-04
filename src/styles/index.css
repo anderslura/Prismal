@@ -1013,3 +1013,153 @@ textarea { resize: vertical; }
   border-radius: 0 4px 4px 0;
   font-size: 12px;
 }
+
+/* ===========================
+   LANDINGSSIDE
+   =========================== */
+.landing-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+}
+
+/* HERO */
+.landing-hero {
+  text-align: center;
+  padding: 60px 20px 50px;
+}
+.landing-tittel {
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 800;
+  color: var(--tekst);
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+.landing-undertittel {
+  font-size: clamp(15px, 2.5vw, 20px);
+  color: var(--tekst-sekundaer);
+  max-width: 560px;
+  margin: 0 auto 32px;
+  line-height: 1.6;
+}
+.landing-cta {
+  font-size: 17px;
+  padding: 14px 32px;
+  border-radius: 50px;
+}
+.landing-cta-hint {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--tekst-sekundaer);
+}
+
+/* FEATURES */
+.landing-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  margin-bottom: 60px;
+}
+.feature-kort {
+  background: var(--hvit);
+  border: 1px solid var(--kant);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  text-align: center;
+  box-shadow: var(--skygge);
+}
+.feature-ikon {
+  font-size: 28px;
+  display: block;
+  margin-bottom: 10px;
+}
+.feature-kort h3 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--tekst);
+}
+.feature-kort p {
+  font-size: 13px;
+  color: var(--tekst-sekundaer);
+  line-height: 1.5;
+}
+
+/* PRIS */
+.landing-seksjon-tittel {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: var(--tekst);
+}
+.pris-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  max-width: 600px;
+  margin: 0 auto 16px;
+}
+.pris-kort {
+  background: var(--hvit);
+  border: 1px solid var(--kant);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  text-align: center;
+  box-shadow: var(--skygge);
+  position: relative;
+}
+.pris-kort-pro {
+  border-color: var(--blaa);
+  box-shadow: 0 4px 24px rgba(30,80,200,0.15);
+}
+.pris-kort h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.pris-beloep {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--blaa);
+  margin-bottom: 16px;
+}
+.pris-beloep span {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--tekst-sekundaer);
+}
+.pris-liste {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+  text-align: left;
+  font-size: 13px;
+  color: var(--tekst-sekundaer);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.pro-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--blaa);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 12px;
+  border-radius: 20px;
+}
+.pris-sammenligning {
+  text-align: center;
+  font-size: 12px;
+  color: var(--tekst-sekundaer);
+  font-style: italic;
+}
+
+@media (max-width: 480px) {
+  .pris-grid { grid-template-columns: 1fr; }
+  .landing-features { grid-template-columns: 1fr 1fr; }
+}
