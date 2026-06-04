@@ -1394,3 +1394,87 @@ textarea { resize: vertical; }
   border: 1.5px solid var(--blaa);
   border-radius: 6px;
 }
+
+/* Logo-sirkel i demo */
+.demo-logo-sirkel {
+  width: 32px; height: 32px;
+  border: 2px solid rgba(255,255,255,0.7);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 7px; font-weight: 700; color: rgba(255,255,255,0.9);
+  text-align: center; line-height: 1.2; flex-shrink: 0;
+}
+.demo-pdf-logo-boks {
+  width: 30px; height: 30px;
+  border: 2px solid rgba(255,255,255,0.7);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 7px; font-weight: 700; color: rgba(255,255,255,0.9);
+  text-align: center; line-height: 1.2; flex-shrink: 0;
+}
+
+/* Påslag i demo */
+.demo-paaslag-rad {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+  padding: 5px 4px;
+  border-top: 1px dashed var(--kant);
+}
+.demo-paaslag-inn { animation: fadeIn 0.4s ease; }
+.demo-paaslag-input {
+  width: 32px; text-align: center;
+  padding: 3px 4px; font-size: 11px;
+}
+
+/* Checkbox i demo */
+.demo-cb {
+  width: 14px; height: 14px;
+  border: 1.5px solid var(--kant);
+  border-radius: 3px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 700;
+  transition: background 0.3s, border-color 0.3s;
+  margin: 0 auto;
+}
+.demo-cb-aktiv {
+  background: var(--blaa);
+  border-color: var(--blaa);
+  color: white;
+  animation: checkPop 0.3s ease;
+}
+@keyframes checkPop {
+  0% { transform: scale(0.6); }
+  70% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Mat header med påslag-kolonne */
+.demo-mat-header {
+  display: grid;
+  grid-template-columns: 1fr 28px 36px 50px 28px;
+  gap: 4px;
+  font-size: 8px;
+  font-weight: 600;
+  color: var(--tekst-sekundaer);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  padding: 0 2px;
+}
+.demo-mat-rad {
+  display: grid;
+  grid-template-columns: 1fr 28px 36px 50px 28px;
+  gap: 4px;
+  font-size: 10px;
+  padding: 4px 4px;
+  border-bottom: 1px solid var(--kant);
+  align-items: center;
+}
+.demo-mat-ny-rad {
+  display: grid;
+  grid-template-columns: 1fr 28px 36px auto;
+  gap: 4px;
+  margin-top: 5px;
+  align-items: center;
+}
