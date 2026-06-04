@@ -1349,3 +1349,16 @@ textarea { resize: vertical; }
 .demo-preview-pris-rad:last-child { border-bottom:none; }
 .demo-preview-paaslag { color:var(--blaa); }
 .demo-preview-total { font-weight:700; font-size:9px; color:var(--tekst); background:var(--blaa-lys); }
+
+/* Logo upload-knapp i demo — lik real app */
+.demo-logo-upload-btn {
+  border: 1.5px dashed var(--blaa);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--blaa);
+  text-align: center;
+  cursor: pointer;
+  background: var(--hvit);
+}

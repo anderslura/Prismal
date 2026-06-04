@@ -5,21 +5,24 @@ const FASER = [
   { id: 'kunde_adr',   slutt: 3400  },
   { id: 'kunde_epost', slutt: 4400  },
   { id: 'jobb',        slutt: 8200  },
-  { id: 'timer',       slutt: 10200 },
-  { id: 'mat1',        slutt: 13200 },
-  { id: 'mat2',        slutt: 16800 },
-  { id: 'mat3',        slutt: 20300 },
-  { id: 'huk_lekt',    slutt: 21800 },
-  { id: 'huk_skruer',  slutt: 23300 },
-  { id: 'paaslag_pst', slutt: 25300 },
-  { id: 'generer',     slutt: 26500 },
-  { id: 'laster',      slutt: 28800 },
-  { id: 'preview',     slutt: 33800 },
-  { id: 'klikk_pdf',   slutt: 35000 },
-  { id: 'pdf',         slutt: 40000 },
-  { id: 'pause',       slutt: 42000 },
+  { id: 'timepris',    slutt: 9600  },
+  { id: 'timer',       slutt: 11000 },
+  { id: 'mat1',        slutt: 14000 },
+  { id: 'mat2',        slutt: 17500 },
+  { id: 'mat3',        slutt: 21000 },
+  { id: 'mat4',        slutt: 24500 },
+  { id: 'huk_lekt',    slutt: 26000 },
+  { id: 'huk_skruer',  slutt: 27500 },
+  { id: 'huk_bord',    slutt: 29000 },
+  { id: 'paaslag_pst', slutt: 31000 },
+  { id: 'generer',     slutt: 32200 },
+  { id: 'laster',      slutt: 34500 },
+  { id: 'preview',     slutt: 38500 },
+  { id: 'klikk_pdf',   slutt: 39700 },
+  { id: 'pdf',         slutt: 44700 },
+  { id: 'pause',       slutt: 46700 },
 ]
-const TOTAL = 42000
+const TOTAL = 46700
 
 function faseSluttt(id) { return FASER.find(f => f.id === id)?.slutt || 0 }
 function fase(ms) { for (const f of FASER) if (ms < f.slutt) return f.id; return 'pause' }
@@ -42,8 +45,9 @@ const MAT = [
   { navn: 'Maskinleie',             ant: 1,  pris: 1500, sum: '1 500 kr', paaslag: false },
   { navn: 'Impregnert lekt',        ant: 12, pris: 214,  sum: '2 568 kr', paaslag: true  },
   { navn: 'Terrasseskruer (pakke)', ant: 2,  pris: 99,   sum: '198 kr',   paaslag: true  },
+  { navn: 'Terrassebord',           ant: 56, pris: 30,   sum: '1 680 kr', paaslag: true  },
 ]
-const MAT_FASER = ['mat1','mat2','mat3']
+const MAT_FASER = ['mat1','mat2','mat3','mat4']
 
 export default function DemoAnimasjon() {
   const [ms, setMs] = useState(0)
@@ -61,24 +65,26 @@ export default function DemoAnimasjon() {
   const aktivFase = fase(ms)
   const visSide   = ['preview','klikk_pdf','pdf','pause'].includes(aktivFase) ? 'preview' : 'skjema'
 
-  const kundeNavnTyped  = typeText(KUNDE_NAVN,  ms, 300,  faseSluttt('kunde_navn'))
+  const kundeNavnTyped  = typeText(KUNDE_NAVN,  ms, 300, faseSluttt('kunde_navn'))
   const kundeAdrTyped   = typeText(KUNDE_ADR,   ms, faseSluttt('kunde_navn'), faseSluttt('kunde_adr'))
   const kundeEpostTyped = typeText(KUNDE_EPOST, ms, faseSluttt('kunde_adr'),  faseSluttt('kunde_epost'))
   const jobbTyped       = typeText(JOBB_TEKST,  ms, faseSluttt('kunde_epost'), faseSluttt('jobb'))
-  const timerTyped      = ms > faseSluttt('jobb') + 400 ? typeText('12', ms, faseSluttt('jobb') + 400, faseSluttt('timer')) : ''
+  const timeprisTyped   = ms > faseSluttt('jobb') + 300 ? typeText('650', ms, faseSluttt('jobb') + 300, faseSluttt('timepris')) : ''
+  const timerTyped      = ms > faseSluttt('timepris') + 200 ? typeText('12', ms, faseSluttt('timepris') + 200, faseSluttt('timer')) : ''
 
   const lagte = MAT.filter((_, i) => ms > faseSluttt(MAT_FASER[i]) - 200)
   const skriveIdx = MAT_FASER.findIndex(id => aktivFase === id)
   const sStart = skriveIdx === 0 ? faseSluttt('timer') : faseSluttt(MAT_FASER[skriveIdx - 1] || 'timer')
   const sSlut  = faseSluttt(MAT_FASER[skriveIdx] || 'mat1') - 400
-  const sNavn  = skriveIdx >= 0 ? typeText(MAT[skriveIdx].navn, ms, sStart, sStart + (sSlut - sStart) * 0.5) : ''
-  const sAnt   = skriveIdx >= 0 && ms > sStart + (sSlut - sStart) * 0.55 ? String(MAT[skriveIdx].ant) : ''
-  const sPris  = skriveIdx >= 0 && ms > sStart + (sSlut - sStart) * 0.7  ? String(MAT[skriveIdx].pris) : ''
+  const sNavn  = skriveIdx >= 0 ? typeText(MAT[skriveIdx].navn, ms, sStart, sStart + (sSlut - sStart) * 0.45) : ''
+  const sAnt   = skriveIdx >= 0 && ms > sStart + (sSlut - sStart) * 0.5  ? String(MAT[skriveIdx].ant) : ''
+  const sPris  = skriveIdx >= 0 && ms > sStart + (sSlut - sStart) * 0.65 ? String(MAT[skriveIdx].pris) : ''
 
-  const huketLekt   = ms > faseSluttt('huk_lekt') - 200
+  const huketLekt   = ms > faseSluttt('huk_lekt')   - 200
   const huketSkruer = ms > faseSluttt('huk_skruer') - 200
+  const huketBord   = ms > faseSluttt('huk_bord')   - 200
   const paasPst     = ms > faseSluttt('paaslag_pst') - 200 ? '25'
-                    : aktivFase === 'paaslag_pst' ? typeText('25', ms, faseSluttt('huk_skruer'), faseSluttt('paaslag_pst')) : ''
+                    : aktivFase === 'paaslag_pst' ? typeText('25', ms, faseSluttt('huk_bord'), faseSluttt('paaslag_pst')) : ''
   const visKnapp    = aktivFase === 'generer'
   const visLaster   = aktivFase === 'laster'
   const aiTyped     = ['preview','klikk_pdf','pdf','pause'].includes(aktivFase)
@@ -86,32 +92,36 @@ export default function DemoAnimasjon() {
   const visPdf      = aktivFase === 'pdf' || aktivFase === 'pause'
   const klikkerPdf  = aktivFase === 'klikk_pdf'
   const pdfOpacity  = prog(ms, 'klikk_pdf', 'pdf')
-  // 4 sek visning: nedlastet-state de siste 4 sek av pdf-fasen
-  const nedlastet   = ms > faseSluttt('pdf') - 4000
+  const nedlastet   = ms > faseSluttt('pdf') - 3000
 
   function cbStatus(i) {
     if (i === 1) return huketLekt
     if (i === 2) return huketSkruer
+    if (i === 3) return huketBord
     return false
   }
+
+  // Påslagsberegning preview: 25% av lekt(2568)+skruer(198)+bord(1680) = 1111.5 ≈ 1112
+  const paaslagBelop = '1 112 kr'
+  const sumEksMva    = '13 858 kr'  // 7800+1500+2568+198+1680+1112
+  const totalInklMva = '17 323 kr'
 
   return (
     <div className="demo-wrapper">
       <div className="demo-skjerm">
 
-        {/* HEADER */}
         <div className="demo-header">
           <span className="demo-logo">Prismal</span>
           <span className="demo-tagline">Din mal. Din pris. Din tid.</span>
           <span className="demo-btn-sm demo-btn-gronn">+ Nytt tilbud</span>
         </div>
 
-        {/* ── SKJEMA ── */}
+        {/* SKJEMA */}
         {visSide === 'skjema' && (
           <div className="demo-to-kol">
             <div className="demo-kol-venstre">
 
-              {/* DIN BEDRIFT */}
+              {/* DIN BEDRIFT — realistisk utseende */}
               <div className="demo-seksjon">
                 <div className="demo-seksjon-tittel">Din bedrift</div>
                 <div className="demo-felt-liten">
@@ -122,16 +132,22 @@ export default function DemoAnimasjon() {
                   <div><div className="demo-label">Telefon</div><div className="demo-input-boks demo-graa demo-prefilled">000 00 000</div></div>
                   <div><div className="demo-label">E-post</div><div className="demo-input-boks demo-graa demo-prefilled">din@firma.no</div></div>
                 </div>
-                <div style={{marginTop:3}}><div className="demo-label">Adresse</div><div className="demo-input-boks demo-graa demo-prefilled">Bedriftsvegen 1, 0000 Byen</div></div>
+                <div style={{marginTop:3}}>
+                  <div className="demo-label">Adresse</div>
+                  <div className="demo-input-boks demo-graa demo-prefilled">Bedriftsvegen 1, 0000 Byen</div>
+                </div>
                 <div className="demo-to-felt" style={{marginTop:3}}>
                   <div><div className="demo-label">Org.nr</div><div className="demo-input-boks demo-graa demo-prefilled">000 000 000</div></div>
                   <div><div className="demo-label">Nettside</div><div className="demo-input-boks demo-graa demo-prefilled">www.dittfirma.no</div></div>
                 </div>
-                <div style={{marginTop:4,display:'flex',alignItems:'center',gap:5}}>
-                  <div className="demo-label" style={{marginBottom:0}}>Logo på PDF</div>
-                  <div className="demo-logo-runding">Din<br/>logo</div>
-                  <span style={{fontSize:9,color:'#dc2626'}}>×</span>
-                  <span style={{fontSize:8,color:'var(--groen)',marginLeft:'auto'}}>✓ Lagres automatisk</span>
+                {/* Logo upload — lik real app */}
+                <div style={{marginTop:5}}>
+                  <div className="demo-label">Logo på PDF</div>
+                  <div className="demo-logo-upload-btn">Velg logofil (PNG/JPG)</div>
+                  <div style={{marginTop:4,display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                    <span style={{fontSize:8,color:'var(--groen)'}}>✓ Lagres automatisk</span>
+                    <span style={{fontSize:8,color:'#dc2626',fontWeight:600}}>Nullstill</span>
+                  </div>
                 </div>
               </div>
 
@@ -164,7 +180,7 @@ export default function DemoAnimasjon() {
               {/* JOBBEN */}
               <div className="demo-seksjon">
                 <div className="demo-seksjon-tittel">Jobben</div>
-                <div className="demo-label">Beskrivelse av jobben *</div>
+                <div className="demo-label">Beskrivelse *</div>
                 <div className="demo-input-boks demo-textarea-boks">
                   {jobbTyped || <span className="demo-placeholder">Eks: male stue, bytte vinduer...</span>}
                   {aktivFase === 'jobb' && <span className="demo-cursor">|</span>}
@@ -178,37 +194,47 @@ export default function DemoAnimasjon() {
               <div className="demo-seksjon">
                 <div className="demo-seksjon-tittel">Arbeid</div>
                 <div className="demo-to-felt">
-                  <div><div className="demo-label">Timer</div>
-                    <div className="demo-input-boks">{timerTyped || <span className="demo-placeholder">eks. 8</span>}{aktivFase==='timer'&&<span className="demo-cursor">|</span>}</div>
+                  <div>
+                    <div className="demo-label">Timer</div>
+                    <div className="demo-input-boks">
+                      {timerTyped || <span className="demo-placeholder">eks. 8</span>}
+                      {aktivFase === 'timer' && <span className="demo-cursor">|</span>}
+                    </div>
                   </div>
-                  <div><div className="demo-label">Kr/time</div><div className="demo-input-boks demo-graa demo-prefilled">650</div></div>
+                  <div>
+                    <div className="demo-label">Kr/time</div>
+                    <div className="demo-input-boks">
+                      {timeprisTyped || <span className="demo-placeholder">650</span>}
+                      {aktivFase === 'timepris' && <span className="demo-cursor">|</span>}
+                    </div>
+                  </div>
                 </div>
               </div>
 
               <div className="demo-seksjon">
                 <div className="demo-seksjon-tittel">Materialer & utgifter</div>
                 <div className="demo-mat-header">
-                  <span>Beskrivelse</span><span>Ant.</span><span>Kr</span><span>Sum</span><span>Påslag</span><span></span>
+                  <span>Beskrivelse</span><span>Ant.</span><span>Kr</span><span>Sum</span><span>↑%</span><span></span>
                 </div>
                 {lagte.map((m, i) => (
                   <div key={i} className="demo-mat-rad demo-mat-rad-aktiv">
-                    <span style={{fontSize:9,overflow:'hidden',whiteSpace:'nowrap',textOverflow:'ellipsis'}}>{m.navn}</span>
-                    <span style={{textAlign:'center'}}>{m.ant}</span>
-                    <span style={{textAlign:'right'}}>{m.pris}</span>
-                    <span style={{color:'var(--blaa)',fontWeight:600,fontSize:9,textAlign:'right'}}>{m.sum}</span>
+                    <span style={{fontSize:8.5,overflow:'hidden',whiteSpace:'nowrap',textOverflow:'ellipsis'}}>{m.navn}</span>
+                    <span style={{textAlign:'center',fontSize:9}}>{m.ant}</span>
+                    <span style={{textAlign:'right',fontSize:9}}>{m.pris}</span>
+                    <span style={{color:'var(--blaa)',fontWeight:600,fontSize:8.5,textAlign:'right'}}>{m.sum}</span>
                     <span className={`demo-cb ${cbStatus(i) ? 'demo-cb-aktiv' : ''}`}>{cbStatus(i) ? '✓' : ''}</span>
                     <span className="demo-x-btn">×</span>
                   </div>
                 ))}
                 {skriveIdx >= 0 && (
                   <div className="demo-mat-ny-rad">
-                    <div className="demo-input-boks demo-mat-input">{sNavn || <span className="demo-placeholder">Beskrivelse</span>}{skriveIdx>=0&&!sAnt&&<span className="demo-cursor">|</span>}</div>
+                    <div className="demo-input-boks demo-mat-input">{sNavn || <span className="demo-placeholder">Beskrivelse</span>}{!sAnt&&skriveIdx>=0&&<span className="demo-cursor">|</span>}</div>
                     <span className="demo-input-boks demo-mat-liten" style={{textAlign:'center'}}>{sAnt}</span>
                     <span className="demo-input-boks demo-mat-liten" style={{textAlign:'right'}}>{sPris}</span>
                     <button className={`demo-legg-til ${sPris ? 'demo-legg-til-aktiv' : ''}`}>Legg til</button>
                   </div>
                 )}
-                {ms > faseSluttt('mat3') - 500 && <div className="demo-hint-tekst" style={{marginTop:3}}>Nye linjer huskes til neste tilbud.</div>}
+                {ms > faseSluttt('mat4') - 500 && <div className="demo-hint-tekst" style={{marginTop:3}}>Nye linjer huskes til neste tilbud.</div>}
               </div>
 
               {ms > faseSluttt('huk_lekt') - 500 && (
@@ -231,14 +257,12 @@ export default function DemoAnimasjon() {
           </div>
         )}
 
-        {/* ── FORHÅNDSVISNING (med påslag) ── */}
+        {/* FORHÅNDSVISNING */}
         {visSide === 'preview' && !visPdf && (
           <div className="demo-preview">
             <div className="demo-preview-tittel-rad">
               <span className="demo-preview-tittel">Forhåndsvisning av tilbud</span>
-              <button className={`demo-btn-lastned ${klikkerPdf ? 'demo-btn-lastned-aktiv' : ''}`}>
-                ⬇ Last ned PDF
-              </button>
+              <button className={`demo-btn-lastned ${klikkerPdf ? 'demo-btn-lastned-aktiv' : ''}`}>⬇ Last ned PDF</button>
             </div>
             <div className="demo-doc">
               <div className="demo-doc-header">
@@ -262,14 +286,14 @@ export default function DemoAnimasjon() {
               <div className="demo-doc-ai-tekst">
                 <div style={{fontWeight:700,fontSize:10,color:'var(--blaa)',marginBottom:2}}>Tilbud</div>
                 <div style={{fontSize:8.5,lineHeight:1.5,whiteSpace:'pre-line',color:'#374151'}}>
-                  {aiTyped}{['preview'].includes(aktivFase) && <span className="demo-cursor">|</span>}
+                  {aiTyped}{aktivFase==='preview' && <span className="demo-cursor">|</span>}
                 </div>
-                {ms > faseSluttt('preview') - 1500 && (
+                {ms > faseSluttt('preview') - 2500 && (
                   <div className="demo-preview-pris-mini">
                     <div className="demo-preview-pris-rad"><span>Arbeid (12t × 650)</span><span>7 800 kr</span></div>
-                    <div className="demo-preview-pris-rad"><span>Materialer</span><span>4 266 kr</span></div>
-                    <div className="demo-preview-pris-rad demo-preview-paaslag"><span>Påslag materialer (25%)</span><span>692 kr</span></div>
-                    <div className="demo-preview-pris-rad demo-preview-total"><span>Totalt inkl. mva</span><span>15 946 kr</span></div>
+                    <div className="demo-preview-pris-rad"><span>Materialer</span><span>5 946 kr</span></div>
+                    <div className="demo-preview-pris-rad demo-preview-paaslag"><span>Påslag materialer (25%)</span><span>{paaslagBelop}</span></div>
+                    <div className="demo-preview-pris-rad demo-preview-total"><span>Totalt inkl. mva</span><span>{totalInklMva}</span></div>
                   </div>
                 )}
               </div>
@@ -277,9 +301,9 @@ export default function DemoAnimasjon() {
           </div>
         )}
 
-        {/* ── PDF (uten påslag, justerte priser) ── */}
+        {/* PDF — påslag bakt inn i priser */}
         {visPdf && (
-          <div className="demo-pdf-full" style={{opacity: Math.min(1, pdfOpacity * 5)}}>
+          <div className="demo-pdf-full" style={{opacity: Math.min(1, pdfOpacity * 6)}}>
             <div className="demo-pdf-hdr">
               <div className="demo-pdf-hdr-venstre">
                 <div className="demo-pdf-logo-boks">Din<br/>logo</div>
@@ -291,7 +315,7 @@ export default function DemoAnimasjon() {
               </div>
               <div style={{textAlign:'right'}}>
                 <div style={{fontSize:13,fontWeight:700,color:'white',letterSpacing:2}}>TILBUD</div>
-                <div style={{fontSize:7.5,color:'rgba(255,255,255,0.9)'}}>Nr: T2606-412 · Dato: 4.6.2026 · Gyldig til: 4.7.2026</div>
+                <div style={{fontSize:7.5,color:'rgba(255,255,255,0.9)'}}>Nr: T2606-412 · 4.6.2026 · Gyldig til: 4.7.2026</div>
               </div>
             </div>
             <div className="demo-pdf-body">
@@ -301,8 +325,8 @@ export default function DemoAnimasjon() {
                 <div style={{fontSize:8,color:'#6b7280'}}>Furuvegen 12, 5700 Voss · kari@epost.no</div>
               </div>
               <div style={{borderBottom:'1px solid #e5e7eb',margin:'5px 0'}}/>
-              <div style={{fontWeight:700,fontSize:9.5,color:'var(--blaa)',marginBottom:3}}>Tilbud</div>
-              <div style={{fontSize:8,lineHeight:1.45,color:'#374151',marginBottom:7}}>
+              <div style={{fontWeight:700,fontSize:9,color:'var(--blaa)',marginBottom:2}}>Tilbud</div>
+              <div style={{fontSize:7.5,lineHeight:1.45,color:'#374151',marginBottom:6}}>
                 Hei Kari, vi sender herved tilbud på nødvendig forarbeid og oppsett av terrasse på 20 kvm. Vi stiller med fagfolk og nødvendig maskiner, og sørger for solid utførelse med kvalitetsmaterialer.
               </div>
               <table className="demo-pdf-tabell">
@@ -314,9 +338,10 @@ export default function DemoAnimasjon() {
                   <tr><td>Maskinleie</td><td>1 stk</td><td>1 500 kr</td><td>1 500 kr</td></tr>
                   <tr><td>Impregnert lekt</td><td>12 stk</td><td>268 kr</td><td>3 216 kr</td></tr>
                   <tr><td>Terrasseskruer (pakke)</td><td>2 stk</td><td>124 kr</td><td>248 kr</td></tr>
-                  <tr className="demo-pdf-sum-rad"><td colSpan={3}>Sum eks. mva</td><td>12 764 kr</td></tr>
-                  <tr className="demo-pdf-sum-rad"><td colSpan={3}>MVA 25%</td><td>3 191 kr</td></tr>
-                  <tr className="demo-pdf-total-rad"><td colSpan={3}><strong>Totalt inkl. mva</strong></td><td><strong>15 955 kr</strong></td></tr>
+                  <tr><td>Terrassebord</td><td>56 stk</td><td>38 kr</td><td>2 128 kr</td></tr>
+                  <tr className="demo-pdf-sum-rad"><td colSpan={3}>Sum eks. mva</td><td>14 892 kr</td></tr>
+                  <tr className="demo-pdf-sum-rad"><td colSpan={3}>MVA 25%</td><td>3 723 kr</td></tr>
+                  <tr className="demo-pdf-total-rad"><td colSpan={3}><strong>Totalt inkl. mva</strong></td><td><strong>18 615 kr</strong></td></tr>
                 </tbody>
               </table>
               <div className="demo-pdf-aksept">
