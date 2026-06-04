@@ -1192,6 +1192,7 @@ textarea { resize: vertical; }
 }
 
 
+
 /* ===========================
    DEMO-ANIMASJON
    =========================== */
@@ -1201,331 +1202,128 @@ textarea { resize: vertical; }
   border: 1px solid var(--kant);
   border-radius: 12px;
   box-shadow: var(--skygge-stor);
-  width: 100%;
-  max-width: 640px;
-  overflow: hidden;
-  min-height: 340px;
+  width: 100%; max-width: 660px;
+  overflow: hidden; min-height: 360px;
 }
-
-/* Header */
 .demo-header {
-  background: var(--hvit);
-  border-bottom: 1px solid var(--kant);
-  padding: 8px 14px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  background: var(--hvit); border-bottom: 1px solid var(--kant);
+  padding: 7px 14px; display: flex; align-items: center; gap: 8px;
 }
-.demo-logo { font-weight: 800; font-size: 14px; color: var(--blaa); }
-.demo-tagline { font-size: 10px; color: var(--tekst-sekundaer); flex: 1; }
+.demo-logo { font-weight:800; font-size:14px; color:var(--blaa); }
+.demo-tagline { font-size:10px; color:var(--tekst-sekundaer); flex:1; }
 .demo-btn-sm {
-  font-size: 10px;
-  padding: 4px 10px;
-  border: 1.5px solid var(--blaa);
-  border-radius: 6px;
-  color: var(--blaa);
-  font-weight: 600;
-  white-space: nowrap;
+  font-size:10px; padding:3px 9px;
+  border:1.5px solid var(--blaa); border-radius:5px;
+  color:var(--blaa); font-weight:600; white-space:nowrap;
 }
-.demo-btn-gronn { border-color: var(--groen); color: var(--groen); }
+.demo-btn-gronn { border-color:var(--groen); color:var(--groen); }
 
-/* Layout */
-.demo-to-kol { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
-.demo-kol-venstre { padding: 10px; border-right: 1px solid var(--kant); display: flex; flex-direction: column; gap: 8px; }
-.demo-kol-hoyre { padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+.demo-to-kol { display:grid; grid-template-columns:1fr 1fr; }
+.demo-kol-venstre { padding:8px; border-right:1px solid var(--kant); display:flex; flex-direction:column; gap:6px; }
+.demo-kol-hoyre { padding:8px; display:flex; flex-direction:column; gap:6px; }
 
-.demo-seksjon { background: var(--hvit); border: 1px solid var(--kant); border-radius: 8px; padding: 8px 10px; }
-.demo-seksjon-tittel { font-size: 10px; font-weight: 700; color: var(--blaa); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 7px; }
-.demo-felt-liten { margin-bottom: 6px; }
-.demo-felt-liten:last-child { margin-bottom: 0; }
-.demo-to-felt { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.demo-label { font-size: 9px; font-weight: 600; color: var(--tekst-sekundaer); margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.3px; }
+.demo-seksjon { background:var(--hvit); border:1px solid var(--kant); border-radius:7px; padding:7px 9px; }
+.demo-seksjon-tittel { font-size:9px; font-weight:700; color:var(--blaa); text-transform:uppercase; letter-spacing:0.6px; margin-bottom:6px; }
+.demo-felt-liten { margin-bottom:4px; }
+.demo-felt-liten:last-child { margin-bottom:0; }
+.demo-to-felt { display:grid; grid-template-columns:1fr 1fr; gap:5px; }
+.demo-label { font-size:8.5px; font-weight:600; color:var(--tekst-sekundaer); margin-bottom:2px; text-transform:uppercase; letter-spacing:0.3px; }
 .demo-input-boks {
-  border: 1px solid var(--kant);
-  border-radius: 5px;
-  padding: 4px 7px;
-  font-size: 11px;
-  color: var(--tekst);
-  background: var(--hvit);
-  min-height: 24px;
-  line-height: 1.4;
+  border:1px solid var(--kant); border-radius:4px; padding:3px 6px;
+  font-size:10px; color:var(--tekst); background:var(--hvit); min-height:22px; line-height:1.4;
 }
-.demo-textarea-boks { min-height: 36px; }
-.demo-graa { background: var(--bakgrunn); color: var(--tekst-sekundaer); }
-.demo-placeholder { color: #c0c7d4; }
-.demo-hint-tekst { font-size: 9px; color: var(--tekst-sekundaer); font-style: italic; margin-top: 3px; }
-.demo-cursor { display: inline-block; animation: blink 0.7s infinite; color: var(--blaa); font-weight: 300; }
+.demo-textarea-boks { min-height:34px; }
+.demo-graa { background:var(--bakgrunn); }
+.demo-prefilled { color:var(--tekst-sekundaer); font-style:italic; }
+.demo-placeholder { color:#c5cad6; }
+.demo-hint-tekst { font-size:8px; color:var(--tekst-sekundaer); font-style:italic; margin-top:2px; }
+.demo-cursor { display:inline-block; animation:blink 0.7s infinite; color:var(--blaa); }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+.demo-logo-runding {
+  border:1.5px dashed var(--blaa); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:7px; font-weight:700; color:var(--blaa); text-align:center; line-height:1.2;
+  background:var(--blaa-lys); flex-shrink:0; width:28px; height:28px;
+}
 
 /* Materialer */
 .demo-mat-header {
-  display: grid;
-  grid-template-columns: 1fr 28px 36px 50px;
-  gap: 4px;
-  font-size: 8px;
-  font-weight: 600;
-  color: var(--tekst-sekundaer);
-  text-transform: uppercase;
-  margin-bottom: 4px;
-  padding: 0 2px;
+  display:grid; grid-template-columns:1fr 22px 30px 44px 26px 14px;
+  gap:3px; font-size:7.5px; font-weight:600; color:var(--tekst-sekundaer);
+  text-transform:uppercase; margin-bottom:3px; padding:0 1px;
 }
 .demo-mat-rad {
-  display: grid;
-  grid-template-columns: 1fr 28px 36px 50px;
-  gap: 4px;
-  font-size: 10px;
-  padding: 4px 4px;
-  border-bottom: 1px solid var(--kant);
-  align-items: center;
+  display:grid; grid-template-columns:1fr 22px 30px 44px 26px 14px;
+  gap:3px; font-size:9.5px; padding:3px 1px;
+  border-bottom:1px solid var(--kant); align-items:center;
 }
-.demo-mat-rad-aktiv { animation: fadeIn 0.4s ease; }
-@keyframes fadeIn { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
-.demo-mat-ny-rad {
-  display: grid;
-  grid-template-columns: 1fr 28px 36px auto;
-  gap: 4px;
-  margin-top: 5px;
-  align-items: center;
-}
-.demo-mat-input { padding: 3px 5px; font-size: 10px; }
-.demo-mat-liten { padding: 3px 4px; font-size: 10px; text-align: center; }
+.demo-mat-rad-aktiv { animation:fadeIn 0.35s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(-3px)} to{opacity:1;transform:translateY(0)} }
+.demo-mat-ny-rad { display:grid; grid-template-columns:1fr 22px 30px auto; gap:3px; margin-top:5px; align-items:center; }
+.demo-mat-input { padding:2px 4px; font-size:9.5px; }
+.demo-mat-liten { padding:2px 3px; font-size:9.5px; }
 .demo-legg-til {
-  font-size: 9px;
-  padding: 3px 7px;
-  border: 1.5px solid var(--blaa);
-  border-radius: 5px;
-  background: var(--hvit);
-  color: var(--blaa);
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-  white-space: nowrap;
+  font-size:9px; padding:2px 7px;
+  border:1.5px solid var(--blaa); border-radius:4px;
+  background:var(--hvit); color:var(--blaa); font-weight:600; cursor:pointer; white-space:nowrap;
 }
-.demo-legg-til-aktiv { background: var(--blaa); color: white; }
+.demo-legg-til-aktiv { background:var(--blaa); color:white; }
+.demo-cb {
+  width:13px; height:13px; border:1.5px solid var(--kant); border-radius:3px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:8px; font-weight:700; margin:0 auto; transition:background 0.25s;
+}
+.demo-cb-aktiv { background:var(--blaa); border-color:var(--blaa); color:white; animation:checkPop 0.3s ease; }
+@keyframes checkPop { 0%{transform:scale(0.5)} 70%{transform:scale(1.2)} 100%{transform:scale(1)} }
+.demo-x-btn { font-size:11px; color:#dc2626; text-align:center; font-weight:700; opacity:0.65; }
 
-/* Generer-knapp */
+/* Påslag seksjon */
+.demo-paaslag-seksjon { animation:fadeIn 0.4s ease; }
+.demo-paaslag-input { width:30px; text-align:center; padding:2px 4px; font-size:11px; }
+
+/* Generer */
 .demo-generer-knapp {
-  background: var(--blaa);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 9px;
-  font-size: 11px;
-  font-weight: 600;
-  text-align: center;
-  cursor: pointer;
-  transition: transform 0.15s, opacity 0.3s;
-  margin-top: auto;
+  background:var(--blaa); color:white; border:none; border-radius:7px;
+  padding:8px; font-size:11px; font-weight:600; text-align:center;
+  cursor:pointer; transition:transform 0.15s,opacity 0.3s; margin-top:auto;
 }
-.demo-generer-aktiv { transform: scale(0.97); opacity: 0.85; }
-.demo-generer-laster { opacity: 0.7; background: #6b7280; }
+.demo-generer-aktiv { transform:scale(0.97); opacity:0.85; }
+.demo-generer-laster { opacity:0.7; background:#6b7280; }
 
 /* Preview */
-.demo-preview { padding: 10px; }
-.demo-preview-tittel-rad { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-.demo-preview-tittel { font-size: 12px; font-weight: 700; color: var(--tekst); }
-.demo-doc {
-  background: var(--hvit);
-  border: 1px solid var(--kant);
-  border-radius: 8px;
-  overflow: hidden;
-}
-.demo-doc-header {
-  background: var(--blaa);
-  padding: 10px 12px;
-  display: flex;
-  justify-content: space-between;
-}
-.demo-doc-firma { font-weight: 800; font-size: 12px; color: white; }
-.demo-doc-sub { font-size: 9px; color: rgba(255,255,255,0.85); }
-.demo-doc-tilbud-label { font-size: 13px; font-weight: 700; color: white; letter-spacing: 2px; }
-.demo-doc-til { padding: 8px 12px 6px; }
-.demo-doc-ai-tekst { padding: 0 12px 10px; }
-
-/* PDF full */
-.demo-pdf-full { display: flex; flex-direction: column; }
-.demo-pdf-hdr {
-  background: var(--blaa);
-  padding: 10px 14px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.demo-pdf-hdr-venstre { display: flex; align-items: center; gap: 8px; }
-.demo-pdf-logo-boks {
-  width: 28px; height: 28px;
-  border: 2px solid white;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 800; font-size: 13px; color: white;
-}
-.demo-pdf-body { padding: 10px 14px; background: white; }
-.demo-pdf-til-blokk { margin-bottom: 8px; }
-.demo-pdf-tabell {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 9px;
-  margin-bottom: 8px;
-}
-.demo-pdf-tabell th {
-  background: var(--blaa);
-  color: white;
-  padding: 5px 6px;
-  text-align: left;
-  font-size: 9px;
-}
-.demo-pdf-tabell td { padding: 4px 6px; border-bottom: 1px solid var(--kant); }
-.demo-pdf-sum-rad td { color: var(--tekst-sekundaer); }
-.demo-pdf-total-rad td { font-weight: 700; background: var(--blaa-lys); }
-.demo-pdf-aksept {
-  font-size: 8px;
-  color: var(--tekst-sekundaer);
-  padding: 6px 8px;
-  border-left: 2px solid var(--blaa);
-  background: #f8f9ff;
-  margin-bottom: 6px;
-}
-.demo-pdf-footer-linje {
-  text-align: center;
-  font-size: 10px;
-  color: var(--blaa);
-  font-weight: 600;
-  padding: 6px;
-  border: 1.5px solid var(--blaa);
-  border-radius: 6px;
-}
-
-/* Logo-sirkel i demo */
+.demo-preview { padding:8px; }
+.demo-preview-tittel-rad { display:flex; justify-content:space-between; align-items:center; margin-bottom:7px; }
+.demo-preview-tittel { font-size:12px; font-weight:700; color:var(--tekst); }
+.demo-doc { background:var(--hvit); border:1px solid var(--kant); border-radius:7px; overflow:hidden; }
+.demo-doc-header { background:var(--blaa); padding:9px 12px; display:flex; justify-content:space-between; }
+.demo-doc-firma { font-weight:800; font-size:11px; color:white; }
+.demo-doc-sub { font-size:8px; color:rgba(255,255,255,0.85); }
+.demo-doc-tilbud-label { font-size:12px; font-weight:700; color:white; letter-spacing:2px; }
+.demo-doc-til { padding:6px 12px 4px; }
+.demo-doc-ai-tekst { padding:0 12px 9px; }
 .demo-logo-sirkel {
-  width: 32px; height: 32px;
-  border: 2px solid rgba(255,255,255,0.7);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 7px; font-weight: 700; color: rgba(255,255,255,0.9);
-  text-align: center; line-height: 1.2; flex-shrink: 0;
+  width:30px; height:30px; border:2px solid rgba(255,255,255,0.7); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:7px; font-weight:700; color:rgba(255,255,255,0.9); text-align:center; line-height:1.2; flex-shrink:0;
 }
+
+/* PDF */
+.demo-pdf-full { display:flex; flex-direction:column; }
+.demo-pdf-hdr { background:var(--blaa); padding:9px 13px; display:flex; justify-content:space-between; align-items:center; }
+.demo-pdf-hdr-venstre { display:flex; align-items:center; gap:8px; }
 .demo-pdf-logo-boks {
-  width: 30px; height: 30px;
-  border: 2px solid rgba(255,255,255,0.7);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 7px; font-weight: 700; color: rgba(255,255,255,0.9);
-  text-align: center; line-height: 1.2; flex-shrink: 0;
+  width:30px; height:30px; border:2px solid rgba(255,255,255,0.7); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:7px; font-weight:700; color:rgba(255,255,255,0.9); text-align:center; line-height:1.2; flex-shrink:0;
 }
-
-/* Påslag i demo */
-.demo-paaslag-rad {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 6px;
-  padding: 5px 4px;
-  border-top: 1px dashed var(--kant);
-}
-.demo-paaslag-inn { animation: fadeIn 0.4s ease; }
-.demo-paaslag-input {
-  width: 32px; text-align: center;
-  padding: 3px 4px; font-size: 11px;
-}
-
-/* Checkbox i demo */
-.demo-cb {
-  width: 14px; height: 14px;
-  border: 1.5px solid var(--kant);
-  border-radius: 3px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 9px; font-weight: 700;
-  transition: background 0.3s, border-color 0.3s;
-  margin: 0 auto;
-}
-.demo-cb-aktiv {
-  background: var(--blaa);
-  border-color: var(--blaa);
-  color: white;
-  animation: checkPop 0.3s ease;
-}
-@keyframes checkPop {
-  0% { transform: scale(0.6); }
-  70% { transform: scale(1.2); }
-  100% { transform: scale(1); }
-}
-
-/* Mat header med påslag-kolonne */
-.demo-mat-header {
-  display: grid;
-  grid-template-columns: 1fr 28px 36px 50px 28px;
-  gap: 4px;
-  font-size: 8px;
-  font-weight: 600;
-  color: var(--tekst-sekundaer);
-  text-transform: uppercase;
-  margin-bottom: 4px;
-  padding: 0 2px;
-}
-.demo-mat-rad {
-  display: grid;
-  grid-template-columns: 1fr 28px 36px 50px 28px;
-  gap: 4px;
-  font-size: 10px;
-  padding: 4px 4px;
-  border-bottom: 1px solid var(--kant);
-  align-items: center;
-}
-.demo-mat-ny-rad {
-  display: grid;
-  grid-template-columns: 1fr 28px 36px auto;
-  gap: 4px;
-  margin-top: 5px;
-  align-items: center;
-}
-
-/* Firmagrid i demo */
-.demo-firma-grid {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 6px;
-  align-items: start;
-  margin-bottom: 0;
-}
-.demo-logo-felt { display: flex; flex-direction: column; align-items: center; }
-.demo-logo-runding {
-  width: 34px; height: 34px;
-  border: 1.5px dashed var(--blaa);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 7px; font-weight: 700; color: var(--blaa);
-  text-align: center; line-height: 1.2;
-  background: var(--blaa-lys);
-}
-
-/* × fjern-knapp i demo */
-.demo-x-btn {
-  font-size: 11px;
-  color: #dc2626;
-  cursor: pointer;
-  text-align: center;
-  font-weight: 700;
-  opacity: 0.7;
-}
-
-/* Oppdater mat-header og mat-rad til 6 kolonner */
-.demo-mat-header {
-  display: grid;
-  grid-template-columns: 1fr 22px 32px 42px 20px 14px;
-  gap: 3px;
-  font-size: 8px;
-  font-weight: 600;
-  color: var(--tekst-sekundaer);
-  text-transform: uppercase;
-  margin-bottom: 4px;
-  padding: 0 2px;
-}
-.demo-mat-rad {
-  display: grid;
-  grid-template-columns: 1fr 22px 32px 42px 20px 14px;
-  gap: 3px;
-  font-size: 9.5px;
-  padding: 4px 2px;
-  border-bottom: 1px solid var(--kant);
-  align-items: center;
-}
+.demo-pdf-body { padding:9px 13px; background:white; }
+.demo-pdf-til-blokk { margin-bottom:6px; }
+.demo-pdf-tabell { width:100%; border-collapse:collapse; font-size:8.5px; margin-bottom:7px; }
+.demo-pdf-tabell th { background:var(--blaa); color:white; padding:4px 6px; text-align:left; font-size:8.5px; }
+.demo-pdf-tabell td { padding:3px 6px; border-bottom:1px solid var(--kant); }
+.demo-pdf-sum-rad td { color:var(--tekst-sekundaer); }
+.demo-pdf-total-rad td { font-weight:700; background:var(--blaa-lys); }
+.demo-pdf-aksept { font-size:7.5px; color:var(--tekst-sekundaer); padding:5px 7px; border-left:2px solid var(--blaa); background:#f8f9ff; margin-bottom:6px; }
+.demo-pdf-footer-linje { text-align:center; font-size:10px; color:var(--blaa); font-weight:600; padding:6px; border:1.5px solid var(--blaa); border-radius:5px; transition:all 0.5s; }
+.demo-nedlastet { background:var(--groen); border-color:var(--groen); color:white; }
