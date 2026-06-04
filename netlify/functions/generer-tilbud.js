@@ -44,16 +44,15 @@ DETALJER OM OPPDRAGET:
 - Kunde: ${kundenavn}${kundeAdresse ? `, ${kundeAdresse}` : ''}
 - Oppdrag: ${beskrivelse || 'Se prisoversikt'}
 - Arbeid: ${(arbeidere||[]).filter(a=>a.timer).map(a=>`${a.timer}t à ${a.timepris}kr/t`).join(', ') || 'Se prisoversikt'}
-- Materialer:
-${materialListe}
-- Estimert totalsum eks. mva: ${totalSum.toLocaleString('no-NO')} kr
+- Materialer: ${materialListe}
 
 INSTRUKSJONER:
-- Skriv 3–4 korte avsnitt med vanlig tekst
+- Skriv 2–3 korte avsnitt med vanlig tekst
 - Start med en høflig innledning til kunden ved navn
 - Beskriv hva som skal gjøres og hvordan dere vil utføre det
 - Nevn eventuelle forbehold (f.eks. uforutsette forhold under arbeidet)
-- Avslutt med en enkel oppfordring til å ta kontakt — IKKE inkluder telefonnummer, e-post eller firmanavn på slutten, det er allerede på tilbudet
+- IKKE nevn priser, summer eller beløp — det vises i prisoversikten under
+- Avslutt med en enkel oppfordring til å ta kontakt — IKKE inkluder telefonnummer, e-post eller firmanavn på slutten
 - IKKE bruk markdown (ingen #, **, *, eller lignende formatering)
 - IKKE bruk plassholdere som [Telefonnummer] eller [E-postadresse]
 - Ren løpende tekst, ingen overskrifter
