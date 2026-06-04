@@ -1,3 +1,4 @@
+import DemoAnimasjon from './DemoAnimasjon.jsx'
 function IkonRakett() {
   return (
     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -50,6 +51,9 @@ export default function Landingsside({ onStart }) {
         </button>
         <p className="landing-cta-hint">Ingen registrering. Ingen kredittkort.</p>
       </section>
+
+      {/* DEMO */}
+      <DemoAnimasjon />
 
       {/* FEATURES — kompakt strip */}
       <section className="landing-features">
@@ -132,7 +136,7 @@ export default function Landingsside({ onStart }) {
           </div>
 
         </div>
-        <p className="pris-sammenligning">Konkurrenten ProTilbud.no koster 499 kr/mnd for tilsvarende.</p>
+        <p className="pris-sammenligning">Tilsvarende løsninger koster opptil 499 kr/mnd. Prismal starter på 59 kr.</p>
       </section>
 
     </div>

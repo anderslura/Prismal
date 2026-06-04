@@ -1190,3 +1190,148 @@ textarea { resize: vertical; }
   .landing-features { grid-template-columns: 1fr 1fr; }
   .pris-kort-gratis { display: none; }
 }
+
+/* ===========================
+   DEMO-ANIMASJON
+   =========================== */
+.demo-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+.demo-skjerm {
+  background: var(--hvit);
+  border: 1px solid var(--kant);
+  border-radius: 14px;
+  box-shadow: var(--skygge-stor);
+  padding: 20px;
+  width: 100%;
+  max-width: 560px;
+  min-height: 280px;
+}
+
+/* Steg-indikatorer */
+.demo-steg-rad {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 18px;
+  justify-content: center;
+}
+.demo-steg {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--tekst-sekundaer);
+  opacity: 0.4;
+  transition: opacity 0.3s;
+}
+.demo-steg.aktiv { opacity: 1; color: var(--blaa); font-weight: 600; }
+.demo-steg.ferdig { opacity: 0.7; color: var(--groen); }
+.demo-steg-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--kant);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.demo-steg.aktiv .demo-steg-dot { background: var(--blaa); color: white; }
+.demo-steg.ferdig .demo-steg-dot { background: var(--groen); color: white; }
+
+/* Skjema-mockup */
+.demo-skjema { display: flex; flex-direction: column; gap: 10px; }
+.demo-felt-gruppe {}
+.demo-label { font-size: 10px; font-weight: 600; color: var(--tekst-sekundaer); margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.4px; }
+.demo-input {
+  border: 1px solid var(--kant);
+  border-radius: 6px;
+  padding: 7px 10px;
+  font-size: 13px;
+  color: var(--tekst);
+  min-height: 32px;
+  background: var(--bakgrunn);
+}
+.demo-textarea { min-height: 44px; }
+.demo-cursor {
+  display: inline-block;
+  animation: blink 0.7s infinite;
+  color: var(--blaa);
+  font-weight: 300;
+  margin-left: 1px;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+.demo-material-rad {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border: 1px solid var(--kant);
+  border-radius: 6px;
+  font-size: 13px;
+  background: var(--bakgrunn);
+  transition: opacity 0.5s;
+}
+.demo-knapp {
+  background: var(--blaa);
+  color: white;
+  text-align: center;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0.4;
+  transition: opacity 0.3s, transform 0.15s;
+  margin-top: 4px;
+}
+.demo-knapp-aktiv { opacity: 1; transform: scale(0.97); }
+
+/* PDF-preview */
+.demo-pdf {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: opacity 0.4s;
+}
+.demo-pdf-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--blaa);
+}
+.demo-pdf-firma { font-size: 14px; font-weight: 700; color: var(--tekst); }
+.demo-pdf-sub { font-size: 11px; color: var(--tekst-sekundaer); }
+.demo-pdf-tittel { font-size: 20px; font-weight: 800; color: var(--blaa); letter-spacing: 2px; }
+.demo-pdf-til { font-size: 12px; color: var(--tekst-sekundaer); }
+.demo-pdf-tekst {
+  font-size: 12px;
+  color: var(--tekst);
+  line-height: 1.5;
+  font-style: italic;
+}
+.demo-pdf-tabell { border: 1px solid var(--kant); border-radius: 6px; overflow: hidden; }
+.demo-pdf-rad {
+  display: grid;
+  grid-template-columns: 1fr 60px 90px;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-bottom: 1px solid var(--kant);
+}
+.demo-pdf-rad:last-child { border-bottom: none; }
+.demo-pdf-header-rad { background: var(--blaa); color: white; font-weight: 600; font-size: 11px; }
+.demo-pdf-total { font-weight: 700; background: var(--blaa-lys); }
+.demo-pdf-nedlast {
+  text-align: center;
+  color: var(--blaa);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px;
+  border: 1.5px solid var(--blaa);
+  border-radius: 6px;
+  cursor: pointer;
+}
