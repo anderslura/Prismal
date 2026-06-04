@@ -17,12 +17,12 @@ const FASER = [
   { id: 'paaslag_pst', slutt: 31000 },
   { id: 'generer',     slutt: 32200 },
   { id: 'laster',      slutt: 34500 },
-  { id: 'preview',     slutt: 38500 },
-  { id: 'klikk_pdf',   slutt: 39700 },
-  { id: 'pdf',         slutt: 44700 },
-  { id: 'pause',       slutt: 46700 },
+  { id: 'preview',     slutt: 39500 },
+  { id: 'klikk_pdf',   slutt: 41000 },
+  { id: 'pdf',         slutt: 46500 },
+  { id: 'pause',       slutt: 48500 },
 ]
-const TOTAL = 46700
+const TOTAL = 48500
 
 function faseSluttt(id) { return FASER.find(f => f.id === id)?.slutt || 0 }
 function fase(ms) { for (const f of FASER) if (ms < f.slutt) return f.id; return 'pause' }
@@ -79,6 +79,7 @@ export default function DemoAnimasjon() {
   const sNavn  = skriveIdx >= 0 ? typeText(MAT[skriveIdx].navn, ms, sStart, sStart + (sSlut - sStart) * 0.45) : ''
   const sAnt   = skriveIdx >= 0 && ms > sStart + (sSlut - sStart) * 0.5  ? String(MAT[skriveIdx].ant) : ''
   const sPris  = skriveIdx >= 0 && ms > sStart + (sSlut - sStart) * 0.65 ? String(MAT[skriveIdx].pris) : ''
+  const sSum   = sAnt && sPris ? ((parseFloat(sPris)||0)*(parseFloat(sAnt)||0)).toLocaleString('no-NO') + ' kr' : ''
 
   const huketLekt   = ms > faseSluttt('huk_lekt')   - 200
   const huketSkruer = ms > faseSluttt('huk_skruer') - 200
@@ -92,7 +93,7 @@ export default function DemoAnimasjon() {
   const visPdf      = aktivFase === 'pdf' || aktivFase === 'pause'
   const klikkerPdf  = aktivFase === 'klikk_pdf'
   const pdfOpacity  = prog(ms, 'klikk_pdf', 'pdf')
-  const nedlastet   = ms > faseSluttt('pdf') - 3000
+  const nedlastet   = ms > faseSluttt('pdf') - 3500
 
   function cbStatus(i) {
     if (i === 1) return huketLekt
@@ -228,9 +229,22 @@ export default function DemoAnimasjon() {
                 ))}
                 {skriveIdx >= 0 && (
                   <div className="demo-mat-ny-rad">
-                    <div className="demo-input-boks demo-mat-input">{sNavn || <span className="demo-placeholder">Beskrivelse</span>}{!sAnt&&skriveIdx>=0&&<span className="demo-cursor">|</span>}</div>
-                    <span className="demo-input-boks demo-mat-liten" style={{textAlign:'center'}}>{sAnt}</span>
-                    <span className="demo-input-boks demo-mat-liten" style={{textAlign:'right'}}>{sPris}</span>
+                    <div className="demo-input-boks demo-mat-input">
+                      {sNavn || <span className="demo-placeholder">Beskrivelse</span>}
+                      {!sAnt && skriveIdx >= 0 && <span className="demo-cursor">|</span>}
+                    </div>
+                    <span className="demo-input-boks demo-mat-liten" style={{textAlign:'center'}}>
+                      {sAnt || <span className="demo-placeholder" style={{fontSize:8}}>1</span>}
+                      {sNavn && !sAnt && <span className="demo-cursor">|</span>}
+                    </span>
+                    <span className="demo-input-boks demo-mat-liten" style={{textAlign:'right'}}>
+                      {sPris || <span className="demo-placeholder" style={{fontSize:8}}>kr</span>}
+                      {sAnt && !sPris && <span className="demo-cursor">|</span>}
+                    </span>
+                    <span className="demo-input-boks demo-mat-liten" style={{textAlign:'right',color:'var(--blaa)',fontWeight:600,fontSize:8.5}}>
+                      {sSum}
+                    </span>
+                    <span className="demo-cb demo-cb-aktiv" style={{fontSize:9}}>✓</span>
                     <button className={`demo-legg-til ${sPris ? 'demo-legg-til-aktiv' : ''}`}>Legg til</button>
                   </div>
                 )}

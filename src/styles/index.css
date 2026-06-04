@@ -1260,7 +1260,7 @@ textarea { resize: vertical; }
 }
 .demo-mat-rad-aktiv { animation:fadeIn 0.35s ease; }
 @keyframes fadeIn { from{opacity:0;transform:translateY(-3px)} to{opacity:1;transform:translateY(0)} }
-.demo-mat-ny-rad { display:grid; grid-template-columns:1fr 22px 30px auto; gap:3px; margin-top:5px; align-items:center; }
+.demo-mat-ny-rad { display:grid; grid-template-columns:1fr 22px 30px 42px 26px auto; gap:3px; margin-top:5px; align-items:center; }
 .demo-mat-input { padding:2px 4px; font-size:9.5px; }
 .demo-mat-liten { padding:2px 3px; font-size:9.5px; }
 .demo-legg-til {
