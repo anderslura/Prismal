@@ -248,11 +248,6 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
           </div>
         </section>
 
-        {/* PDF-TEMA */}
-        <section className="skjema-seksjon">
-          <PdfTemavelger valgtTema={skjema.pdfTema || 'standard'} onVelg={v => oppdater('pdfTema', v)} />
-        </section>
-
         {/* PÅSLAG */}
         <section className="skjema-seksjon">
           <div className="seksjon-tittel-rad">
@@ -282,6 +277,11 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
             </div>
           </section>
         )}
+
+        {/* PDF-TEMA */}
+        <section className="skjema-seksjon">
+          <PdfTemavelger valgtTema={skjema.pdfTema || 'standard'} onVelg={v => oppdater('pdfTema', v)} />
+        </section>
 
         {feil && <p className="feilmelding">{feil}</p>}
         <button className="btn btn-primary btn-stor" onClick={onGenerer} disabled={laster}>

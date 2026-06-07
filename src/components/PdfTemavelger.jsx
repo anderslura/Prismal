@@ -6,6 +6,7 @@ const TEMAER = [
   { id: 'jul',        navn: '🎄 Jul',         header: '#991b1b', sub: '#ffffff' },
   { id: 'paske',      navn: '🐣 Påske',       header: '#854d0e', sub: '#ffffff' },
   { id: 'bunad',      navn: '🇳🇴 17. mai',    header: '#1d4ed8', sub: '#ffffff' },
+  { id: 'pride',      navn: '🏳️‍🌈 Pride',      header: 'linear-gradient(135deg,#e40303 0%,#ff8c00 20%,#ffed00 40%,#008026 60%,#004dff 80%,#750787 100%)', sub: '#ffffff' },
 ]
 
 const SPESIALDATOER = [
@@ -13,6 +14,7 @@ const SPESIALDATOER = [
   { dato: '17.05',       tema: 'bunad',  tittel: 'Nasjonaldagen',          beskrivelse: 'Norges grunnlovsdag.' },
   { dato: '24.12–26.12', tema: 'jul',    tittel: 'Julehøytiden',           beskrivelse: 'Rød og festlig stil.' },
   { dato: '22.04',       tema: 'gronn',  tittel: 'Jordens dag',            beskrivelse: 'April — vis miljøengasjement.' },
+  { dato: 'Juni',          tema: 'pride',  tittel: 'Pride-måneden',           beskrivelse: 'Juni — vis støtte og inkludering.' },
 ]
 
 export default function PdfTemavelger({ valgtTema, onVelg }) {
