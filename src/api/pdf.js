@@ -4,13 +4,27 @@ import 'jspdf-autotable'
 /**
  * Genererer og laster ned et profesjonelt tilbud som PDF.
  */
+function temaFarge(temaId) {
+  const kart = {
+    standard: [30, 80, 200],
+    mork:     [17, 24, 39],
+    gronn:    [22, 101, 52],
+    rosa:     [190, 24, 93],
+    jul:      [153, 27, 27],
+    paske:    [133, 77, 14],
+    bunad:    [29, 78, 216],
+    pride:    [124, 58, 237],
+  }
+  return kart[temaId] || kart.standard
+}
+
 export function lastNedPDF(skjema) {
   const doc = new jsPDF({ unit: 'mm', format: 'a4' })
   const sideBredde = doc.internal.pageSize.getWidth()
   const margin = 20
 
   // --- FARGER OG FONTER ---
-  const fargeHoved = [30, 80, 200]   // blå
+  const fargeHoved = temaFarge(skjema.pdfTema)
   const fargeMork = [30, 30, 30]
   const fargeGraa = [120, 120, 120]
   const fargeLysGraa = [245, 245, 245]
@@ -105,8 +119,8 @@ export function lastNedPDF(skjema) {
 
   // --- PRISTABELL ---
   const totalArbeid = (skjema.arbeidere || []).reduce((s, a) => s + (parseFloat(a.timer)||0)*(parseFloat(a.timepris)||0), 0)
-  const totalMaterialer = skjema.materialer.reduce((s, m) => s + (parseFloat(m.pris) || 0), 0)
-  const materialerMedPaaslag = skjema.materialer.reduce((s, m) => s + (m.hasPaaslag ? (parseFloat(m.sum)||parseFloat(m.pris)||0) : 0), 0)
+  const totalMaterialer = skjema.materialer.filter(m => (parseFloat(m.antall)||0) > 0).reduce((s, m) => s + (parseFloat(m.sum) || (parseFloat(m.pris)||0)*(parseFloat(m.antall)||1)), 0)
+  const materialerMedPaaslag = skjema.materialer.filter(m => (parseFloat(m.antall)||0) > 0).reduce((s, m) => s + (m.hasPaaslag ? (parseFloat(m.sum)||(parseFloat(m.pris)||0)*(parseFloat(m.antall)||1)) : 0), 0)
   const paaslag = materialerMedPaaslag * (parseFloat(skjema.paaslagProsent) || 0) / 100
   const totalEksMva = totalArbeid + totalMaterialer + paaslag
   const mva = totalEksMva * 0.25
@@ -122,8 +136,11 @@ export function lastNedPDF(skjema) {
       kr(sum),
     ])
   })
-  skjema.materialer.forEach(m => {
-    rader.push([m.navn, '1', kr(m.pris), kr(m.pris)])
+  skjema.materialer.filter(m => (parseFloat(m.antall)||0) > 0).forEach(m => {
+    const ant = parseFloat(m.antall) || 1
+    const pris = parseFloat(m.pris) || 0
+    const sum = parseFloat(m.sum) || pris * ant
+    rader.push([m.navn, String(ant), kr(pris), kr(sum)])
   })
 
   doc.autoTable({

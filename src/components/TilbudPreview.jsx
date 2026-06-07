@@ -13,7 +13,7 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
       <div className="preview-actions">
         <h2 className="preview-tittel">Forhåndsvisning av tilbud</h2>
         {paaslag > 0 && (
-          <p className="preview-notat">ℹ Påslag vises ikke for kunden på PDF — kun intern kalkyle</p>
+          <div className="preview-paaslag-notat">Påslag er kun intern kalkyle — vises ikke på PDF som sendes kunden. Beløpet er allerede innbakt i totalprisen.</div>
         )}
         <div className="preview-knapper">
           <button className="btn btn-secondary" onClick={() => oppdaterTekst(skjema.tilbudstekst)}>
