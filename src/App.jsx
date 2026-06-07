@@ -21,6 +21,7 @@ const TOM_SKJEMA = {
   materialer: [],
   logoUrl: '',
   tilbudstekst: '',
+  pdfTema: 'standard',
   tilbudsnummer: '',
   dato: new Date().toLocaleDateString('no-NO'),
 }

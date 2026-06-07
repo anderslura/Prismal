@@ -7,13 +7,13 @@ export default function PrismalLogo() {
         <polygon points="96,16 118,16 90,144 68,144" fill="#3366ee"/>
       </svg>
       <div style={{display:'flex', flexDirection:'column', gap:2}}>
-        <span style={{fontWeight:800, fontSize:19, color:'#1a1a2e', letterSpacing:1.5, lineHeight:1, fontFamily:'-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'}}>PRISMAL</span>
+        <span style={{fontWeight:800, fontSize:19, color:'#ffffff', letterSpacing:1.5, lineHeight:1, fontFamily:'-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'}}>PRISMAL</span>
         <div style={{display:'flex', alignItems:'center', gap:3}}>
-          <span style={{fontSize:10, fontWeight:600, color:'#7baeff', letterSpacing:0.2}}>Din mal.</span>
-          <span style={{fontSize:10, color:'#c8d0e0'}}>·</span>
+          <span style={{fontSize:10, fontWeight:600, color:'#a8caff', letterSpacing:0.2}}>Din mal.</span>
+          <span style={{fontSize:10, color:'#4a5568'}}>·</span>
           <span style={{fontSize:10, fontWeight:600, color:'#6699ff', letterSpacing:0.2}}>Din pris.</span>
-          <span style={{fontSize:10, color:'#c8d0e0'}}>·</span>
-          <span style={{fontSize:10, fontWeight:600, color:'#3366ee', letterSpacing:0.2}}>Din tid.</span>
+          <span style={{fontSize:10, color:'#4a5568'}}>·</span>
+          <span style={{fontSize:10, fontWeight:600, color:'#7baeff', letterSpacing:0.2}}>Din tid.</span>
         </div>
       </div>
     </div>

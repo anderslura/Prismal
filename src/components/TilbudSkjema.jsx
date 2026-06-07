@@ -1,3 +1,4 @@
+import PdfTemavelger from './PdfTemavelger.jsx'
 import { useState } from 'react'
 
 export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil, prisliste, setPrisliste, isPro }) {
@@ -245,6 +246,11 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
             <input type="checkbox" className="mat-paaslag-cb" checked={nyHasPaaslag} onChange={e => setNyHasPaaslag(e.target.checked)} />
             <button onClick={leggTilMaterial} style={{padding:"0 12px",height:"34px",border:"1.5px solid var(--blaa)",borderRadius:"6px",background:"var(--hvit)",color:"var(--blaa)",fontWeight:600,fontSize:"13px",cursor:"pointer",whiteSpace:"nowrap"}}>Legg til</button>
           </div>
+        </section>
+
+        {/* PDF-TEMA */}
+        <section className="skjema-seksjon">
+          <PdfTemavelger valgtTema={skjema.pdfTema || 'standard'} onVelg={v => oppdater('pdfTema', v)} />
         </section>
 
         {/* PÅSLAG */}

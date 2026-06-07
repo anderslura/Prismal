@@ -55,35 +55,27 @@ export default function Landingsside({ onStart }) {
       {/* DEMO */}
       <DemoAnimasjon />
 
-      {/* FEATURES — kompakt strip */}
+      {/* FEATURES — Office 365-stil */}
       <section className="landing-features">
-        <div className="feature-kort">
-          <span className="feature-ikon"><IkonRakett /></span>
-          <div>
-            <h3>Raskt</h3>
-            <p>Fra blankt skjema til ferdig PDF på under 2 minutter.</p>
-          </div>
+        <div className="feature-kort feature-blaa">
+          <div className="feature-ikon-boks feature-ikon-boks-blaa"><IkonRakett /></div>
+          <h3>Raskt</h3>
+          <p>Fra blankt skjema til ferdig PDF på under 2 minutter.</p>
         </div>
-        <div className="feature-kort">
-          <span className="feature-ikon"><IkonAI /></span>
-          <div>
-            <h3>AI-tekst</h3>
-            <p>Beskriv kort — AI formulerer profesjonelt tilbudsspråk.</p>
-          </div>
+        <div className="feature-kort feature-lilla">
+          <div className="feature-ikon-boks feature-ikon-boks-lilla"><IkonAI /></div>
+          <h3>AI-tekst</h3>
+          <p>Beskriv jobben kort — AI skriver profesjonelt tilbudsspråk.</p>
         </div>
-        <div className="feature-kort">
-          <span className="feature-ikon"><IkonHusk /></span>
-          <div>
-            <h3>Husker prisene</h3>
-            <p>Materialer og timepriser lagres. Neste tilbud går raskere.</p>
-          </div>
+        <div className="feature-kort feature-gronn">
+          <div className="feature-ikon-boks feature-ikon-boks-gronn"><IkonHusk /></div>
+          <h3>Husker prisene</h3>
+          <p>Materialer og timepriser lagres. Neste tilbud går raskere.</p>
         </div>
-        <div className="feature-kort">
-          <span className="feature-ikon"><IkonPDF /></span>
-          <div>
-            <h3>Klar PDF</h3>
-            <p>Med logo, prisoversikt og akseptklausul — klar til å sende.</p>
-          </div>
+        <div className="feature-kort feature-oransje">
+          <div className="feature-ikon-boks feature-ikon-boks-oransje"><IkonPDF /></div>
+          <h3>Klar PDF</h3>
+          <p>Med logo, prisoversikt og akseptklausul — klar til å sende.</p>
         </div>
       </section>
 
