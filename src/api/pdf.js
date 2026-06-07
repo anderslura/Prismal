@@ -40,14 +40,22 @@ export function lastNedPDF(skjema) {
   ].filter(Boolean)
   const headerHoyde = Math.max(40, 18 + firmaLinjer.length * 5 + 4)
 
-  // Tegn header-bakgrunn (pride = regnbue, resten = solid)
+  // Tegn header-bakgrunn (pride = glatt regnbue, resten = solid)
   if (skjema.pdfTema === 'pride') {
-    const prideKolorer = [[228,3,3],[255,140,0],[255,237,0],[0,128,38],[0,77,255],[117,7,135]]
-    const bW = sideBredde / prideKolorer.length
-    prideKolorer.forEach((c, i) => {
-      doc.setFillColor(...c)
-      doc.rect(i * bW, 0, bW + 0.5, headerHoyde, 'F')
-    })
+    const stops = [[228,3,3],[255,140,0],[255,237,0],[0,128,38],[0,77,255],[117,7,135]]
+    const steg = 80
+    for (let i = 0; i < steg; i++) {
+      const t = i / (steg - 1)
+      const segLen = stops.length - 1
+      const seg = Math.min(Math.floor(t * segLen), segLen - 1)
+      const segT = t * segLen - seg
+      const c1 = stops[seg], c2 = stops[seg + 1]
+      const r = Math.round(c1[0] + (c2[0]-c1[0]) * segT)
+      const g = Math.round(c1[1] + (c2[1]-c1[1]) * segT)
+      const b = Math.round(c1[2] + (c2[2]-c1[2]) * segT)
+      doc.setFillColor(r, g, b)
+      doc.rect(i * sideBredde / steg, 0, sideBredde / steg + 0.5, headerHoyde, 'F')
+    }
   } else {
     doc.setFillColor(...fargeHoved)
     doc.rect(0, 0, sideBredde, headerHoyde, 'F')
