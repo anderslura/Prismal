@@ -1362,3 +1362,11 @@ textarea { resize: vertical; }
   cursor: pointer;
   background: var(--hvit);
 }
+
+.pris-grid-to {
+  grid-template-columns: 1fr 1fr;
+  max-width: 640px;
+}
+@media (max-width: 480px) {
+  .pris-grid-to { grid-template-columns: 1fr; }
+}

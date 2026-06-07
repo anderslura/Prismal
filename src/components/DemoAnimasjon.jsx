@@ -112,8 +112,24 @@ export default function DemoAnimasjon() {
       <div className="demo-skjerm">
 
         <div className="demo-header">
-          <span className="demo-logo">Prismal</span>
-          <span className="demo-tagline">Din mal. Din pris. Din tid.</span>
+          <div style={{display:'flex', alignItems:'center', gap:6}}>
+            <svg width="14" height="20" viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
+              <polygon points="32,16 54,16 26,144 4,144"   fill="#a8caff"/>
+              <polygon points="64,16 86,16 58,144 36,144"  fill="#6699ff"/>
+              <polygon points="96,16 118,16 90,144 68,144" fill="#3366ee"/>
+            </svg>
+            <div style={{display:'flex', flexDirection:'column', gap:1}}>
+              <span style={{fontWeight:800, fontSize:11, color:'#1a1a2e', letterSpacing:1, lineHeight:1}}>PRISMAL</span>
+              <div style={{display:'flex', alignItems:'center', gap:2, lineHeight:1}}>
+                <span style={{fontSize:7, fontWeight:600, color:'#7baeff'}}>Din mal.</span>
+                <span style={{fontSize:7, color:'#c8d0e0'}}>·</span>
+                <span style={{fontSize:7, fontWeight:600, color:'#6699ff'}}>Din pris.</span>
+                <span style={{fontSize:7, color:'#c8d0e0'}}>·</span>
+                <span style={{fontSize:7, fontWeight:600, color:'#3366ee'}}>Din tid.</span>
+              </div>
+            </div>
+          </div>
+          <span style={{flex:1}}/>
           <span className="demo-btn-sm demo-btn-gronn">+ Nytt tilbud</span>
         </div>
 
@@ -265,7 +281,7 @@ export default function DemoAnimasjon() {
               )}
 
               <button className={`demo-generer-knapp ${visKnapp ? 'demo-generer-aktiv' : ''} ${visLaster ? 'demo-generer-laster' : ''}`}>
-                {visLaster ? '⏳ AI genererer tekst...' : 'Generer profesjonelt tilbud'}
+                {visLaster ? 'AI genererer tekst...' : 'Generer profesjonelt tilbud'}
               </button>
             </div>
           </div>

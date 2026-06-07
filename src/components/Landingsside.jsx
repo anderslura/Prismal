@@ -89,54 +89,50 @@ export default function Landingsside({ onStart }) {
 
       {/* PRIS */}
       <section className="landing-pris">
-        <h2 className="landing-seksjon-tittel">Velg din plan</h2>
-        <div className="pris-grid">
+        <h2 className="landing-seksjon-tittel">To enkle valg</h2>
+        <div className="pris-grid pris-grid-to">
 
           <div className="pris-kort pris-kort-gratis">
             <h3>Gratis</h3>
             <p className="pris-beloep">0 kr</p>
+            <p style={{fontSize:'12px',color:'var(--tekst-sekundaer)',marginBottom:'12px',lineHeight:'1.5'}}>
+              Prøv Prismal uten registrering. Passer om du vil se hvordan det fungerer før du bestemmer deg.
+            </p>
             <ul className="pris-liste">
               <li>✓ 3 tilbud totalt</li>
-              <li>✓ AI-generert tekst</li>
-              <li>✓ PDF-nedlasting</li>
-              <li className="pris-nei">✗ Ingen logo i PDF</li>
+              <li>✓ AI-generert tilbudstekst</li>
+              <li>✓ Last ned PDF</li>
+              <li className="pris-nei">✗ Ingen firmalogo i PDF</li>
               <li className="pris-nei">✗ "Laget med Prismal" i footer</li>
+              <li className="pris-nei">✗ Ingen lagrede prislinjer</li>
               <li className="pris-nei">✗ Ingen tilbudshistorikk</li>
             </ul>
             <button className="btn btn-secondary btn-full" onClick={onStart}>Prøv gratis</button>
           </div>
 
-          <div className="pris-kort pris-kort-anbefalt">
-            <div className="pro-badge">Anbefalt</div>
-            <h3>Basis</h3>
-            <p className="pris-beloep">59 kr<span>/mnd</span></p>
-            <ul className="pris-liste">
-              <li>✓ Ubegrenset tilbud</li>
-              <li>✓ AI-generert tekst</li>
-              <li>✓ PDF med firmalogo</li>
-              <li>✓ Lagrede prislinjer</li>
-              <li>✓ Påslagskalkulator</li>
-              <li className="pris-nei">✗ Ingen tilbudshistorikk</li>
-            </ul>
-            <button className="btn btn-primary btn-full" onClick={onStart}>Velg Basis</button>
-          </div>
-
           <div className="pris-kort pris-kort-pro">
-            <div className="pro-badge pro-badge-gull">Pro</div>
+            <div className="pro-badge pro-badge-gull">Anbefalt</div>
             <h3>Pro</h3>
             <p className="pris-beloep">99 kr<span>/mnd</span></p>
+            <p style={{fontSize:'12px',color:'var(--tekst-sekundaer)',marginBottom:'12px',lineHeight:'1.5'}}>
+              Alt du trenger for å sende profesjonelle tilbud raskt — uten kompromisser.
+            </p>
             <ul className="pris-liste">
-              <li>✓ Alt i Basis</li>
+              <li>✓ Ubegrenset antall tilbud</li>
+              <li>✓ AI-generert tilbudstekst</li>
+              <li>✓ PDF med din firmalogo</li>
+              <li>✓ Lagrede prislinjer — raskere neste gang</li>
+              <li>✓ Påslagskalkulator</li>
               <li>✓ Ingen Prismal-branding i PDF</li>
               <li>✓ Tilbudshistorikk</li>
-              <li>✓ Send tilbud på e-post</li>
+              <li>✓ Send tilbud direkte på e-post</li>
               <li>✓ Tidlig tilgang til nye funksjoner</li>
             </ul>
-            <button className="btn btn-primary btn-full btn-gull" onClick={onStart}>Velg Pro</button>
+            <button className="btn btn-primary btn-full btn-gull" onClick={onStart}>Kom i gang med Pro</button>
           </div>
 
         </div>
-        <p className="pris-sammenligning">Tilsvarende løsninger koster opptil 499 kr/mnd. Prismal starter på 59 kr.</p>
+        <p className="pris-sammenligning">Tilsvarende løsninger koster opptil 499 kr/mnd. Prismal Pro: 99 kr.</p>
       </section>
 
     </div>
