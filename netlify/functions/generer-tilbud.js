@@ -57,7 +57,7 @@ INSTRUKSJONER:
 - IKKE bruk plassholdere som [Telefonnummer] eller [E-postadresse]
 - Ren løpende tekst, ingen overskrifter
 - Profesjonell, varm og norsk tone
-- 3 avsnitt, totalt 250–300 ord`
+- 3 avsnitt, totalt ca. 250 ord`
 
   try {
     const respons = await fetch('https://api.anthropic.com/v1/messages', {

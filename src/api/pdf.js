@@ -211,16 +211,16 @@ export function lastNedPDF(skjema) {
   doc.text(akseptLinjer, margin + 6, gy + 12)
   gy += akseptHoyde + 8
 
-  // --- BUNNTEKST ---
-  const sideFot = doc.internal.pageSize.getHeight() - 12
+  // --- BUNNTEKST (dynamisk posisjon — aldri overlapp med aksept-boks) ---
   doc.setDrawColor(220, 220, 220)
-  doc.line(margin, sideFot - 6, sideBredde - margin, sideFot - 6)
+  doc.line(margin, gy, sideBredde - margin, gy)
+  gy += 6
   doc.setFontSize(7.5)
   doc.setTextColor(...fargeGraa)
   doc.text(
     `Tilbudet er gyldig i 30 dager. ${skjema.firmanavn || ''} · ${skjema.firmaEpost || ''} · ${skjema.firmaTelefon || ''}`,
     sideBredde / 2,
-    sideFot,
+    gy,
     { align: 'center' }
   )
 
