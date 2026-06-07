@@ -10,11 +10,12 @@ const TEMAER = [
 ]
 
 const SPESIALDATOER = [
-  { dato: '01.10–31.10', tema: 'rosa',   tittel: 'Brystkreft-måneden',    beskrivelse: 'Oktober — rosa sløyfe. Vis støtte.' },
-  { dato: '17.05',       tema: 'bunad',  tittel: 'Nasjonaldagen',          beskrivelse: 'Norges grunnlovsdag.' },
-  { dato: '24.12–26.12', tema: 'jul',    tittel: 'Julehøytiden',           beskrivelse: 'Rød og festlig stil.' },
+  { dato: '14.02',       tema: 'rosa',   tittel: 'Valentinsdagen',         beskrivelse: 'Februar — vis omsorg og varme.' },
   { dato: '22.04',       tema: 'gronn',  tittel: 'Jordens dag',            beskrivelse: 'April — vis miljøengasjement.' },
-  { dato: 'Juni',          tema: 'pride',  tittel: 'Pride-måneden',           beskrivelse: 'Juni — vis støtte og inkludering.' },
+  { dato: '17.05',       tema: 'bunad',  tittel: 'Nasjonaldagen',          beskrivelse: 'Norges grunnlovsdag.' },
+  { dato: 'Juni',        tema: 'pride',  tittel: 'Pride-måneden',          beskrivelse: 'Juni — vis støtte og inkludering.' },
+  { dato: 'Okt.',        tema: 'rosa',   tittel: 'Brystkreft-måneden',     beskrivelse: 'Oktober — rosa sløyfe. Vis støtte.' },
+  { dato: '24.12–26.12', tema: 'jul',    tittel: 'Julehøytiden',           beskrivelse: 'Rød og festlig stil.' },
 ]
 
 export default function PdfTemavelger({ valgtTema, onVelg }) {

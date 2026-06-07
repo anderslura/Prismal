@@ -12,9 +12,6 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
     <div className="preview-layout">
       <div className="preview-actions">
         <h2 className="preview-tittel">Forhåndsvisning av tilbud</h2>
-        {paaslag > 0 && (
-          <div className="preview-paaslag-notat">Påslag er kun intern kalkyle — vises ikke på PDF som sendes kunden. Beløpet er allerede innbakt i totalprisen.</div>
-        )}
         <div className="preview-knapper">
           <button className="btn btn-secondary" onClick={() => oppdaterTekst(skjema.tilbudstekst)}>
             Rediger tekst
@@ -26,12 +23,18 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
             + Nytt tilbud
           </button>
         </div>
+        {paaslag > 0 && (
+          <div className="preview-paaslag-notat">Påslag er kun intern kalkyle — vises ikke på PDF som sendes kunden. Beløpet er allerede innbakt i totalprisen.</div>
+        )}
       </div>
 
       <div className="tilbud-dokument">
         {/* HEADER */}
         <div className="dok-header" style={{background: hentTemaFarger(skjema.pdfTema).header, color: hentTemaFarger(skjema.pdfTema).sub}}>
           <div className="dok-firma">
+            {skjema.logoUrl && (
+              <img src={skjema.logoUrl} alt="Logo" style={{height:'40px', maxWidth:'120px', objectFit:'contain', marginBottom:'6px', display:'block'}} />
+            )}
             <h1 className="firma-navn">{skjema.firmanavn || 'Ditt Firma AS'}</h1>
             {skjema.firmaAdresse && <p>{skjema.firmaAdresse}</p>}
             {skjema.firmaTelefon && <p>Tlf: {skjema.firmaTelefon}</p>}
