@@ -4,6 +4,7 @@ import TilbudPreview from './components/TilbudPreview.jsx'
 import { genererTilbudstekst } from './api/claude.js'
 import { lastNedPDF } from './api/pdf.js'
 import Landingsside from './components/Landingsside.jsx'
+import PrismalLogo from './components/PrismalLogo.jsx'
 
 const TOM_SKJEMA = {
   firmanavn: '',
@@ -152,8 +153,7 @@ export default function App() {
       <header className="app-header">
         <div className="header-inner">
           <div className="logo">
-            <span className="logo-tekst">Prismal</span>
-            <span className="logo-tagline">Din mal. Din pris. Din tid.</span>
+            <PrismalLogo />
           </div>
           <div style={{display:'flex', gap:'10px'}}>
             {steg === 'preview' && (
