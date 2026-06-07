@@ -40,8 +40,18 @@ export function lastNedPDF(skjema) {
   ].filter(Boolean)
   const headerHoyde = Math.max(40, 18 + firmaLinjer.length * 5 + 4)
 
-  doc.setFillColor(...fargeHoved)
-  doc.rect(0, 0, sideBredde, headerHoyde, 'F')
+  // Tegn header-bakgrunn (pride = regnbue, resten = solid)
+  if (skjema.pdfTema === 'pride') {
+    const prideKolorer = [[228,3,3],[255,140,0],[255,237,0],[0,128,38],[0,77,255],[117,7,135]]
+    const bW = sideBredde / prideKolorer.length
+    prideKolorer.forEach((c, i) => {
+      doc.setFillColor(...c)
+      doc.rect(i * bW, 0, bW + 0.5, headerHoyde, 'F')
+    })
+  } else {
+    doc.setFillColor(...fargeHoved)
+    doc.rect(0, 0, sideBredde, headerHoyde, 'F')
+  }
 
   // Logo øverst til venstre — behold aspect ratio
   let tekstStartX = margin
@@ -165,6 +175,33 @@ export function lastNedPDF(skjema) {
     },
     margin: { left: margin, right: margin },
   })
+
+  // --- GYLDIGHET + AKSEPTKLAUSUL ---
+  let gy = doc.lastAutoTable.finalY + 10
+
+  doc.setFontSize(8.5)
+  doc.setTextColor(...fargeGraa)
+  doc.setFont('helvetica', 'normal')
+  doc.text('Tilbudet er gyldig i 30 dager fra utstedelsesdato.', margin, gy)
+  gy += 8
+
+  // Aksept-boks med venstre fargestripe
+  const akseptTekst = `For å godta dette tilbudet må skriftlig aksept sendes til ${skjema.firmaEpost || 'firmaets e-post'} innen tilbudets gyldighetsperiode. Muntlig aksept er ikke bindende.`
+  const akseptLinjer = doc.splitTextToSize(akseptTekst, sideBredde - margin * 2 - 6)
+  const akseptHoyde = akseptLinjer.length * 5 + 8
+
+  doc.setFillColor(245, 247, 255)
+  doc.rect(margin, gy, sideBredde - margin * 2, akseptHoyde, 'F')
+  doc.setFillColor(...fargeHoved)
+  doc.rect(margin, gy, 3, akseptHoyde, 'F')
+
+  doc.setTextColor(...fargeMork)
+  doc.setFontSize(8.5)
+  doc.setFont('helvetica', 'bold')
+  doc.text('Aksept av tilbud:', margin + 6, gy + 6)
+  doc.setFont('helvetica', 'normal')
+  doc.text(akseptLinjer, margin + 6, gy + 12)
+  gy += akseptHoyde + 8
 
   // --- BUNNTEKST ---
   const sideFot = doc.internal.pageSize.getHeight() - 12
