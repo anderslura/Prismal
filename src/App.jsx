@@ -204,6 +204,7 @@ function AppInnhold() {
             onLastNed={() => lastNedPDF(skjema, isPro)}
             onTilbake={() => setSteg('skjema')}
             onNyttTilbud={nullstill}
+            isPro={isPro}
           />
         )}
       </main>

@@ -1,6 +1,7 @@
 import { hentTemaFarger } from './PdfTemavelger.jsx'
+import PrismalLogo from './PrismalLogo.jsx'
 
-export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilbake, onNyttTilbud }) {
+export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilbake, onNyttTilbud, isPro = true }) {
   const totalArbeid = (skjema.arbeidere || []).reduce((s, a) => s + (parseFloat(a.timer)||0)*(parseFloat(a.timepris)||0), 0)
   const totalMaterialer = skjema.materialer.reduce((s, m) => s + (parseFloat(m.sum) || (parseFloat(m.antall)||1) * (parseFloat(m.pris)||0)), 0)
   const materialerMedPaaslag = skjema.materialer.reduce((s, m) => s + (m.hasPaaslag ? (parseFloat(m.sum) || (parseFloat(m.antall)||1) * (parseFloat(m.pris)||0)) : 0), 0)
@@ -32,10 +33,18 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
         {/* HEADER */}
         <div className="dok-header" style={{background: hentTemaFarger(skjema.pdfTema).header, color: hentTemaFarger(skjema.pdfTema).sub}}>
           <div className="dok-firma">
-            {skjema.logoUrl && (
-              <img src={skjema.logoUrl} alt="Logo" style={{height:'40px', maxWidth:'120px', objectFit:'contain', marginBottom:'6px', display:'block'}} />
+            {isPro ? (
+              <>
+                {skjema.logoUrl && (
+                  <img src={skjema.logoUrl} alt="Logo" style={{height:'40px', maxWidth:'120px', objectFit:'contain', marginBottom:'6px', display:'block'}} />
+                )}
+                <h1 className="firma-navn">{skjema.firmanavn || 'Ditt Firma AS'}</h1>
+              </>
+            ) : (
+              <div style={{display:'flex', alignItems:'center', gap:'10px', marginBottom:'4px'}}>
+                <PrismalLogo />
+              </div>
             )}
-            <h1 className="firma-navn">{skjema.firmanavn || 'Ditt Firma AS'}</h1>
             {skjema.firmaAdresse && <p>{skjema.firmaAdresse}</p>}
             {skjema.firmaTelefon && <p>Tlf: {skjema.firmaTelefon}</p>}
             {skjema.firmaEpost && <p>{skjema.firmaEpost}</p>}
