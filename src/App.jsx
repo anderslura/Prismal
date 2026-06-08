@@ -9,23 +9,11 @@ import LoginModal from './components/LoginModal.jsx'
 import { AuthProvider, useAuth } from './contexts/AuthContext.jsx'
 
 const TOM_SKJEMA = {
-  firmanavn: '',
-  firmaTelefon: '',
-  firmaEpost: '',
-  firmaAdresse: '',
-  firmaOrgnr: '',
-  firmaNettside: '',
-  kundenavn: '',
-  kundeAdresse: '',
-  kundeEpost: '',
-  beskrivelse: '',
-  arbeidere: [],
-  materialer: [],
-  logoUrl: '',
-  tilbudstekst: '',
-  pdfTema: 'standard',
-  tilbudsnummer: '',
-  dato: new Date().toLocaleDateString('no-NO'),
+  firmanavn: '', firmaTelefon: '', firmaEpost: '', firmaAdresse: '',
+  firmaOrgnr: '', firmaNettside: '', kundenavn: '', kundeAdresse: '',
+  kundeEpost: '', beskrivelse: '', arbeidere: [], materialer: [],
+  logoUrl: '', tilbudstekst: '', pdfTema: 'standard',
+  tilbudsnummer: '', dato: new Date().toLocaleDateString('no-NO'),
 }
 
 function hentLagretFirma() {
@@ -49,12 +37,15 @@ function hentLagretPrisliste() {
 }
 
 function AppInnhold() {
-  const { bruker, laster: authLaster, loggUt, isPro, kanLageTilbud, tilbudGjenstaende, registrerTilbud, MAKS_GRATIS_TILBUD } = useAuth()
+  const {
+    bruker, laster: authLaster, loggUt, isPro,
+    kanBrukeForsok, forsokGjenstaende, registrerForsok, MAKS_GRATIS_FORSOK
+  } = useAuth()
 
   const [skjema, setSkjema] = useState(() => ({
     ...TOM_SKJEMA,
-    ...hentLagretFirma(),
-    logoUrl: hentLagretLogo(),
+    ...(isPro ? hentLagretFirma() : {}),
+    logoUrl: isPro ? hentLagretLogo() : '',
     arbeidere: [{ id: 1, navn: 'Fagarbeider', timer: '', timepris: hentLagretTimepris() }],
     materialer: hentLagretMaterialMal(),
     tilbudsnummer: genererTilbudsnummer(),
@@ -64,8 +55,8 @@ function AppInnhold() {
   const [feil, setFeil] = useState('')
   const [steg, setSteg] = useState('landing')
   const [visLogin, setVisLogin] = useState(false)
+  const [visOppgrader, setVisOppgrader] = useState(false)
 
-  // Gå til skjema automatisk etter innlogging
   useEffect(() => {
     if (bruker && visLogin) {
       setVisLogin(false)
@@ -74,17 +65,18 @@ function AppInnhold() {
   }, [bruker])
 
   useEffect(() => {
+    if (!isPro) return
     const firma = {
       firmanavn: skjema.firmanavn, firmaTelefon: skjema.firmaTelefon,
       firmaEpost: skjema.firmaEpost, firmaAdresse: skjema.firmaAdresse,
       firmaOrgnr: skjema.firmaOrgnr, firmaNettside: skjema.firmaNettside,
     }
     localStorage.setItem('firma', JSON.stringify(firma))
-  }, [skjema.firmanavn, skjema.firmaTelefon, skjema.firmaEpost, skjema.firmaAdresse, skjema.firmaOrgnr, skjema.firmaNettside])
+  }, [skjema.firmanavn, skjema.firmaTelefon, skjema.firmaEpost, skjema.firmaAdresse, skjema.firmaOrgnr, skjema.firmaNettside, isPro])
 
   useEffect(() => {
-    localStorage.setItem('logoUrl', skjema.logoUrl || '')
-  }, [skjema.logoUrl])
+    if (isPro) localStorage.setItem('logoUrl', skjema.logoUrl || '')
+  }, [skjema.logoUrl, isPro])
 
   useEffect(() => {
     const mal = skjema.materialer.map(m => ({ navn: m.navn, pris: m.pris, hasPaaslag: m.hasPaaslag }))
@@ -92,9 +84,8 @@ function AppInnhold() {
   }, [skjema.materialer])
 
   useEffect(() => {
-    if (skjema.arbeidere.length > 0 && skjema.arbeidere[0].timepris) {
+    if (skjema.arbeidere.length > 0 && skjema.arbeidere[0].timepris)
       localStorage.setItem('timepris', skjema.arbeidere[0].timepris)
-    }
   }, [skjema.arbeidere])
 
   useEffect(() => {
@@ -105,18 +96,13 @@ function AppInnhold() {
     setSkjema(prev => ({ ...prev, [felt]: verdi }))
   }
 
-  function startLagTilbud() {
-    if (!bruker) { setVisLogin(true); return }
-    setSteg('skjema')
-  }
-
   async function generer() {
     if (!skjema.kundenavn || !skjema.beskrivelse) {
       setFeil('Fyll inn kundenavn og beskrivelse av jobben.')
       return
     }
-    if (!kanLageTilbud) {
-      setFeil(`Du har brukt alle ${MAKS_GRATIS_TILBUD} gratis tilbud. Oppgrader til Pro for ubegrenset tilgang.`)
+    if (!kanBrukeForsok) {
+      setVisOppgrader(true)
       return
     }
     setFeil('')
@@ -124,10 +110,10 @@ function AppInnhold() {
     try {
       const tekst = await genererTilbudstekst(skjema)
       setSkjema(prev => ({ ...prev, tilbudstekst: tekst }))
-      registrerTilbud()
+      registrerForsok()
       setSteg('preview')
     } catch (e) {
-      setFeil('Kunne ikke generere tilbudstekst. Sjekk API-nøkkel og prøv igjen.')
+      setFeil('Kunne ikke generere tilbudstekst. Prøv igjen.')
     } finally {
       setLaster(false)
     }
@@ -138,8 +124,8 @@ function AppInnhold() {
     const forhandslagte = lagredeMat.map(l => ({ id: Date.now() + Math.random(), navn: l.navn, antall: 0, pris: Number(l.pris) || 0, sum: 0, hasPaaslag: l.hasPaaslag }))
     setSkjema({
       ...TOM_SKJEMA,
-      ...hentLagretFirma(),
-      logoUrl: hentLagretLogo(),
+      ...(isPro ? hentLagretFirma() : {}),
+      logoUrl: isPro ? hentLagretLogo() : '',
       arbeidere: [{ id: Date.now(), navn: 'Fagarbeider', timer: '', timepris: hentLagretTimepris() }],
       materialer: forhandslagte,
       tilbudsnummer: genererTilbudsnummer(),
@@ -164,11 +150,13 @@ function AppInnhold() {
                 + Nytt tilbud
               </button>
             )}
-            {steg === 'landing' && !bruker && (
+            {!bruker && (
               <button className="btn btn-secondary" onClick={() => setVisLogin(true)}>Logg inn</button>
             )}
             {steg === 'landing' && (
-              <button className="btn btn-primary" onClick={startLagTilbud}>Lag tilbud →</button>
+              <button className="btn btn-primary" onClick={() => setSteg('skjema')}>
+                Lag tilbud →
+              </button>
             )}
             {bruker && (
               <button className="btn btn-secondary" style={{ fontSize: '0.8rem', opacity: 0.7 }} onClick={loggUt} title={bruker.email}>
@@ -179,20 +167,25 @@ function AppInnhold() {
         </div>
       </header>
 
-      {/* Pro-banner for gratisbrukere */}
-      {bruker && !isPro && steg === 'skjema' && (
+      {/* Banner — gratis forsøk-teller */}
+      {!isPro && steg === 'skjema' && (
         <div className="gratis-banner">
-          {kanLageTilbud
-            ? <span>Gratis plan — <strong>{tilbudGjenstaende} av {MAKS_GRATIS_TILBUD} tilbud</strong> gjenstår · Firmanavn og logo krever Pro</span>
-            : <span>Du har brukt alle {MAKS_GRATIS_TILBUD} gratis tilbud</span>
-          }
-          <button className="btn btn-pro-oppgrader">Oppgrader til Pro — 99 kr/mnd</button>
+          {kanBrukeForsok ? (
+            <span>
+              Prøveversjon — <strong>{forsokGjenstaende} av {MAKS_GRATIS_FORSOK} gratis forsøk</strong> gjenstår · Firmainfo og logo krever Pro
+            </span>
+          ) : (
+            <span>Du har brukt alle gratis forsøk</span>
+          )}
+          <button className="btn-pro-oppgrader" onClick={() => setVisOppgrader(true)}>
+            Oppgrader til Pro — 99 kr/mnd
+          </button>
         </div>
       )}
 
       <main className="app-main">
         {steg === 'landing' ? (
-          <Landingsside onStart={startLagTilbud} />
+          <Landingsside onStart={() => setSteg('skjema')} />
         ) : steg === 'skjema' ? (
           <TilbudSkjema
             skjema={skjema}
@@ -208,7 +201,7 @@ function AppInnhold() {
           <TilbudPreview
             skjema={skjema}
             oppdaterTekst={(tekst) => oppdater('tilbudstekst', tekst)}
-            onLastNed={() => lastNedPDF(skjema)}
+            onLastNed={() => lastNedPDF(skjema, isPro)}
             onTilbake={() => setSteg('skjema')}
             onNyttTilbud={nullstill}
           />
@@ -220,6 +213,33 @@ function AppInnhold() {
       </footer>
 
       {visLogin && <LoginModal onLukk={() => setVisLogin(false)} />}
+
+      {visOppgrader && (
+        <div className="modal-bakgrunn" onClick={() => setVisOppgrader(false)}>
+          <div className="modal-boks oppgrader-modal" onClick={e => e.stopPropagation()}>
+            <button className="modal-lukk" onClick={() => setVisOppgrader(false)}>✕</button>
+            <div className="oppgrader-ikon">⚡</div>
+            <h2>Oppgrader til Pro</h2>
+            <p>Du har brukt alle {MAKS_GRATIS_FORSOK} gratis forsøk.</p>
+            <ul className="oppgrader-liste">
+              <li>✓ Ubegrenset antall tilbud</li>
+              <li>✓ Eget firmanavn og logo i PDF</li>
+              <li>✓ Ingen Prismal-branding</li>
+              <li>✓ Lagrede prislinjer og historikk</li>
+            </ul>
+            <div className="oppgrader-pris">99 kr <span>/mnd</span></div>
+            <button className="btn btn-primary" style={{ width: '100%', padding: '12px', fontSize: '15px' }}
+              onClick={() => { alert('Stripe-betaling kommer snart!'); setVisOppgrader(false) }}>
+              Kom i gang med Pro
+            </button>
+            {!bruker && (
+              <p className="oppgrader-logginn">
+                Allerede Pro? <button onClick={() => { setVisOppgrader(false); setVisLogin(true) }}>Logg inn</button>
+              </p>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

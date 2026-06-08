@@ -3,36 +3,26 @@ import { supabase } from '../lib/supabase.js'
 
 const AuthContext = createContext(null)
 
-const MAKS_GRATIS_TILBUD = 10
+const MAKS_GRATIS_FORSOK = 3
+const FORSOK_KEY = 'prismal_gratis_forsok'
 
 export function AuthProvider({ children }) {
   const [bruker, setBruker] = useState(null)
   const [laster, setLaster] = useState(true)
-  const [antallTilbud, setAntallTilbud] = useState(0)
+  const [forsok, setForsok] = useState(() => {
+    try { return parseInt(localStorage.getItem(FORSOK_KEY) || '0') } catch { return 0 }
+  })
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setBruker(session?.user ?? null)
       setLaster(false)
     })
-
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setBruker(session?.user ?? null)
     })
-
     return () => subscription.unsubscribe()
   }, [])
-
-  // Hent antall tilbud fra localStorage per bruker
-  useEffect(() => {
-    if (bruker) {
-      const key = `tilbud_count_${bruker.id}`
-      const count = parseInt(localStorage.getItem(key) || '0')
-      setAntallTilbud(count)
-    } else {
-      setAntallTilbud(0)
-    }
-  }, [bruker])
 
   async function loggInn(epost, passord) {
     const { error } = await supabase.auth.signInWithPassword({ email: epost, password: passord })
@@ -48,34 +38,23 @@ export function AuthProvider({ children }) {
     await supabase.auth.signOut()
   }
 
-  function registrerTilbud() {
-    if (!bruker) return
-    const key = `tilbud_count_${bruker.id}`
-    const ny = antallTilbud + 1
-    localStorage.setItem(key, String(ny))
-    setAntallTilbud(ny)
+  function registrerForsok() {
+    const ny = forsok + 1
+    try { localStorage.setItem(FORSOK_KEY, String(ny)) } catch {}
+    setForsok(ny)
   }
 
-  // isPro: leses fra Supabase user_metadata
-  // Settes manuelt i Supabase SQL Editor, eller via Stripe webhook (TODO)
+  // isPro: leses fra Supabase user_metadata (settes manuelt eller via Stripe webhook)
   const isPro = bruker?.user_metadata?.isPro === true
 
-  const tilbudGjenstaende = MAKS_GRATIS_TILBUD - antallTilbud
-  const kanLageTilbud = isPro || tilbudGjenstaende > 0
+  const forsokGjenstaende = Math.max(0, MAKS_GRATIS_FORSOK - forsok)
+  const kanBrukeForsok = isPro || forsokGjenstaende > 0
 
   return (
     <AuthContext.Provider value={{
-      bruker,
-      laster,
-      loggInn,
-      registrer,
-      loggUt,
-      isPro,
-      antallTilbud,
-      tilbudGjenstaende,
-      kanLageTilbud,
-      registrerTilbud,
-      MAKS_GRATIS_TILBUD,
+      bruker, laster, loggInn, registrer, loggUt,
+      isPro, forsok, forsokGjenstaende, kanBrukeForsok,
+      registrerForsok, MAKS_GRATIS_FORSOK,
     }}>
       {children}
     </AuthContext.Provider>

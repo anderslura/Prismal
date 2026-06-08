@@ -18,7 +18,7 @@ function temaFarge(temaId) {
   return kart[temaId] || kart.standard
 }
 
-export function lastNedPDF(skjema) {
+export function lastNedPDF(skjema, isPro = true) {
   const doc = new jsPDF({ unit: 'mm', format: 'a4' })
   const sideBredde = doc.internal.pageSize.getWidth()
   const margin = 20
@@ -61,9 +61,9 @@ export function lastNedPDF(skjema) {
     doc.rect(0, 0, sideBredde, headerHoyde, 'F')
   }
 
-  // Logo øverst til venstre — behold aspect ratio
+  // Logo / firmanavn i header
   let tekstStartX = margin
-  if (skjema.logoUrl) {
+  if (isPro && skjema.logoUrl) {
     try {
       const img = new Image()
       img.src = skjema.logoUrl
@@ -72,13 +72,23 @@ export function lastNedPDF(skjema) {
       doc.addImage(skjema.logoUrl, 'PNG', margin, 6, logoW, logoH)
       tekstStartX = margin + logoW + 4
     } catch {}
+  } else if (!isPro) {
+    // Prismal-logo: tre diagonale striper
+    const sx = margin, sy = 5, sh = 18, sw = 13
+    doc.setFillColor(168, 202, 255)
+    doc.triangle(sx, sy + sh, sx + sw * 0.4, sy, sx + sw * 0.65, sy, 'F')
+    doc.setFillColor(102, 153, 255)
+    doc.triangle(sx + sw * 0.25, sy + sh, sx + sw * 0.65, sy, sx + sw * 0.9, sy, 'F')
+    doc.setFillColor(51, 102, 238)
+    doc.triangle(sx + sw * 0.5, sy + sh, sx + sw * 0.9, sy, sx + sw, sy, 'F')
+    tekstStartX = margin + sw + 4
   }
 
-  // Firmanavn alltid synlig
+  // Firmanavn
   doc.setTextColor(255, 255, 255)
   doc.setFontSize(14)
   doc.setFont('helvetica', 'bold')
-  doc.text(skjema.firmanavn || 'Ditt Firma AS', tekstStartX, 14)
+  doc.text(isPro ? (skjema.firmanavn || 'Ditt Firma AS') : 'PRISMAL', tekstStartX, 14)
 
   doc.setFontSize(8)
   doc.setFont('helvetica', 'normal')
@@ -217,12 +227,21 @@ export function lastNedPDF(skjema) {
   gy += 6
   doc.setFontSize(7.5)
   doc.setTextColor(...fargeGraa)
-  doc.text(
-    `Tilbudet er gyldig i 30 dager. ${skjema.firmanavn || ''} · ${skjema.firmaEpost || ''} · ${skjema.firmaTelefon || ''}`,
-    sideBredde / 2,
-    gy,
-    { align: 'center' }
-  )
+  if (isPro) {
+    doc.text(
+      `Tilbudet er gyldig i 30 dager. ${skjema.firmanavn || ''} · ${skjema.firmaEpost || ''} · ${skjema.firmaTelefon || ''}`,
+      sideBredde / 2, gy, { align: 'center' }
+    )
+  } else {
+    doc.text(
+      'Tilbudet er gyldig i 30 dager.',
+      sideBredde / 2, gy, { align: 'center' }
+    )
+    gy += 5
+    doc.setFontSize(7)
+    doc.setTextColor(102, 153, 255)
+    doc.text('Laget med Prismal — prismal.no | Fjern Prismal-branding med Pro', sideBredde / 2, gy, { align: 'center' })
+  }
 
   doc.save(`Tilbud-${skjema.tilbudsnummer}-${skjema.kundenavn || 'kunde'}.pdf`)
 }
