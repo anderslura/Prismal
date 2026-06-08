@@ -2,8 +2,8 @@ import { hentTemaFarger } from './PdfTemavelger.jsx'
 
 export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilbake, onNyttTilbud }) {
   const totalArbeid = (skjema.arbeidere || []).reduce((s, a) => s + (parseFloat(a.timer)||0)*(parseFloat(a.timepris)||0), 0)
-  const totalMaterialer = skjema.materialer.reduce((s, m) => s + (parseFloat(m.pris) || 0), 0)
-  const materialerMedPaaslag = skjema.materialer.reduce((s, m) => s + (m.hasPaaslag ? (parseFloat(m.sum)||parseFloat(m.pris)||0) : 0), 0)
+  const totalMaterialer = skjema.materialer.reduce((s, m) => s + (parseFloat(m.sum) || (parseFloat(m.antall)||1) * (parseFloat(m.pris)||0)), 0)
+  const materialerMedPaaslag = skjema.materialer.reduce((s, m) => s + (m.hasPaaslag ? (parseFloat(m.sum) || (parseFloat(m.antall)||1) * (parseFloat(m.pris)||0)) : 0), 0)
   const paaslag = materialerMedPaaslag * (parseFloat(skjema.paaslagProsent) || 0) / 100
   const totalEksMva = totalArbeid + totalMaterialer + paaslag
   const totalInklMva = totalEksMva * 1.25
@@ -103,9 +103,9 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
               {skjema.materialer.map(m => (
                 <tr key={m.id}>
                   <td>{m.navn}</td>
-                  <td className="td-antall">1</td>
+                  <td className="td-antall">{parseFloat(m.antall) || 1}</td>
                   <td className="td-pris">{formaterKr(m.pris)}</td>
-                  <td className="td-sum">{formaterKr(m.pris)}</td>
+                  <td className="td-sum">{formaterKr(parseFloat(m.sum) || (parseFloat(m.antall)||1) * (parseFloat(m.pris)||0))}</td>
                 </tr>
               ))}
               {paaslag > 0 && (
