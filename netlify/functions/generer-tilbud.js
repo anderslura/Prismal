@@ -28,13 +28,9 @@ exports.handler = async (event) => {
   const { firmanavn, kundenavn, kundeAdresse, beskrivelse, arbeidere, materialer } = data
   const totalArbeid2 = (arbeidere||[]).reduce((s,a) => s+(parseFloat(a.timer)||0)*(parseFloat(a.timepris)||0), 0)
 
-  // Bygg prompt
-  const totalArbeid = totalArbeid2
-  const totalMaterialer = (materialer || []).reduce((s, m) => s + (parseFloat(m.pris) || 0), 0)
-  const totalSum = totalArbeid + totalMaterialer
-
-  const materialListe = (materialer || []).length > 0
-    ? (materialer || []).map(m => `- ${m.navn}: ${m.pris} kr`).join('\n')
+  // Bygg prompt — send kun materialnavn, IKKE priser (unngår at AI gjengir prisliste i teksten)
+  const materialListe = (materialer || []).filter(m => m.navn).length > 0
+    ? (materialer || []).filter(m => m.navn).map(m => `- ${m.navn}`).join('\n')
     : 'Ingen materialer spesifisert'
 
   const prompt = `Du er en profesjonell norsk håndverker som skriver tilbud til kunder. Skriv en kortfattet, profesjonell og tillitsvekkende tilbudstekst på norsk bokmål.
@@ -43,21 +39,22 @@ DETALJER OM OPPDRAGET:
 - Firma: ${firmanavn || 'Håndverkerbedrift'}
 - Kunde: ${kundenavn}${kundeAdresse ? `, ${kundeAdresse}` : ''}
 - Oppdrag: ${beskrivelse || 'Se prisoversikt'}
-- Arbeid: ${(arbeidere||[]).filter(a=>a.timer).map(a=>`${a.timer}t à ${a.timepris}kr/t`).join(', ') || 'Se prisoversikt'}
-- Materialer: ${materialListe}
+- Arbeid: ${(arbeidere||[]).filter(a=>a.timer).map(a=>`${a.timer}t`).join(', ') || 'Se prisoversikt'}
+- Materialer som inngår: ${materialListe}
 
 INSTRUKSJONER:
-- Skriv 2–3 korte avsnitt med vanlig tekst
+- Skriv 3 korte avsnitt med vanlig løpende tekst
 - Start med en høflig innledning til kunden ved navn
 - Beskriv hva som skal gjøres og hvordan dere vil utføre det
 - Nevn eventuelle forbehold (f.eks. uforutsette forhold under arbeidet)
-- IKKE nevn priser, summer eller beløp — det vises i prisoversikten under
+- IKKE nevn priser, summer, beløp eller kroner — priser vises separat under teksten
+- IKKE lag prisoversikt, prisliste eller en PRISOVERSIKT-seksjon — dette genereres automatisk av systemet
 - Avslutt med en enkel oppfordring til å ta kontakt — IKKE inkluder telefonnummer, e-post eller firmanavn på slutten
 - IKKE bruk markdown (ingen #, **, *, eller lignende formatering)
 - IKKE bruk plassholdere som [Telefonnummer] eller [E-postadresse]
-- Ren løpende tekst, ingen overskrifter
+- Ren løpende tekst, ingen overskrifter, ingen lister, ingen punkter
 - Profesjonell, varm og norsk tone
-- 3 avsnitt, totalt ca. 250 ord`
+- Totalt ca. 200–250 ord`
 
   try {
     const respons = await fetch('https://api.anthropic.com/v1/messages', {
