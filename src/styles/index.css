@@ -1578,3 +1578,135 @@ textarea { resize: vertical; }
   text-align: center;
   color: #d1d5db;
 }
+
+/* ══════════════════════════════════════════
+   MOBILOPTIMALISERING
+   Breakpoints: 768px (tablet), 480px (mobil)
+   ══════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+
+  /* Header */
+  .header-inner {
+    padding: 10px 14px;
+    gap: 8px;
+  }
+  .header-inner > div:last-child {
+    gap: 6px;
+  }
+  .btn {
+    padding: 7px 12px;
+    font-size: 13px;
+  }
+
+  /* Firma-info 2-kolonne → 1-kolonne */
+  .felt-rad {
+    grid-template-columns: 1fr;
+  }
+
+  /* Skjema-seksjoner */
+  .skjema-seksjon {
+    padding: 14px;
+  }
+
+  /* Prisliste-rader: 6-kolonne grid → stablede rader */
+  .prisliste-rad {
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    row-gap: 4px;
+  }
+  .prisliste-item-navn  { grid-column: 1; grid-row: 1; }
+  .prisliste-item-enhetspris { grid-column: 1; grid-row: 2; font-size: 11px; }
+  .prisliste-item-enhet { display: none; }
+  .prisliste-antall-input { grid-column: 2; grid-row: 1; width: 52px !important; }
+  .prisliste-item-sum   { grid-column: 2; grid-row: 2; }
+  .btn-fjern            { grid-column: 2; grid-row: 1; align-self: center; }
+
+  /* Prisliste admin-input: 4 → 2 kolonner */
+  .prisliste-admin-input {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+  }
+  .prisliste-admin-input > *:nth-child(4) {
+    grid-column: 1 / -1;
+  }
+
+  /* Material ny-linje input */
+  .material-input-rad {
+    grid-template-columns: 1fr auto;
+    flex-wrap: wrap;
+  }
+
+  /* Pristabell i preview: scroll horisontalt */
+  .dok-body { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .pris-tabell { min-width: 420px; }
+
+  /* Preview knapper: wrap */
+  .preview-knapper {
+    flex-wrap: wrap;
+  }
+  .preview-knapper .btn {
+    flex: 1;
+    min-width: 120px;
+    justify-content: center;
+  }
+
+  /* Dokument-layout */
+  .dok-hode {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .dok-hode > * { width: 100% !important; }
+
+  /* PDF-temavelger pill-rekke: wrap bedre */
+  .tema-grid { gap: 5px; }
+  .tema-knapp { font-size: 12px; padding: 3px 8px 3px 5px; }
+
+  /* Modal */
+  .modal-boks { padding: 1.5rem; }
+}
+
+@media (max-width: 480px) {
+
+  /* Header: skjul "Logg ut" tekst, vis som ikon-knapp */
+  .app-header .btn-secondary[title] {
+    padding: 7px 10px;
+  }
+
+  /* Skjema-seksjon enda tettere */
+  .skjema-seksjon { padding: 12px; }
+  .seksjon-tittel { font-size: 13px; }
+
+  /* Arbeidere-rad */
+  .arbeidere-rad {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  /* Knapper full-bredde på veldig liten skjerm */
+  .skjema-knapper {
+    flex-direction: column;
+  }
+  .skjema-knapper .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Landing hero */
+  .landing-hero h1 { font-size: 1.6rem; }
+  .landing-hero p  { font-size: 0.95rem; }
+
+  /* Feature-bokser: 1 kolonne */
+  .landing-features {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Pristabell mindre font */
+  .pris-tabell th, .pris-tabell td { padding: 7px 8px; font-size: 12px; }
+
+  /* Ny-material input: full bredde */
+  .material-input-rad {
+    grid-template-columns: 1fr;
+  }
+  .material-input-rad .btn { width: 100%; }
+}
