@@ -173,11 +173,14 @@ export function lastNedPDF(skjema, isPro = true) {
       kr(sum),
     ])
   })
+  const paaslagFaktor = 1 + (parseFloat(skjema.paaslagProsent) || 0) / 100
   skjema.materialer.filter(m => (parseFloat(m.antall)||0) > 0).forEach(m => {
     const ant = parseFloat(m.antall) || 1
-    const pris = parseFloat(m.pris) || 0
-    const sum = parseFloat(m.sum) || pris * ant
-    rader.push([m.navn, String(ant), kr(pris), kr(sum)])
+    const prisUten = parseFloat(m.pris) || 0
+    // Bak påslag inn i enhetspris for materialer med påslag — kunden ser ferdigpris
+    const prisMedPaaslag = m.hasPaaslag ? prisUten * paaslagFaktor : prisUten
+    const sumMedPaaslag = prisMedPaaslag * ant
+    rader.push([m.navn, String(ant), kr(prisMedPaaslag), kr(sumMedPaaslag)])
   })
 
   doc.autoTable({
