@@ -73,15 +73,24 @@ export function lastNedPDF(skjema, isPro = true) {
       tekstStartX = margin + logoW + 4
     } catch {}
   } else if (!isPro) {
-    // Prismal-logo: tre diagonale striper
-    const sx = margin, sy = 5, sh = 18, sw = 13
-    doc.setFillColor(168, 202, 255)
-    doc.triangle(sx, sy + sh, sx + sw * 0.4, sy, sx + sw * 0.65, sy, 'F')
-    doc.setFillColor(102, 153, 255)
-    doc.triangle(sx + sw * 0.25, sy + sh, sx + sw * 0.65, sy, sx + sw * 0.9, sy, 'F')
-    doc.setFillColor(51, 102, 238)
-    doc.triangle(sx + sw * 0.5, sy + sh, sx + sw * 0.9, sy, sx + sw, sy, 'F')
-    tekstStartX = margin + sw + 4
+    // Prismal-logo: tre diagonale striper (parallelogrammer)
+    const sx = margin, sy = 6, sh = 16, sw = 14, gap = 1.5, w = 3.5
+    const striper = [
+      [168, 202, 255],
+      [102, 153, 255],
+      [51,  102, 238],
+    ]
+    striper.forEach(([r, g, b], i) => {
+      const ox = i * (w + gap)
+      doc.setFillColor(r, g, b)
+      // Parallelogram: skråstilt til høyre oppover
+      const skew = sh * 0.45
+      doc.lines(
+        [[w, 0], [skew, -sh], [-w, 0], [-skew, sh]],
+        sx + ox + skew, sy + sh, [1, 1], 'F', true
+      )
+    })
+    tekstStartX = margin + sw * 3 + gap * 2 + 5
   }
 
   // Firmanavn
