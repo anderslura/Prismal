@@ -5,6 +5,8 @@ import { genererTilbudstekst } from './api/claude.js'
 import { lastNedPDF } from './api/pdf.js'
 import Landingsside from './components/Landingsside.jsx'
 import PrismalLogo from './components/PrismalLogo.jsx'
+import LoginModal from './components/LoginModal.jsx'
+import { AuthProvider, useAuth } from './contexts/AuthContext.jsx'
 
 const TOM_SKJEMA = {
   firmanavn: '',
@@ -17,7 +19,7 @@ const TOM_SKJEMA = {
   kundeAdresse: '',
   kundeEpost: '',
   beskrivelse: '',
-  arbeidere: [], // [{id, navn, timer, timepris}] — støtter flere rader
+  arbeidere: [],
   materialer: [],
   logoUrl: '',
   tilbudstekst: '',
@@ -26,7 +28,6 @@ const TOM_SKJEMA = {
   dato: new Date().toLocaleDateString('no-NO'),
 }
 
-// Henter lagret firmainformasjon fra localStorage
 function hentLagretFirma() {
   try {
     const lagret = localStorage.getItem('firma')
@@ -50,7 +51,6 @@ function hentLagretLogo() {
   try { return localStorage.getItem('logoUrl') || '' } catch { return '' }
 }
 
-// Henter lagret prisliste fra localStorage
 function hentLagretPrisliste() {
   try {
     const lagret = localStorage.getItem('prisliste')
@@ -58,7 +58,8 @@ function hentLagretPrisliste() {
   } catch { return [] }
 }
 
-export default function App() {
+function AppInnhold() {
+  const { bruker, laster: authLaster, loggUt, isPro } = useAuth()
   const [skjema, setSkjema] = useState(() => ({
     ...TOM_SKJEMA,
     ...hentLagretFirma(),
@@ -68,12 +69,19 @@ export default function App() {
     tilbudsnummer: genererTilbudsnummer(),
   }))
   const [prisliste, setPrisliste] = useState(hentLagretPrisliste)
-  const [isPro, setIsPro] = useState(true) // TODO: koble til Stripe ved Fase 2
   const [laster, setLaster] = useState(false)
   const [feil, setFeil] = useState('')
   const [steg, setSteg] = useState('landing')
+  const [visLogin, setVisLogin] = useState(false)
 
-  // Lagre firmainformasjon automatisk når den endres
+  // Gå til skjema automatisk etter innlogging via modal
+  useEffect(() => {
+    if (bruker && visLogin) {
+      setVisLogin(false)
+      setSteg('skjema')
+    }
+  }, [bruker])
+
   useEffect(() => {
     const firma = {
       firmanavn: skjema.firmanavn,
@@ -91,25 +99,30 @@ export default function App() {
   }, [skjema.logoUrl])
 
   useEffect(() => {
-    // Lagre materiallinjer som mal (uten antall/sum)
     const mal = skjema.materialer.map(m => ({ navn: m.navn, pris: m.pris, hasPaaslag: m.hasPaaslag }))
     localStorage.setItem('materialMal', JSON.stringify(mal))
   }, [skjema.materialer])
 
   useEffect(() => {
-    // Lagre timepris fra første arbeider som default
     if (skjema.arbeidere.length > 0 && skjema.arbeidere[0].timepris) {
       localStorage.setItem('timepris', skjema.arbeidere[0].timepris)
     }
   }, [skjema.arbeidere])
 
-  // Lagre prisliste automatisk når den endres
   useEffect(() => {
     localStorage.setItem('prisliste', JSON.stringify(prisliste))
   }, [prisliste])
 
   function oppdater(felt, verdi) {
     setSkjema(prev => ({ ...prev, [felt]: verdi }))
+  }
+
+  function startLagTilbud() {
+    if (!bruker) {
+      setVisLogin(true)
+      return
+    }
+    setSteg('skjema')
   }
 
   async function generer() {
@@ -149,6 +162,8 @@ export default function App() {
     lastNedPDF(skjema)
   }
 
+  if (authLaster) return <div className="auth-laster">Laster...</div>
+
   return (
     <div className="app">
       <header className="app-header">
@@ -156,20 +171,35 @@ export default function App() {
           <div className="logo">
             <PrismalLogo />
           </div>
-          <div style={{display:'flex', gap:'10px'}}>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
             {steg === 'preview' && (
               <button className="btn btn-secondary" onClick={() => setSteg('skjema')}>
                 ← Tilbake til skjema
               </button>
             )}
             {steg !== 'landing' && (
-              <button className="btn btn-secondary" style={{borderColor:'#16a34a', color:'#16a34a'}} onClick={nullstill}>
+              <button className="btn btn-secondary" style={{ borderColor: '#16a34a', color: '#16a34a' }} onClick={nullstill}>
                 + Nytt tilbud
               </button>
             )}
+            {steg === 'landing' && !bruker && (
+              <button className="btn btn-secondary" onClick={() => setVisLogin(true)}>
+                Logg inn
+              </button>
+            )}
             {steg === 'landing' && (
-              <button className="btn btn-primary" onClick={() => setSteg('skjema')}>
+              <button className="btn btn-primary" onClick={startLagTilbud}>
                 Lag tilbud →
+              </button>
+            )}
+            {bruker && (
+              <button
+                className="btn btn-secondary"
+                style={{ fontSize: '0.8rem', opacity: 0.7 }}
+                onClick={loggUt}
+                title={bruker.email}
+              >
+                Logg ut
               </button>
             )}
           </div>
@@ -178,7 +208,7 @@ export default function App() {
 
       <main className="app-main">
         {steg === 'landing' ? (
-          <Landingsside onStart={() => setSteg('skjema')} />
+          <Landingsside onStart={startLagTilbud} />
         ) : steg === 'skjema' ? (
           <TilbudSkjema
             skjema={skjema}
@@ -204,7 +234,17 @@ export default function App() {
       <footer className="app-footer">
         <p>© {new Date().getFullYear()} Hjelpeportalen AS · prismal.no</p>
       </footer>
+
+      {visLogin && <LoginModal onLukk={() => setVisLogin(false)} />}
     </div>
+  )
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppInnhold />
+    </AuthProvider>
   )
 }
 
