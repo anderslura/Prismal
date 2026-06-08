@@ -74,8 +74,12 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
         <section className="skjema-seksjon">
           <h2 className="seksjon-tittel">Din bedrift</h2>
           <div className="felt-gruppe">
-            <label>Firmanavn</label>
-            <input type="text" placeholder="Ola Nordmann AS" value={skjema.firmanavn} onChange={e => oppdater('firmanavn', e.target.value)} />
+            <label>Firmanavn {!isPro && <span className="pro-badge">PRO</span>}</label>
+            {isPro ? (
+              <input type="text" placeholder="Ola Nordmann AS" value={skjema.firmanavn} onChange={e => oppdater('firmanavn', e.target.value)} />
+            ) : (
+              <div className="pro-locked">🔒 Tilgjengelig på Pro — <a href="#" className="pro-lenke" onClick={e => { e.preventDefault(); alert('Stripe-betaling kommer snart!') }}>Oppgrader (99 kr/mnd)</a></div>
+            )}
           </div>
           <div className="felt-rad">
             <div className="felt-gruppe">

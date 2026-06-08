@@ -29,12 +29,8 @@ const TOM_SKJEMA = {
 }
 
 function hentLagretFirma() {
-  try {
-    const lagret = localStorage.getItem('firma')
-    return lagret ? JSON.parse(lagret) : {}
-  } catch { return {} }
+  try { return JSON.parse(localStorage.getItem('firma') || '{}') } catch { return {} }
 }
-
 function hentLagretMaterialMal() {
   try {
     const lagret = localStorage.getItem('materialMal')
@@ -42,24 +38,19 @@ function hentLagretMaterialMal() {
     return JSON.parse(lagret).map(m => ({ ...m, id: Date.now() + Math.random(), antall: 0, sum: 0 }))
   } catch { return [] }
 }
-
 function hentLagretTimepris() {
   try { return localStorage.getItem('timepris') || '' } catch { return '' }
 }
-
 function hentLagretLogo() {
   try { return localStorage.getItem('logoUrl') || '' } catch { return '' }
 }
-
 function hentLagretPrisliste() {
-  try {
-    const lagret = localStorage.getItem('prisliste')
-    return lagret ? JSON.parse(lagret) : []
-  } catch { return [] }
+  try { return JSON.parse(localStorage.getItem('prisliste') || '[]') } catch { return [] }
 }
 
 function AppInnhold() {
-  const { bruker, laster: authLaster, loggUt, isPro } = useAuth()
+  const { bruker, laster: authLaster, loggUt, isPro, kanLageTilbud, tilbudGjenstaende, registrerTilbud, MAKS_GRATIS_TILBUD } = useAuth()
+
   const [skjema, setSkjema] = useState(() => ({
     ...TOM_SKJEMA,
     ...hentLagretFirma(),
@@ -74,7 +65,7 @@ function AppInnhold() {
   const [steg, setSteg] = useState('landing')
   const [visLogin, setVisLogin] = useState(false)
 
-  // Gå til skjema automatisk etter innlogging via modal
+  // Gå til skjema automatisk etter innlogging
   useEffect(() => {
     if (bruker && visLogin) {
       setVisLogin(false)
@@ -84,12 +75,9 @@ function AppInnhold() {
 
   useEffect(() => {
     const firma = {
-      firmanavn: skjema.firmanavn,
-      firmaTelefon: skjema.firmaTelefon,
-      firmaEpost: skjema.firmaEpost,
-      firmaAdresse: skjema.firmaAdresse,
-      firmaOrgnr: skjema.firmaOrgnr,
-      firmaNettside: skjema.firmaNettside,
+      firmanavn: skjema.firmanavn, firmaTelefon: skjema.firmaTelefon,
+      firmaEpost: skjema.firmaEpost, firmaAdresse: skjema.firmaAdresse,
+      firmaOrgnr: skjema.firmaOrgnr, firmaNettside: skjema.firmaNettside,
     }
     localStorage.setItem('firma', JSON.stringify(firma))
   }, [skjema.firmanavn, skjema.firmaTelefon, skjema.firmaEpost, skjema.firmaAdresse, skjema.firmaOrgnr, skjema.firmaNettside])
@@ -118,10 +106,7 @@ function AppInnhold() {
   }
 
   function startLagTilbud() {
-    if (!bruker) {
-      setVisLogin(true)
-      return
-    }
+    if (!bruker) { setVisLogin(true); return }
     setSteg('skjema')
   }
 
@@ -130,11 +115,16 @@ function AppInnhold() {
       setFeil('Fyll inn kundenavn og beskrivelse av jobben.')
       return
     }
+    if (!kanLageTilbud) {
+      setFeil(`Du har brukt alle ${MAKS_GRATIS_TILBUD} gratis tilbud. Oppgrader til Pro for ubegrenset tilgang.`)
+      return
+    }
     setFeil('')
     setLaster(true)
     try {
       const tekst = await genererTilbudstekst(skjema)
       setSkjema(prev => ({ ...prev, tilbudstekst: tekst }))
+      registrerTilbud()
       setSteg('preview')
     } catch (e) {
       setFeil('Kunne ikke generere tilbudstekst. Sjekk API-nøkkel og prøv igjen.')
@@ -158,24 +148,16 @@ function AppInnhold() {
     setFeil('')
   }
 
-  function lastNed() {
-    lastNedPDF(skjema)
-  }
-
   if (authLaster) return <div className="auth-laster">Laster...</div>
 
   return (
     <div className="app">
       <header className="app-header">
         <div className="header-inner">
-          <div className="logo">
-            <PrismalLogo />
-          </div>
+          <div className="logo"><PrismalLogo /></div>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
             {steg === 'preview' && (
-              <button className="btn btn-secondary" onClick={() => setSteg('skjema')}>
-                ← Tilbake til skjema
-              </button>
+              <button className="btn btn-secondary" onClick={() => setSteg('skjema')}>← Tilbake</button>
             )}
             {steg !== 'landing' && (
               <button className="btn btn-secondary" style={{ borderColor: '#16a34a', color: '#16a34a' }} onClick={nullstill}>
@@ -183,28 +165,30 @@ function AppInnhold() {
               </button>
             )}
             {steg === 'landing' && !bruker && (
-              <button className="btn btn-secondary" onClick={() => setVisLogin(true)}>
-                Logg inn
-              </button>
+              <button className="btn btn-secondary" onClick={() => setVisLogin(true)}>Logg inn</button>
             )}
             {steg === 'landing' && (
-              <button className="btn btn-primary" onClick={startLagTilbud}>
-                Lag tilbud →
-              </button>
+              <button className="btn btn-primary" onClick={startLagTilbud}>Lag tilbud →</button>
             )}
             {bruker && (
-              <button
-                className="btn btn-secondary"
-                style={{ fontSize: '0.8rem', opacity: 0.7 }}
-                onClick={loggUt}
-                title={bruker.email}
-              >
+              <button className="btn btn-secondary" style={{ fontSize: '0.8rem', opacity: 0.7 }} onClick={loggUt} title={bruker.email}>
                 Logg ut
               </button>
             )}
           </div>
         </div>
       </header>
+
+      {/* Pro-banner for gratisbrukere */}
+      {bruker && !isPro && steg === 'skjema' && (
+        <div className="gratis-banner">
+          {kanLageTilbud
+            ? <span>Gratis plan — <strong>{tilbudGjenstaende} av {MAKS_GRATIS_TILBUD} tilbud</strong> gjenstår · Firmanavn og logo krever Pro</span>
+            : <span>Du har brukt alle {MAKS_GRATIS_TILBUD} gratis tilbud</span>
+          }
+          <button className="btn btn-pro-oppgrader">Oppgrader til Pro — 99 kr/mnd</button>
+        </div>
+      )}
 
       <main className="app-main">
         {steg === 'landing' ? (
@@ -224,7 +208,7 @@ function AppInnhold() {
           <TilbudPreview
             skjema={skjema}
             oppdaterTekst={(tekst) => oppdater('tilbudstekst', tekst)}
-            onLastNed={lastNed}
+            onLastNed={() => lastNedPDF(skjema)}
             onTilbake={() => setSteg('skjema')}
             onNyttTilbud={nullstill}
           />
