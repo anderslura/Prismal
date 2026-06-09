@@ -220,7 +220,7 @@ function AppInnhold() {
             <span>Du har brukt alle gratis forsøk</span>
           )}
           <button className="btn-pro-oppgrader" onClick={() => setVisOppgrader(true)}>
-            Oppgrader til Pro — 99 kr/mnd
+            Oppgrader til Pro — 99 kr/mnd eks. mva
           </button>
         </div>
       )}
@@ -270,7 +270,7 @@ function AppInnhold() {
               <li>✓ Ingen Prismal-branding</li>
               <li>✓ Lagrede prislinjer og historikk</li>
             </ul>
-            <div className="oppgrader-pris">99 kr <span>/mnd</span></div>
+            <div className="oppgrader-pris">99 kr <span>/mnd eks. mva</span></div>
             <button className="btn btn-primary" style={{ width: '100%', padding: '12px', fontSize: '15px' }}
               onClick={() => { alert('Stripe-betaling kommer snart!'); setVisOppgrader(false) }}>
               Kom i gang med Pro
