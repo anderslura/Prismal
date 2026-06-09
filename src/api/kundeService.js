@@ -41,3 +41,12 @@ export async function lagreKunde({ mobil, navn, adresse, epost }) {
     )
   if (error) throw error
 }
+
+// Slett kunde på mobilnummer
+export async function slettKunde(mobil) {
+  const { error } = await supabase
+    .from('kunder')
+    .delete()
+    .eq('mobil', mobil.trim())
+  if (error) throw error
+}

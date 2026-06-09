@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
-import { hentKundePaMobil, sokKunderPaNavn, lagreKunde } from '../api/kundeService.js'
+import { hentKundePaMobil, sokKunderPaNavn, lagreKunde, slettKunde } from '../api/kundeService.js'
 import { useAuth } from '../contexts/AuthContext.jsx'
 
 /**
- * KundeInfo – kundeseksjon med mob-oppslag, navn-søk og lagring til Supabase.
+ * KundeInfo – mob-oppslag, navn-søk, lagre og slett mot Supabase.
  * Props:
- *   kunde      – { kundenavn, kundeAdresse, kundeEpost, kundeMobil }
- *   onChange   – (felt, verdi) callback (samme som TilbudSkjema.oppdater)
+ *   kunde       – { kundenavn, kundeAdresse, kundeEpost, kundeMobil }
+ *   onChange    – (felt, verdi) callback
  *   onNullstill – tøm alle kundefelt + jobb
  */
 export default function KundeInfo({ kunde, onChange, onNullstill }) {
@@ -17,20 +17,22 @@ export default function KundeInfo({ kunde, onChange, onNullstill }) {
   const [navnInput, setNavnInput] = useState(kunde.kundenavn || '')
   const [navnForslag, setNavnForslag] = useState([])
   const [status, setStatus] = useState('') // '' | 'laster' | 'ok' | 'feil'
+  const [lastetFraDb, setLastetFraDb] = useState(false)
+  const [slettStatus, setSlettStatus] = useState('') // '' | 'bekreft' | 'laster'
   const navnTimer = useRef(null)
 
   // Sync ved nullstill fra parent
   useEffect(() => {
     setMobilInput(kunde.kundeMobil || '')
     setNavnInput(kunde.kundenavn || '')
+    if (!kunde.kundeMobil) setLastetFraDb(false)
   }, [kunde.kundeMobil, kunde.kundenavn])
 
-  // Mobiloppslag på blur / Enter
   async function slaSoMobil() {
     if (!innlogget || !mobilInput.trim()) return
     try {
       const k = await hentKundePaMobil(mobilInput)
-      if (k) fyllInnKunde(k)
+      if (k) { fyllInnKunde(k); setLastetFraDb(true) }
     } catch (e) {
       console.error('Mobiloppslag feilet:', e)
     }
@@ -45,10 +47,10 @@ export default function KundeInfo({ kunde, onChange, onNullstill }) {
     setNavnInput(k.navn || '')
   }
 
-  // Live navn-søk
   function onNavnEndring(verdi) {
     setNavnInput(verdi)
     onChange('kundenavn', verdi)
+    setLastetFraDb(false)
     if (!innlogget || verdi.length < 2) { setNavnForslag([]); return }
     clearTimeout(navnTimer.current)
     navnTimer.current = setTimeout(async () => {
@@ -58,26 +60,50 @@ export default function KundeInfo({ kunde, onChange, onNullstill }) {
 
   function velgDropdown(k) {
     fyllInnKunde(k)
+    setLastetFraDb(true)
     setNavnForslag([])
   }
 
-  // Lagre til Supabase
+  async function slettFraDropdown(e, k) {
+    e.stopPropagation()
+    try {
+      await slettKunde(k.mobil)
+      setNavnForslag(prev => prev.filter(x => x.id !== k.id))
+    } catch (err) {
+      console.error('Slett feilet:', err)
+    }
+  }
+
   async function lagreKlikk() {
     if (!innlogget || !mobilInput.trim() || !navnInput.trim()) return
     setStatus('laster')
     try {
-      await lagreKunde({
-        mobil: mobilInput,
-        navn: navnInput,
-        adresse: kunde.kundeAdresse,
-        epost: kunde.kundeEpost,
-      })
+      await lagreKunde({ mobil: mobilInput, navn: navnInput, adresse: kunde.kundeAdresse, epost: kunde.kundeEpost })
       setStatus('ok')
+      setLastetFraDb(true)
       setTimeout(() => setStatus(''), 2500)
     } catch (e) {
       console.error('Lagring feilet:', e)
       setStatus('feil')
       setTimeout(() => setStatus(''), 3000)
+    }
+  }
+
+  async function slettLastetKunde() {
+    if (slettStatus === 'bekreft') {
+      setSlettStatus('laster')
+      try {
+        await slettKunde(mobilInput)
+        setLastetFraDb(false)
+        setSlettStatus('')
+        onNullstill()
+      } catch (e) {
+        console.error('Slett feilet:', e)
+        setSlettStatus('')
+      }
+    } else {
+      setSlettStatus('bekreft')
+      setTimeout(() => setSlettStatus(prev => prev === 'bekreft' ? '' : prev), 4000)
     }
   }
 
@@ -90,7 +116,6 @@ export default function KundeInfo({ kunde, onChange, onNullstill }) {
         </button>
       </div>
 
-      {/* Mobil – kun for innloggede */}
       {innlogget && (
         <div className="felt-gruppe">
           <label>Mobilnummer</label>
@@ -99,7 +124,7 @@ export default function KundeInfo({ kunde, onChange, onNullstill }) {
               type="tel"
               placeholder="98765432"
               value={mobilInput}
-              onChange={e => { setMobilInput(e.target.value); onChange('kundeMobil', e.target.value) }}
+              onChange={e => { setMobilInput(e.target.value); onChange('kundeMobil', e.target.value); setLastetFraDb(false) }}
               onBlur={slaSoMobil}
               onKeyDown={e => e.key === 'Enter' && slaSoMobil()}
               className="kunde-mob-input"
@@ -109,7 +134,6 @@ export default function KundeInfo({ kunde, onChange, onNullstill }) {
         </div>
       )}
 
-      {/* Kundenavn med dropdown */}
       <div className="felt-gruppe kunde-navn-wrapper">
         <label>Kundenavn <span className="paakrevd">*</span></label>
         <input
@@ -125,10 +149,19 @@ export default function KundeInfo({ kunde, onChange, onNullstill }) {
           <ul className="kunde-dropdown">
             {navnForslag.map(k => (
               <li key={k.id} onMouseDown={() => velgDropdown(k)}>
-                <span className="kunde-dropdown-navn">{k.navn}</span>
-                <span className="kunde-dropdown-meta">
-                  {k.mobil}{k.adresse ? ` · ${k.adresse}` : ''}
-                </span>
+                <div className="kunde-dropdown-info">
+                  <span className="kunde-dropdown-navn">{k.navn}</span>
+                  <span className="kunde-dropdown-meta">
+                    {k.mobil}{k.adresse ? ` · ${k.adresse}` : ''}
+                  </span>
+                </div>
+                <button
+                  className="kunde-dropdown-slett"
+                  onMouseDown={e => slettFraDropdown(e, k)}
+                  title="Slett lagret kunde"
+                >
+                  🗑
+                </button>
               </li>
             ))}
           </ul>
@@ -155,18 +188,29 @@ export default function KundeInfo({ kunde, onChange, onNullstill }) {
         />
       </div>
 
-      {/* Lagre-knapp – kun for innloggede */}
       {innlogget && (
-        <button
-          className={`btn-lagre-kunde${status === 'ok' ? ' lagret' : status === 'feil' ? ' feil' : ''}`}
-          onClick={lagreKlikk}
-          disabled={status === 'laster' || !mobilInput.trim() || !navnInput.trim()}
-        >
-          {status === 'laster' ? 'Lagrer…'
-            : status === 'ok'   ? '✓ Lagret'
-            : status === 'feil' ? 'Feil – prøv igjen'
-            : 'Lagre kunde'}
-        </button>
+        <div className="kunde-knapp-rad">
+          <button
+            className={`btn-lagre-kunde${status === 'ok' ? ' lagret' : status === 'feil' ? ' feil' : ''}`}
+            onClick={lagreKlikk}
+            disabled={status === 'laster' || !mobilInput.trim() || !navnInput.trim()}
+          >
+            {status === 'laster' ? 'Lagrer…'
+              : status === 'ok'   ? '✓ Lagret'
+              : status === 'feil' ? 'Feil – prøv igjen'
+              : 'Lagre kunde'}
+          </button>
+
+          {lastetFraDb && (
+            <button
+              className={`btn-slett-kunde${slettStatus === 'bekreft' ? ' bekreft' : ''}`}
+              onClick={slettLastetKunde}
+              disabled={slettStatus === 'laster'}
+            >
+              {slettStatus === 'bekreft' ? 'Bekreft sletting?' : slettStatus === 'laster' ? 'Sletter…' : 'Slett lagret kunde'}
+            </button>
+          )}
+        </div>
       )}
     </section>
   )

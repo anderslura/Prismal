@@ -1886,3 +1886,62 @@ textarea { resize: vertical; }
 .btn-lagre-kunde.feil {
   background: #dc2626;
 }
+
+/* KundeInfo – slett og knapperad */
+.kunde-knapp-rad {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+}
+.kunde-knapp-rad .btn-lagre-kunde {
+  margin-top: 0;
+}
+.btn-slett-kunde {
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  border: 1px solid #dc2626;
+  background: transparent;
+  color: #dc2626;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.btn-slett-kunde:hover {
+  background: #fee2e2;
+}
+.btn-slett-kunde.bekreft {
+  background: #dc2626;
+  color: #fff;
+}
+.btn-slett-kunde:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.kunde-dropdown li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.kunde-dropdown-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+.kunde-dropdown-slett {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0 4px;
+  opacity: 0.4;
+  transition: opacity 0.15s;
+  flex-shrink: 0;
+}
+.kunde-dropdown-slett:hover {
+  opacity: 1;
+}
