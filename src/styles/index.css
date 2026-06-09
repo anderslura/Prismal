@@ -1097,7 +1097,7 @@ textarea { resize: vertical; }
 .l2-undertittel {
   font-size: clamp(13px, 2vw, 16px);
   color: #94a3b8;
-  max-width: 420px;
+  max-width: 500px;
   margin: 0 auto 26px;
   line-height: 1.6;
 }
@@ -1331,6 +1331,21 @@ textarea { resize: vertical; }
   color: #475569;
   font-style: italic;
   text-align: center;
+}
+
+
+/* Garantier-linje */
+.l2-garantier {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: 10px 0 8px;
+}
+.l2-garantier span {
+  font-size: 11.5px;
+  color: #64748b;
+  font-weight: 500;
 }
 
 /* ── RESPONSIVE ── */

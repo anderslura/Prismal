@@ -101,9 +101,9 @@ export default function Landingsside({ onStart }) {
             <span className="l2-tittel-grad">På minutter.</span>
           </h1>
           <p className="l2-undertittel">
-            Legg inn bedriften din én gang. Kunder og materialer huskes automatisk.
-            <br />Det som før tok tid å sy sammen — priser, tekst og oppsett — 
-            gjøres nå fra mobil eller PC på sekunder, og ser mer profesjonelt ut enn noensinne.
+            Legg inn bedriften én gang — kunder, materialer og priser huskes automatisk.
+            Det som før krevde timevis å sette sammen, gjøres nå fra mobil eller PC
+            på sekunder. Resultatet ser mer profesjonelt ut enn noensinne.
           </p>
           <button className="l2-cta" onClick={onStart}>
             Prøv gratis
@@ -111,13 +111,12 @@ export default function Landingsside({ onStart }) {
               <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
-          <p className="l2-cta-hint">3 tilbud uten registrering &nbsp;·&nbsp; Deretter 99 kr/mnd</p>
+          <p className="l2-cta-hint">3 tilbud uten registrering &nbsp;·&nbsp; Deretter 99 kr/mnd &nbsp;·&nbsp; Ingen bindingstid</p>
         </div>
       </section>
 
       {/* ── FEATURES — lyst, glass-kort ── */}
       <section className="l2-features">
-        <div className="l2-features-bg" />
         {FEATURES.map(f => (
           <div key={f.tittel} className="l2-kort">
             <div className="l2-ikon-boks">{f.ikon}</div>
@@ -145,8 +144,8 @@ export default function Landingsside({ onStart }) {
           </div>
 
           <p className="l2-plan-sub">
-            Start helt gratis. Etter 3 tilbud registrerer du deg og fortsetter for 99 kr/mnd —
-            det samme som en kaffe på kafé, men noe du faktisk tjener penger på.
+            Start helt gratis. Etter 3 tilbud registrerer du deg og fortsetter for 99 kr/mnd.
+            Ingen bindingstid — avslutt når du vil, med ett klikk.
           </p>
 
           <div className="l2-pro-kolonner">
@@ -169,6 +168,11 @@ export default function Landingsside({ onStart }) {
           <button className="l2-btn-pro" onClick={onStart}>
             Start gratis nå
           </button>
+          <div className="l2-garantier">
+            <span>✓ Ingen bindingstid</span>
+            <span>✓ Avslutt når du vil</span>
+            <span>✓ Ingen skjulte kostnader</span>
+          </div>
           <p className="l2-pris-sammenligning">
             Tilsvarende løsninger koster 299–499 kr/mnd. Prismal: 99 kr.
           </p>
