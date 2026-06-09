@@ -157,13 +157,14 @@ export default function Landingsside({ onStart, onRegistrer }) {
             </div>
             <div className="l2-trial-boks">
               <div className="l2-trial-tall">3</div>
-              <div className="l2-trial-tekst">tilbud gratis<br/>uten å registrere deg</div>
+              <div className="l2-trial-tekst">gratis tilbud<br/>ved registrering</div>
             </div>
           </div>
 
           <p className="l2-plan-sub">
-            Start helt gratis. Etter 3 tilbud registrerer du deg og fortsetter for 99 kr/mnd eks. mva (124 kr inkl. mva).
-            Ingen bindingstid — avslutt når du vil, med ett klikk.
+            Registrer deg gratis — ingen kredittkort. Du får 3 fulle tilbud med alle funksjoner: 
+            firmalogo, kundedatabase og materialbibliotek. Deretter 99 kr/mnd eks. mva (124 kr inkl. mva). 
+            Ingen bindingstid — avslutt når du vil.
           </p>
 
           <div className="l2-pro-kolonner">
@@ -183,8 +184,8 @@ export default function Landingsside({ onStart, onRegistrer }) {
             </ul>
           </div>
 
-          <button className="l2-btn-pro" onClick={onStart}>
-            Start gratis nå
+          <button className="l2-btn-pro" onClick={onRegistrer}>
+            Registrer deg og start gratis
           </button>
           <div className="l2-garantier">
             <span>✓ Ingen bindingstid</span>
