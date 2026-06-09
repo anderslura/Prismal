@@ -1,7 +1,7 @@
 import KundeInfo from './KundeInfo.jsx'
 import PdfTemavelger from './PdfTemavelger.jsx'
 import { useState } from 'react'
-import { lagreFirma, slettFirma } from '../api/firmaService.js'
+import { lagreFirma, slettFirma, uploadLogo, slettLogo } from '../api/firmaService.js'
 
 export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil, prisliste, setPrisliste, isPro }) {
 
@@ -11,6 +11,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
   const [nyHasPaaslag, setNyHasPaaslag] = useState(true)
   const [firmaStatus, setFirmaStatus] = useState('') // '' | 'laster' | 'ok' | 'feil'
   const [firmaSlett, setFirmaSlett] = useState('')    // '' | 'bekreft' | 'laster'
+  const [logoLaster, setLogoLaster] = useState(false)
 
   function leggTilArbeider() {
     const lagretPris = (() => { try { return localStorage.getItem('timepris') || '' } catch { return '' } })()
@@ -116,16 +117,23 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                 {skjema.logoUrl ? (
                   <div className="logo-preview">
                     <img src={skjema.logoUrl} alt="Logo" className="logo-img" />
-                    <button className="btn-fjern" onClick={() => oppdater('logoUrl', '')}>×</button>
+                    <button className="btn-fjern" onClick={async () => { oppdater('logoUrl', ''); try { await slettLogo() } catch {} }}>×</button>
                   </div>
                 ) : (
-                  <label className="logo-velg-knapp">
-                    Velg logofil (PNG/JPG)
-                    <input type="file" accept="image/png,image/jpeg,image/svg+xml" style={{display:'none'}} onChange={e => {
+                  <label className={`logo-velg-knapp${logoLaster ? ' laster' : ''}`}>
+                    {logoLaster ? 'Laster opp…' : 'Velg logofil (PNG/JPG/SVG)'}
+                    <input type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" style={{display:'none'}} disabled={logoLaster} onChange={async e => {
                       const fil = e.target.files[0]; if (!fil) return
-                      const reader = new FileReader()
-                      reader.onload = ev => oppdater('logoUrl', ev.target.result)
-                      reader.readAsDataURL(fil)
+                      setLogoLaster(true)
+                      try {
+                        const url = await uploadLogo(fil)
+                        oppdater('logoUrl', url)
+                      } catch (err) {
+                        console.error('Logo opplasting feilet:', err)
+                        alert('Logo-opplasting feilet. Prøv en mindre fil.')
+                      } finally {
+                        setLogoLaster(false)
+                      }
                     }} />
                   </label>
                 )}

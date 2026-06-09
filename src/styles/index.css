@@ -1954,3 +1954,9 @@ textarea { resize: vertical; }
   margin-top: 0.75rem;
   align-items: center;
 }
+
+/* Logo-opplasting laste-tilstand */
+.logo-velg-knapp.laster {
+  opacity: 0.6;
+  cursor: wait;
+}
