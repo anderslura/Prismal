@@ -1,7 +1,7 @@
 import KundeInfo from './KundeInfo.jsx'
 import PdfTemavelger from './PdfTemavelger.jsx'
 import { useState } from 'react'
-import { lagreFirma, slettFirma, uploadLogo, slettLogo } from '../api/firmaService.js'
+import { hentFirma, lagreFirma, slettFirma, uploadLogo, slettLogo } from '../api/firmaService.js'
 
 export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil, prisliste, setPrisliste, isPro }) {
 
@@ -174,6 +174,22 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                   localStorage.removeItem('firma'); localStorage.removeItem('logoUrl')
                 }}
               >Nullstill</button>
+              <button
+                className="btn-lenke"
+                onClick={async () => {
+                  try {
+                    const f = await hentFirma()
+                    if (!f) return alert('Ingen lagret profil funnet.')
+                    if (f.firmanavn)  oppdater('firmanavn',    f.firmanavn)
+                    if (f.telefon)    oppdater('firmaTelefon', f.telefon)
+                    if (f.epost)      oppdater('firmaEpost',   f.epost)
+                    if (f.adresse)    oppdater('firmaAdresse', f.adresse)
+                    if (f.orgnr)      oppdater('firmaOrgnr',   f.orgnr)
+                    if (f.nettside)   oppdater('firmaNettside',f.nettside)
+                    if (f.logo_url)   oppdater('logoUrl',      f.logo_url)
+                  } catch (e) { console.error('Hent firma feilet:', e) }
+                }}
+              >Hent lagret profil</button>
               <button
                 className={`btn-slett-kunde${firmaSlett === 'bekreft' ? ' bekreft' : ''}`}
                 disabled={firmaSlett === 'laster'}
