@@ -8,6 +8,7 @@ import PrismalLogo from './components/PrismalLogo.jsx'
 import LoginModal from './components/LoginModal.jsx'
 import { AuthProvider, useAuth } from './contexts/AuthContext.jsx'
 import { hentFirma } from './api/firmaService.js'
+import { hentMaterialer } from './api/materialService.js'
 
 const TOM_SKJEMA = {
   firmanavn: '', firmaTelefon: '', firmaEpost: '', firmaAdresse: '',
@@ -78,6 +79,31 @@ function AppInnhold() {
       if (f.nettside)   oppdater('firmaNettside',f.nettside)
       if (f.logo_url)   oppdater('logoUrl',      f.logo_url)
     }).catch(e => console.error('Kunne ikke hente firma:', e))
+  }, [bruker])
+
+  // Last materialbibliotek fra Supabase ved innlogging
+  useEffect(() => {
+    if (!bruker) return
+    hentMaterialer().then(liste => {
+      if (!liste.length) return
+      // Bygg mal-linjer (antall=0) fra Supabase – erstatter localStorage-biblioteket
+      const malLinjer = liste.map(m => ({
+        id: Date.now() + Math.random(),
+        navn: m.navn,
+        antall: 0,
+        pris: Number(m.pris) || 0,
+        sum: 0,
+        hasPaaslag: m.has_paaslag,
+      }))
+      setSkjema(prev => {
+        // Behold linjer med antall > 0 (bruker har allerede fylt inn noe)
+        const aktive = prev.materialer.filter(m => m.antall > 0)
+        // Legg til mal-linjer som ikke allerede er lagt til aktivt
+        const aktivNavn = new Set(aktive.map(m => m.navn.toLowerCase()))
+        const nye = malLinjer.filter(m => !aktivNavn.has(m.navn.toLowerCase()))
+        return { ...prev, materialer: [...aktive, ...nye] }
+      })
+    }).catch(e => console.error('Kunne ikke hente materialer:', e))
   }, [bruker])
 
   useEffect(() => {

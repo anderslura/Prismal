@@ -1,7 +1,8 @@
 import KundeInfo from './KundeInfo.jsx'
 import PdfTemavelger from './PdfTemavelger.jsx'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { hentFirma, lagreFirma, slettFirma, uploadLogo, slettLogo } from '../api/firmaService.js'
+import { sokMaterialer, lagreMaterial, slettMaterial } from '../api/materialService.js'
 
 export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil, prisliste, setPrisliste, isPro }) {
 
@@ -9,6 +10,8 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
   const [nyAnt, setNyAnt] = useState('')
   const [nyPris, setNyPris] = useState('')
   const [nyHasPaaslag, setNyHasPaaslag] = useState(true)
+  const [matForslag, setMatForslag] = useState([])
+  const matTimer = useRef(null)
   const [firmaStatus, setFirmaStatus] = useState('') // '' | 'laster' | 'ok' | 'feil'
   const [firmaSlett, setFirmaSlett] = useState('')    // '' | 'bekreft' | 'laster'
   const [logoLaster, setLogoLaster] = useState(false)
@@ -25,21 +28,19 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
     if (felt === 'timepris') { try { localStorage.setItem('timepris', verdi) } catch {} }
   }
 
-  function leggTilMaterial() {
+  async function leggTilMaterial() {
     if (!nyNavn) return
     const ant = parseFloat(nyAnt) || 1
     const pris = parseFloat(nyPris) || 0
     oppdater('materialer', [...skjema.materialer, { id: Date.now(), navn: nyNavn, antall: ant, pris: pris, sum: pris * ant, hasPaaslag: nyHasPaaslag }])
-    // Lagre linje til bibliotek
+    // Lagre til Supabase-bibliotek (og localStorage som fallback)
+    lagreMaterial({ navn: nyNavn, pris, hasPaaslag: nyHasPaaslag }).catch(() => {})
     try {
       const eksisterende = JSON.parse(localStorage.getItem('materialLinjer') || '[]')
       const finnes = eksisterende.some(l => l.navn.toLowerCase() === nyNavn.toLowerCase())
-      if (!finnes) {
-        const oppdatert = [...eksisterende, { navn: nyNavn, pris: pris, hasPaaslag: nyHasPaaslag }]
-        localStorage.setItem('materialLinjer', JSON.stringify(oppdatert))
-      }
+      if (!finnes) localStorage.setItem('materialLinjer', JSON.stringify([...eksisterende, { navn: nyNavn, pris, hasPaaslag: nyHasPaaslag }]))
     } catch {}
-    setNyNavn(''); setNyPris(''); setNyAnt('1')
+    setNyNavn(''); setNyPris(''); setNyAnt(''); setMatForslag([])
   }
 
 
@@ -53,13 +54,17 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
   }
 
   function fjernMaterial(id) {
-    const fjernet = skjema.materialer.find(m => m.id === id)
+    // Fjern kun fra dette tilbudet — biblioteket beholdes
     oppdater('materialer', skjema.materialer.filter(m => m.id !== id))
-    // Fjern også fra localStorage-biblioteket
-    if (fjernet) {
+  }
+
+  async function slettFraLibraryOgTilbud(id) {
+    const m = skjema.materialer.find(x => x.id === id)
+    oppdater('materialer', skjema.materialer.filter(x => x.id !== id))
+    if (m) {
+      slettMaterial(m.navn).catch(() => {})
       try {
-        const oppdatert = JSON.parse(localStorage.getItem('materialLinjer') || '[]')
-          .filter(l => l.navn !== fjernet.navn)
+        const oppdatert = JSON.parse(localStorage.getItem('materialLinjer') || '[]').filter(l => l.navn !== m.navn)
         localStorage.setItem('materialLinjer', JSON.stringify(oppdatert))
       } catch {}
     }
@@ -301,24 +306,54 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
               <span className="mat-sum">{formaterKr(m.sum||m.pris||0)}</span>
               <input type="checkbox" className="mat-paaslag-cb" checked={m.hasPaaslag}
                 onChange={e => oppdater('materialer', skjema.materialer.map(x => x.id===m.id ? {...x, hasPaaslag:e.target.checked} : x))} />
-              <button className="btn-fjern" onClick={() => fjernMaterial(m.id)}>×</button>
+              <div className="mat-knapp-gruppe">
+                <button className="btn-fjern" title="Fjern fra tilbudet" onClick={() => fjernMaterial(m.id)}>×</button>
+                <button className="btn-slett-lib" title="Slett fra bibliotek" onClick={() => slettFraLibraryOgTilbud(m.id)}>🗑</button>
+              </div>
             </div>
           ))}
 
           {/* NY LINJE */}
-          <p className="mat-info-tekst">Nye linjer huskes til neste tilbud — pris lagres, antall nullstilles.</p>
-          <div className="mat-rad mat-ny-rad">
-            <input type="text" placeholder="Beskrivelse" value={nyNavn} onChange={e => setNyNavn(e.target.value)}
-              className="mat-ny-navn" onKeyDown={e => e.key==='Enter' && leggTilMaterial()} />
-            <input type="number" min="1" step="1" placeholder="1" value={nyAnt}
-              className={`mat-ant${!nyAnt ? ' mat-ant-tom' : ''}`}
-              onFocus={e => e.target.select()}
-              onChange={e => setNyAnt(e.target.value)} />
-            <input type="number" min="0" placeholder="kr" value={nyPris} onChange={e => setNyPris(e.target.value)}
-              className="mat-pris" onKeyDown={e => e.key==='Enter' && leggTilMaterial()} />
-            <span className="mat-sum">{nyPris && nyAnt ? formaterKr((parseFloat(nyPris)||0)*(parseFloat(nyAnt)||1)) : ''}</span>
-            <input type="checkbox" className="mat-paaslag-cb" checked={nyHasPaaslag} onChange={e => setNyHasPaaslag(e.target.checked)} />
-            <button onClick={leggTilMaterial} style={{padding:"0 12px",height:"34px",border:"1.5px solid var(--blaa)",borderRadius:"6px",background:"var(--hvit)",color:"var(--blaa)",fontWeight:600,fontSize:"13px",cursor:"pointer",whiteSpace:"nowrap"}}>Legg til</button>
+          <p className="mat-info-tekst">Skriv beskrivelse — tidligere linjer foreslås automatisk. Pris huskes til neste tilbud.</p>
+          <div className="mat-ny-wrapper">
+            <div className="mat-rad mat-ny-rad">
+              <div className="mat-ny-navn-wrapper">
+                <input type="text" placeholder="Beskrivelse" value={nyNavn}
+                  className="mat-ny-navn"
+                  autoComplete="off"
+                  onChange={e => {
+                    const v = e.target.value; setNyNavn(v)
+                    clearTimeout(matTimer.current)
+                    if (v.length < 1) { setMatForslag([]); return }
+                    matTimer.current = setTimeout(async () => {
+                      try { setMatForslag(await sokMaterialer(v)) } catch {}
+                    }, 200)
+                  }}
+                  onBlur={() => setTimeout(() => setMatForslag([]), 150)}
+                  onKeyDown={e => e.key==='Enter' && leggTilMaterial()} />
+                {matForslag.length > 0 && (
+                  <ul className="mat-dropdown">
+                    {matForslag.map(m => (
+                      <li key={m.id} onMouseDown={() => {
+                        setNyNavn(m.navn); setNyPris(String(m.pris)); setNyHasPaaslag(m.has_paaslag); setMatForslag([])
+                      }}>
+                        <span className="mat-dropdown-navn">{m.navn}</span>
+                        <span className="mat-dropdown-pris">{m.pris ? `${m.pris} kr` : ''}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+              <input type="number" min="1" step="1" placeholder="1" value={nyAnt}
+                className={`mat-ant${!nyAnt ? ' mat-ant-tom' : ''}`}
+                onFocus={e => e.target.select()}
+                onChange={e => setNyAnt(e.target.value)} />
+              <input type="number" min="0" placeholder="kr" value={nyPris} onChange={e => setNyPris(e.target.value)}
+                className="mat-pris" onKeyDown={e => e.key==='Enter' && leggTilMaterial()} />
+              <span className="mat-sum">{nyPris && nyAnt ? formaterKr((parseFloat(nyPris)||0)*(parseFloat(nyAnt)||1)) : ''}</span>
+              <input type="checkbox" className="mat-paaslag-cb" checked={nyHasPaaslag} onChange={e => setNyHasPaaslag(e.target.checked)} />
+              <button onClick={leggTilMaterial} style={{padding:"0 12px",height:"34px",border:"1.5px solid var(--blaa)",borderRadius:"6px",background:"var(--hvit)",color:"var(--blaa)",fontWeight:600,fontSize:"13px",cursor:"pointer",whiteSpace:"nowrap"}}>Legg til</button>
+            </div>
           </div>
         </section>
 
