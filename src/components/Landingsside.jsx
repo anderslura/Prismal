@@ -111,7 +111,7 @@ export default function Landingsside({ onStart }) {
               <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
-          <p className="l2-cta-hint">3 tilbud uten registrering &nbsp;·&nbsp; Deretter 99 kr/mnd &nbsp;·&nbsp; Ingen bindingstid</p>
+          <p className="l2-cta-hint">3 tilbud uten registrering &nbsp;·&nbsp; Deretter 99 kr/mnd eks. mva &nbsp;·&nbsp; Ingen bindingstid</p>
         </div>
       </section>
 
@@ -135,7 +135,7 @@ export default function Landingsside({ onStart }) {
           <div className="l2-pro-solo-topp">
             <div>
               <div className="l2-plan-navn">Prismal Pro</div>
-              <div className="l2-plan-pris l2-plan-pris-gull">99 <span>kr / mnd</span></div>
+              <div className="l2-plan-pris l2-plan-pris-gull">99 <span>kr / mnd eks. mva</span></div>
             </div>
             <div className="l2-trial-boks">
               <div className="l2-trial-tall">3</div>
@@ -144,7 +144,7 @@ export default function Landingsside({ onStart }) {
           </div>
 
           <p className="l2-plan-sub">
-            Start helt gratis. Etter 3 tilbud registrerer du deg og fortsetter for 99 kr/mnd.
+            Start helt gratis. Etter 3 tilbud registrerer du deg og fortsetter for 99 kr/mnd eks. mva (124 kr inkl. mva).
             Ingen bindingstid — avslutt når du vil, med ett klikk.
           </p>
 
@@ -174,7 +174,7 @@ export default function Landingsside({ onStart }) {
             <span>✓ Ingen skjulte kostnader</span>
           </div>
           <p className="l2-pris-sammenligning">
-            Tilsvarende løsninger koster 299–499 kr/mnd. Prismal: 99 kr.
+            Alle priser eks. mva. Tilsvarende løsninger koster 299–499 kr/mnd. Prismal: 99 kr.
           </p>
         </div>
       </section>

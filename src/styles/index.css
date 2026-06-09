@@ -1122,7 +1122,8 @@ textarea { resize: vertical; }
 .l2-cta-hint {
   margin-top: 10px;
   font-size: 11px;
-  color: #475569;
+  color: #94a3b8;
+  letter-spacing: 0.01em;
 }
 
 /* ── FEATURES — lyst, glass-kort ── */
