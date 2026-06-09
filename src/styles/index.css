@@ -2089,3 +2089,36 @@ textarea { resize: vertical; }
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
+
+/* PDF-tema – to rader */
+.tema-rad {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+/* Påslag hurtigknapper */
+.paaslag-hurtig {
+  padding: 0 10px;
+  height: 36px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 7px;
+  background: #fff;
+  color: #475569;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.12s, background 0.12s, color 0.12s;
+  white-space: nowrap;
+}
+.paaslag-hurtig:hover {
+  border-color: var(--blaa);
+  color: var(--blaa);
+  background: var(--blaa-lys);
+}
+.paaslag-hurtig.aktiv {
+  border-color: var(--blaa);
+  background: var(--blaa);
+  color: #fff;
+}

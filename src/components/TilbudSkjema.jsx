@@ -367,6 +367,13 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
             <input type="number" min="0" max="200" step="5" placeholder="0" value={skjema.paaslagProsent}
               onChange={e => oppdater('paaslagProsent', e.target.value)} className="paaslag-input" />
             <span className="paaslag-symbol">%</span>
+            {[10, 15, 20].map(p => (
+              <button
+                key={p}
+                className={`paaslag-hurtig${parseFloat(skjema.paaslagProsent) === p ? ' aktiv' : ''}`}
+                onClick={() => oppdater('paaslagProsent', String(p))}
+              >{p}%</button>
+            ))}
             {parseFloat(skjema.paaslagProsent) > 0 && materialerMedPaaslag > 0 && (
               <span className="paaslag-resultat">= +{formaterKr(paaslag)}</span>
             )}

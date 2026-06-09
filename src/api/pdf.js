@@ -12,7 +12,7 @@ function temaFarge(temaId) {
     hvit:     [241, 245, 249],
     rosa:     [190, 24, 93],
     jul:      [153, 27, 27],
-    paske:    [133, 77, 14],
+    paske:    [217, 119, 6],
     pride:    [124, 58, 237],
   }
   return kart[temaId] || kart.standard
