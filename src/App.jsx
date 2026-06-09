@@ -197,8 +197,8 @@ function AppInnhold() {
               <button className="btn btn-secondary" onClick={() => setVisLogin(true)}>Logg inn</button>
             )}
             {steg === 'landing' && (
-              <button className="btn btn-primary" onClick={() => setSteg('skjema')}>
-                Lag tilbud →
+              <button className="btn btn-primary" onClick={() => setVisLogin(true)}>
+                Kom i gang →
               </button>
             )}
             {bruker && (
