@@ -197,8 +197,8 @@ function AppInnhold() {
               <button className="btn btn-secondary" onClick={() => setVisLogin(true)}>Logg inn</button>
             )}
             {steg === 'landing' && (
-              <button className="btn btn-primary" onClick={() => setVisLogin(true)}>
-                Kom i gang →
+              <button className="btn btn-primary" onClick={() => bruker ? setSteg('skjema') : setVisLogin(true)}>
+                {bruker ? 'Lag tilbud →' : 'Kom i gang →'}
               </button>
             )}
             {bruker && (
@@ -233,7 +233,7 @@ function AppInnhold() {
 
       <main className={`app-main${steg === 'landing' ? ' app-main--landing' : ''}`}>
         {steg === 'landing' ? (
-          <Landingsside onStart={() => setSteg('skjema')} onRegistrer={() => setVisLogin(true)} />
+          <Landingsside onStart={() => setSteg('skjema')} onRegistrer={() => bruker ? setSteg('skjema') : setVisLogin(true)} />
         ) : steg === 'skjema' ? (
           <TilbudSkjema
             skjema={skjema}
