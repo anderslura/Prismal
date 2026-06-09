@@ -144,72 +144,77 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
           </div>
           {isPro && (
             <div className="firma-knapp-rad">
-              <button
-                className={`btn-lagre-kunde${firmaStatus === 'ok' ? ' lagret' : firmaStatus === 'feil' ? ' feil' : ''}`}
-                disabled={firmaStatus === 'laster'}
-                onClick={async () => {
-                  setFirmaStatus('laster')
-                  try {
-                    await lagreFirma({
-                      firmanavn: skjema.firmanavn, telefon: skjema.firmaTelefon,
-                      epost: skjema.firmaEpost, adresse: skjema.firmaAdresse,
-                      orgnr: skjema.firmaOrgnr, nettside: skjema.firmaNettside,
-                      logoUrl: skjema.logoUrl,
-                    })
-                    setFirmaStatus('ok')
-                    setTimeout(() => setFirmaStatus(''), 2500)
-                  } catch (e) {
-                    console.error('Firma lagring feilet:', e)
-                    setFirmaStatus('feil')
-                    setTimeout(() => setFirmaStatus(''), 3000)
-                  }
-                }}
-              >
-                {firmaStatus === 'laster' ? 'Lagrer…' : firmaStatus === 'ok' ? '✓ Lagret' : firmaStatus === 'feil' ? 'Feil – prøv igjen' : 'Lagre bedriftsprofil'}
-              </button>
-              <button
-                className="btn-lenke roed"
-                onClick={() => {
-                  ;['firmanavn','firmaTelefon','firmaEpost','firmaAdresse','firmaOrgnr','firmaNettside','logoUrl'].forEach(f => oppdater(f, ''))
-                  localStorage.removeItem('firma'); localStorage.removeItem('logoUrl')
-                }}
-              >Nullstill</button>
-              <button
-                className="btn-lenke"
-                onClick={async () => {
-                  try {
-                    const f = await hentFirma()
-                    if (!f) return alert('Ingen lagret profil funnet.')
-                    if (f.firmanavn)  oppdater('firmanavn',    f.firmanavn)
-                    if (f.telefon)    oppdater('firmaTelefon', f.telefon)
-                    if (f.epost)      oppdater('firmaEpost',   f.epost)
-                    if (f.adresse)    oppdater('firmaAdresse', f.adresse)
-                    if (f.orgnr)      oppdater('firmaOrgnr',   f.orgnr)
-                    if (f.nettside)   oppdater('firmaNettside',f.nettside)
-                    if (f.logo_url)   oppdater('logoUrl',      f.logo_url)
-                  } catch (e) { console.error('Hent firma feilet:', e) }
-                }}
-              >Hent lagret profil</button>
-              <button
-                className={`btn-slett-kunde${firmaSlett === 'bekreft' ? ' bekreft' : ''}`}
-                disabled={firmaSlett === 'laster'}
-                onClick={async () => {
-                  if (firmaSlett !== 'bekreft') {
-                    setFirmaSlett('bekreft')
-                    setTimeout(() => setFirmaSlett(p => p === 'bekreft' ? '' : p), 4000)
-                    return
-                  }
-                  setFirmaSlett('laster')
-                  try {
-                    await slettFirma()
+              <div className="firma-knapp-primær">
+                <button
+                  className={`btn-firma-lagre${firmaStatus === 'ok' ? ' lagret' : firmaStatus === 'feil' ? ' feil' : ''}`}
+                  disabled={firmaStatus === 'laster'}
+                  onClick={async () => {
+                    setFirmaStatus('laster')
+                    try {
+                      await lagreFirma({
+                        firmanavn: skjema.firmanavn, telefon: skjema.firmaTelefon,
+                        epost: skjema.firmaEpost, adresse: skjema.firmaAdresse,
+                        orgnr: skjema.firmaOrgnr, nettside: skjema.firmaNettside,
+                        logoUrl: skjema.logoUrl,
+                      })
+                      setFirmaStatus('ok')
+                      setTimeout(() => setFirmaStatus(''), 2500)
+                    } catch (e) {
+                      console.error('Firma lagring feilet:', e)
+                      setFirmaStatus('feil')
+                      setTimeout(() => setFirmaStatus(''), 3000)
+                    }
+                  }}
+                >
+                  {firmaStatus === 'laster' ? 'Lagrer…' : firmaStatus === 'ok' ? '✓ Lagret' : firmaStatus === 'feil' ? 'Feil – prøv igjen' : 'Lagre bedriftsprofil'}
+                </button>
+                <button
+                  className="btn-firma-hent"
+                  onClick={async () => {
+                    try {
+                      const f = await hentFirma()
+                      if (!f) return alert('Ingen lagret profil funnet.')
+                      if (f.firmanavn)  oppdater('firmanavn',    f.firmanavn)
+                      if (f.telefon)    oppdater('firmaTelefon', f.telefon)
+                      if (f.epost)      oppdater('firmaEpost',   f.epost)
+                      if (f.adresse)    oppdater('firmaAdresse', f.adresse)
+                      if (f.orgnr)      oppdater('firmaOrgnr',   f.orgnr)
+                      if (f.nettside)   oppdater('firmaNettside',f.nettside)
+                      if (f.logo_url)   oppdater('logoUrl',      f.logo_url)
+                    } catch (e) { console.error('Hent firma feilet:', e) }
+                  }}
+                >↩ Hent lagret profil</button>
+              </div>
+              <div className="firma-knapp-sekundær">
+                <button
+                  className="firma-lenke"
+                  onClick={() => {
                     ;['firmanavn','firmaTelefon','firmaEpost','firmaAdresse','firmaOrgnr','firmaNettside','logoUrl'].forEach(f => oppdater(f, ''))
                     localStorage.removeItem('firma'); localStorage.removeItem('logoUrl')
-                  } catch (e) { console.error(e) }
-                  setFirmaSlett('')
-                }}
-              >
-                {firmaSlett === 'bekreft' ? 'Bekreft sletting?' : firmaSlett === 'laster' ? 'Sletter…' : 'Slett fra sky'}
-              </button>
+                  }}
+                >Nullstill felt</button>
+                <span className="firma-skillelinje">|</span>
+                <button
+                  className={`firma-lenke roed${firmaSlett === 'bekreft' ? ' bekreft' : ''}`}
+                  disabled={firmaSlett === 'laster'}
+                  onClick={async () => {
+                    if (firmaSlett !== 'bekreft') {
+                      setFirmaSlett('bekreft')
+                      setTimeout(() => setFirmaSlett(p => p === 'bekreft' ? '' : p), 4000)
+                      return
+                    }
+                    setFirmaSlett('laster')
+                    try {
+                      await slettFirma()
+                      ;['firmanavn','firmaTelefon','firmaEpost','firmaAdresse','firmaOrgnr','firmaNettside','logoUrl'].forEach(f => oppdater(f, ''))
+                      localStorage.removeItem('firma'); localStorage.removeItem('logoUrl')
+                    } catch (e) { console.error(e) }
+                    setFirmaSlett('')
+                  }}
+                >
+                  {firmaSlett === 'bekreft' ? 'Bekreft sletting?' : firmaSlett === 'laster' ? 'Sletter…' : 'Slett fra sky'}
+                </button>
+              </div>
             </div>
           )}
         </section>

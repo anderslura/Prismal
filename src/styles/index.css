@@ -1949,10 +1949,72 @@ textarea { resize: vertical; }
 /* Firma-knapperad */
 .firma-knapp-rad {
   display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+.firma-knapp-primær {
+  display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
-  margin-top: 0.75rem;
+}
+.firma-knapp-sekundær {
+  display: flex;
   align-items: center;
+  gap: 0.4rem;
+}
+/* Primær: Lagre */
+.btn-firma-lagre {
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  border: none;
+  background: var(--blaa);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+}
+.btn-firma-lagre:hover { background: var(--blaa-mork); }
+.btn-firma-lagre:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-firma-lagre.lagret { background: #16a34a; }
+.btn-firma-lagre.feil    { background: #dc2626; }
+/* Sekundær: Hent lagret */
+.btn-firma-hent {
+  padding: 0.5rem 1.1rem;
+  border-radius: 8px;
+  border: 1.5px solid #cbd5e1;
+  background: #fff;
+  color: #475569;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.btn-firma-hent:hover {
+  border-color: var(--blaa);
+  color: var(--blaa);
+  background: var(--blaa-lys);
+}
+/* Diskrete lenker: Nullstill + Slett fra sky */
+.firma-lenke {
+  background: none;
+  border: none;
+  font-size: 0.78rem;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.12s;
+}
+.firma-lenke:hover { color: #475569; }
+.firma-lenke.roed { color: #94a3b8; }
+.firma-lenke.roed:hover { color: var(--rod); }
+.firma-lenke.roed.bekreft { color: var(--rod); font-weight: 600; }
+.firma-lenke:disabled { opacity: 0.5; cursor: not-allowed; }
+.firma-skillelinje {
+  color: #e2e8f0;
+  font-size: 0.75rem;
+  user-select: none;
 }
 
 /* Logo-opplasting laste-tilstand */
