@@ -8,11 +8,11 @@ function temaFarge(temaId) {
   const kart = {
     standard: [30, 80, 200],
     mork:     [17, 24, 39],
-    gronn:    [22, 101, 52],
+    graa:     [100, 116, 139],
+    hvit:     [241, 245, 249],
     rosa:     [190, 24, 93],
     jul:      [153, 27, 27],
     paske:    [133, 77, 14],
-    bunad:    [29, 78, 216],
     pride:    [124, 58, 237],
   }
   return kart[temaId] || kart.standard
@@ -94,7 +94,7 @@ export function lastNedPDF(skjema, isPro = true) {
   }
 
   // Firmanavn
-  doc.setTextColor(255, 255, 255)
+  doc.setTextColor(...(skjema.pdfTema === 'hvit' ? [30, 41, 59] : [255, 255, 255]))
   doc.setFontSize(14)
   doc.setFont('helvetica', 'bold')
   doc.text(isPro ? (skjema.firmanavn || 'Ditt Firma AS') : 'PRISMAL', tekstStartX, 14)

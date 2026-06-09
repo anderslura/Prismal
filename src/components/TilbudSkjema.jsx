@@ -290,7 +290,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
 
           {/* EKSISTERENDE LINJER */}
           {skjema.materialer.some(m => !m.antall || m.antall == 0) && (
-            <p className="mat-mal-hint">Linjer uten antall er lagrede maler — fylles ikke inn i tilbudet før du setter antall.</p>
+            <p className="mat-mal-hint">Lagrede linjer — fyll inn antall for å ta dem med i tilbudet. × fjerner fra tilbudet · 🗑 sletter fra biblioteket.</p>
           )}
           {skjema.materialer.map(m => (
             <div key={m.id} className={`mat-rad${(!m.antall || m.antall == 0) ? ' mat-rad-mal' : ''}`}>
@@ -314,7 +314,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
           ))}
 
           {/* NY LINJE */}
-          <p className="mat-info-tekst">Skriv beskrivelse — tidligere linjer foreslås automatisk. Pris huskes til neste tilbud.</p>
+          <p className="mat-info-tekst">Skriv beskrivelse for forslag fra biblioteket. Ny linje lagres automatisk.</p>
           <div className="mat-ny-wrapper">
             <div className="mat-rad mat-ny-rad">
               <div className="mat-ny-navn-wrapper">

@@ -2076,3 +2076,16 @@ textarea { resize: vertical; }
   line-height: 1;
 }
 .btn-slett-lib:hover { opacity: 1; }
+
+/* PDF-tema – hvit fargeprøve trenger border */
+.tema-fargeprøve-lys {
+  border: 1.5px solid #cbd5e1 !important;
+}
+.spesialdato-overskrift {
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #64748b;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
