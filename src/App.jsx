@@ -7,6 +7,7 @@ import Landingsside from './components/Landingsside.jsx'
 import PrismalLogo from './components/PrismalLogo.jsx'
 import LoginModal from './components/LoginModal.jsx'
 import { AuthProvider, useAuth } from './contexts/AuthContext.jsx'
+import { hentFirma } from './api/firmaService.js'
 
 const TOM_SKJEMA = {
   firmanavn: '', firmaTelefon: '', firmaEpost: '', firmaAdresse: '',
@@ -62,6 +63,21 @@ function AppInnhold() {
       setVisLogin(false)
       setSteg('skjema')
     }
+  }, [bruker])
+
+  // Last firmaprofil fra Supabase ved innlogging
+  useEffect(() => {
+    if (!bruker || !isPro) return
+    hentFirma().then(f => {
+      if (!f) return
+      if (f.firmanavn)  oppdater('firmanavn',    f.firmanavn)
+      if (f.telefon)    oppdater('firmaTelefon', f.telefon)
+      if (f.epost)      oppdater('firmaEpost',   f.epost)
+      if (f.adresse)    oppdater('firmaAdresse', f.adresse)
+      if (f.orgnr)      oppdater('firmaOrgnr',   f.orgnr)
+      if (f.nettside)   oppdater('firmaNettside',f.nettside)
+      if (f.logo_url)   oppdater('logoUrl',      f.logo_url)
+    }).catch(e => console.error('Kunne ikke hente firma:', e))
   }, [bruker])
 
   useEffect(() => {

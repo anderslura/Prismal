@@ -1,6 +1,7 @@
 import KundeInfo from './KundeInfo.jsx'
 import PdfTemavelger from './PdfTemavelger.jsx'
 import { useState } from 'react'
+import { lagreFirma, slettFirma } from '../api/firmaService.js'
 
 export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil, prisliste, setPrisliste, isPro }) {
 
@@ -8,6 +9,8 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
   const [nyAnt, setNyAnt] = useState('')
   const [nyPris, setNyPris] = useState('')
   const [nyHasPaaslag, setNyHasPaaslag] = useState(true)
+  const [firmaStatus, setFirmaStatus] = useState('') // '' | 'laster' | 'ok' | 'feil'
+  const [firmaSlett, setFirmaSlett] = useState('')    // '' | 'bekreft' | 'laster'
 
   function leggTilArbeider() {
     const lagretPris = (() => { try { return localStorage.getItem('timepris') || '' } catch { return '' } })()
@@ -131,15 +134,60 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
               <div className="pro-locked">🔒 Tilgjengelig på Pro-plan (99 kr/mnd)</div>
             )}
           </div>
-          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginTop:'8px'}}>
-            <p className="lagret-info">✓ Lagres automatisk</p>
-            <button className="btn-lenke roed" onClick={() => {
-              if (confirm('Nullstille lagret firmainformasjon?')) {
-                localStorage.removeItem('firma'); localStorage.removeItem('logoUrl')
-                ;['firmanavn','firmaTelefon','firmaEpost','firmaAdresse','firmaOrgnr','firmaNettside','logoUrl'].forEach(f => oppdater(f, ''))
-              }
-            }}>Nullstill</button>
-          </div>
+          {isPro && (
+            <div className="firma-knapp-rad">
+              <button
+                className={`btn-lagre-kunde${firmaStatus === 'ok' ? ' lagret' : firmaStatus === 'feil' ? ' feil' : ''}`}
+                disabled={firmaStatus === 'laster'}
+                onClick={async () => {
+                  setFirmaStatus('laster')
+                  try {
+                    await lagreFirma({
+                      firmanavn: skjema.firmanavn, telefon: skjema.firmaTelefon,
+                      epost: skjema.firmaEpost, adresse: skjema.firmaAdresse,
+                      orgnr: skjema.firmaOrgnr, nettside: skjema.firmaNettside,
+                      logoUrl: skjema.logoUrl,
+                    })
+                    setFirmaStatus('ok')
+                    setTimeout(() => setFirmaStatus(''), 2500)
+                  } catch (e) {
+                    console.error('Firma lagring feilet:', e)
+                    setFirmaStatus('feil')
+                    setTimeout(() => setFirmaStatus(''), 3000)
+                  }
+                }}
+              >
+                {firmaStatus === 'laster' ? 'Lagrer…' : firmaStatus === 'ok' ? '✓ Lagret' : firmaStatus === 'feil' ? 'Feil – prøv igjen' : 'Lagre bedriftsprofil'}
+              </button>
+              <button
+                className="btn-lenke roed"
+                onClick={() => {
+                  ;['firmanavn','firmaTelefon','firmaEpost','firmaAdresse','firmaOrgnr','firmaNettside','logoUrl'].forEach(f => oppdater(f, ''))
+                  localStorage.removeItem('firma'); localStorage.removeItem('logoUrl')
+                }}
+              >Nullstill</button>
+              <button
+                className={`btn-slett-kunde${firmaSlett === 'bekreft' ? ' bekreft' : ''}`}
+                disabled={firmaSlett === 'laster'}
+                onClick={async () => {
+                  if (firmaSlett !== 'bekreft') {
+                    setFirmaSlett('bekreft')
+                    setTimeout(() => setFirmaSlett(p => p === 'bekreft' ? '' : p), 4000)
+                    return
+                  }
+                  setFirmaSlett('laster')
+                  try {
+                    await slettFirma()
+                    ;['firmanavn','firmaTelefon','firmaEpost','firmaAdresse','firmaOrgnr','firmaNettside','logoUrl'].forEach(f => oppdater(f, ''))
+                    localStorage.removeItem('firma'); localStorage.removeItem('logoUrl')
+                  } catch (e) { console.error(e) }
+                  setFirmaSlett('')
+                }}
+              >
+                {firmaSlett === 'bekreft' ? 'Bekreft sletting?' : firmaSlett === 'laster' ? 'Sletter…' : 'Slett fra sky'}
+              </button>
+            </div>
+          )}
         </section>
 
         {/* KUNDE */}

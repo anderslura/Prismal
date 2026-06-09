@@ -1945,3 +1945,12 @@ textarea { resize: vertical; }
 .kunde-dropdown-slett:hover {
   opacity: 1;
 }
+
+/* Firma-knapperad */
+.firma-knapp-rad {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+  align-items: center;
+}
