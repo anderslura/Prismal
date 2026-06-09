@@ -183,7 +183,7 @@ function AppInnhold() {
     <div className="app">
       <header className="app-header">
         <div className="header-inner">
-          <div className="logo"><PrismalLogo /></div>
+          <div className="logo" onClick={() => setSteg('landing')} style={{cursor:'pointer'}} title="Til forsiden"><PrismalLogo /></div>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
             {steg === 'preview' && (
               <button className="btn btn-secondary" onClick={() => setSteg('skjema')}>← Tilbake</button>
