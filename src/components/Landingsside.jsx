@@ -148,7 +148,7 @@ export default function Landingsside({ onStart }) {
             </div>
             <div className="l2-trial-boks">
               <div className="l2-trial-tall">3</div>
-              <div className="l2-trial-tekst">gratis tilbud<br/>ingen registrering</div>
+              <div className="l2-trial-tekst">gratis tilbud<br/>uten å registrere deg</div>
             </div>
           </div>
 
