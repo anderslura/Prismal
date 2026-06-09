@@ -18,6 +18,7 @@ export default function KundeInfo({ kunde, onChange, onNullstill }) {
   const [navnForslag, setNavnForslag] = useState([])
   const [status, setStatus] = useState('') // '' | 'laster' | 'ok' | 'feil'
   const [lastetFraDb, setLastetFraDb] = useState(false)
+  const [endret, setEndret] = useState(false)
   const [slettStatus, setSlettStatus] = useState('') // '' | 'bekreft' | 'laster'
   const navnTimer = useRef(null)
 
@@ -45,12 +46,14 @@ export default function KundeInfo({ kunde, onChange, onNullstill }) {
     onChange('kundeEpost', k.epost || '')
     setMobilInput(k.mobil)
     setNavnInput(k.navn || '')
+    setEndret(false)
   }
 
   function onNavnEndring(verdi) {
     setNavnInput(verdi)
     onChange('kundenavn', verdi)
     setLastetFraDb(false)
+    setEndret(true)
     if (!innlogget || verdi.length < 2) { setNavnForslag([]); return }
     clearTimeout(navnTimer.current)
     navnTimer.current = setTimeout(async () => {
@@ -81,6 +84,7 @@ export default function KundeInfo({ kunde, onChange, onNullstill }) {
       await lagreKunde({ mobil: mobilInput, navn: navnInput, adresse: kunde.kundeAdresse, epost: kunde.kundeEpost })
       setStatus('ok')
       setLastetFraDb(true)
+      setEndret(false)
       setTimeout(() => setStatus(''), 2500)
     } catch (e) {
       console.error('Lagring feilet:', e)
@@ -124,7 +128,7 @@ export default function KundeInfo({ kunde, onChange, onNullstill }) {
               type="tel"
               placeholder="98765432"
               value={mobilInput}
-              onChange={e => { setMobilInput(e.target.value); onChange('kundeMobil', e.target.value); setLastetFraDb(false) }}
+              onChange={e => { setMobilInput(e.target.value); onChange('kundeMobil', e.target.value); setLastetFraDb(false); setEndret(true) }}
               onBlur={slaSoMobil}
               onKeyDown={e => e.key === 'Enter' && slaSoMobil()}
               className="kunde-mob-input"
@@ -174,7 +178,7 @@ export default function KundeInfo({ kunde, onChange, onNullstill }) {
           type="text"
           placeholder="Hjemveien 5, 0002 Oslo"
           value={kunde.kundeAdresse}
-          onChange={e => onChange('kundeAdresse', e.target.value)}
+          onChange={e => { onChange('kundeAdresse', e.target.value); setEndret(true) }}
         />
       </div>
 
@@ -184,13 +188,13 @@ export default function KundeInfo({ kunde, onChange, onNullstill }) {
           type="email"
           placeholder="kari@epost.no"
           value={kunde.kundeEpost}
-          onChange={e => onChange('kundeEpost', e.target.value)}
+          onChange={e => { onChange('kundeEpost', e.target.value); setEndret(true) }}
         />
       </div>
 
       {innlogget && (
         <div className="kunde-knapp-rad">
-          <button
+          {(!lastetFraDb || endret) && <button
             className={`btn-lagre-kunde${status === 'ok' ? ' lagret' : status === 'feil' ? ' feil' : ''}`}
             onClick={lagreKlikk}
             disabled={status === 'laster' || !mobilInput.trim() || !navnInput.trim()}
@@ -199,7 +203,7 @@ export default function KundeInfo({ kunde, onChange, onNullstill }) {
               : status === 'ok'   ? '✓ Lagret'
               : status === 'feil' ? 'Feil – prøv igjen'
               : 'Lagre kunde'}
-          </button>
+          </button>}
 
           {lastetFraDb && (
             <button
