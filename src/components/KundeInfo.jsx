@@ -120,6 +120,7 @@ export default function KundeInfo({ kunde, onChange, onNullstill }) {
           onBlur={() => setTimeout(() => setNavnForslag([]), 200)}
           autoComplete="off"
         />
+        <p className="felt-hint">Lagret kunde? Begynn å skrive navnet — velg fra listen som dukker opp.</p>
         {navnForslag.length > 0 && (
           <ul className="kunde-dropdown">
             {navnForslag.map(k => (
