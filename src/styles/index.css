@@ -1126,6 +1126,65 @@ textarea { resize: vertical; }
   letter-spacing: 0.01em;
 }
 
+
+/* ── Dobbel CTA-rad ── */
+.l2-cta-rad {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+.l2-cta-alternativ {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.l2-cta-eller {
+  font-size: 12px;
+  color: #475569;
+  font-style: italic;
+  flex-shrink: 0;
+  padding-bottom: 24px; /* align with buttons, offset for hint text */
+}
+.l2-cta-sekundaer {
+  display: inline-flex;
+  align-items: center;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 11px 22px;
+  border-radius: 50px;
+  border: 1.5px solid rgba(148,163,184,0.35);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.l2-cta-sekundaer:hover {
+  border-color: rgba(148,163,184,0.65);
+  color: #cbd5e1;
+}
+.l2-cta-hint-prim {
+  color: #94a3b8 !important;
+  line-height: 1.5;
+  text-align: center;
+}
+.l2-cta-hint-prim span {
+  font-size: 10.5px;
+  color: #475569;
+}
+.l2-cta-hint-sek {
+  color: #475569 !important;
+  font-size: 10.5px !important;
+  text-align: center;
+}
+@media (max-width: 520px) {
+  .l2-cta-rad { flex-direction: column; gap: 12px; }
+  .l2-cta-eller { padding-bottom: 0; }
+}
+
 /* ── FEATURES — lyst, glass-kort ── */
 .l2-features {
   display: grid;

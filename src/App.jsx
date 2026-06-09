@@ -233,7 +233,7 @@ function AppInnhold() {
 
       <main className={`app-main${steg === 'landing' ? ' app-main--landing' : ''}`}>
         {steg === 'landing' ? (
-          <Landingsside onStart={() => setSteg('skjema')} />
+          <Landingsside onStart={() => setSteg('skjema')} onRegistrer={() => setVisLogin(true)} />
         ) : steg === 'skjema' ? (
           <TilbudSkjema
             skjema={skjema}

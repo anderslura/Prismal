@@ -86,7 +86,7 @@ const FEATURES = [
   },
 ]
 
-export default function Landingsside({ onStart }) {
+export default function Landingsside({ onStart, onRegistrer }) {
   return (
     <div className="l2-wrapper">
 
@@ -105,13 +105,31 @@ export default function Landingsside({ onStart }) {
             Det som før krevde timevis å sette sammen, gjøres nå fra mobil eller PC
             på sekunder. Resultatet ser mer profesjonelt ut enn noensinne.
           </p>
-          <button className="l2-cta" onClick={onStart}>
-            Prøv gratis
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{marginLeft:6}}>
-              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-          <p className="l2-cta-hint">3 tilbud uten registrering &nbsp;·&nbsp; Deretter 99 kr/mnd eks. mva &nbsp;·&nbsp; Ingen bindingstid</p>
+          <div className="l2-cta-rad">
+            <div className="l2-cta-alternativ">
+              <button className="l2-cta" onClick={onRegistrer}>
+                Registrer deg gratis
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{marginLeft:6}}>
+                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+              <p className="l2-cta-hint l2-cta-hint-prim">
+                3 fulle tilbud med alle funksjoner<br/>
+                <span>Ingen kredittkort · Ingen bindingstid</span>
+              </p>
+            </div>
+
+            <div className="l2-cta-eller">eller</div>
+
+            <div className="l2-cta-alternativ">
+              <button className="l2-cta-sekundaer" onClick={onStart}>
+                Prøv uten registrering
+              </button>
+              <p className="l2-cta-hint l2-cta-hint-sek">
+                1 tilbud · Uten firma og logo
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
