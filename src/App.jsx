@@ -11,7 +11,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext.jsx'
 const TOM_SKJEMA = {
   firmanavn: '', firmaTelefon: '', firmaEpost: '', firmaAdresse: '',
   firmaOrgnr: '', firmaNettside: '', kundenavn: '', kundeAdresse: '',
-  kundeEpost: '', beskrivelse: '', arbeidere: [], materialer: [],
+  kundeEpost: '', kundeMobil: '', beskrivelse: '', arbeidere: [], materialer: [],
   logoUrl: '', tilbudstekst: '', pdfTema: 'standard',
   tilbudsnummer: '', dato: new Date().toLocaleDateString('no-NO'),
 }

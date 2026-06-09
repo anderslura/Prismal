@@ -1817,3 +1817,72 @@ textarea { resize: vertical; }
   font-size: 12px;
   text-decoration: underline;
 }
+
+/* ===== KundeInfo ===== */
+.kunde-mob-rad {
+  display: flex;
+  gap: 0.5rem;
+}
+.kunde-mob-input {
+  flex: 1;
+}
+.kunde-navn-wrapper {
+  position: relative;
+}
+.kunde-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: var(--bg-card, #fff);
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  list-style: none;
+  margin: 2px 0 0;
+  padding: 4px 0;
+  max-height: 240px;
+  overflow-y: auto;
+}
+.kunde-dropdown li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.kunde-dropdown li:hover {
+  background: var(--bg-hover, #f1f5f9);
+}
+.kunde-dropdown-navn {
+  font-weight: 600;
+  font-size: 0.93rem;
+}
+.kunde-dropdown-meta {
+  font-size: 0.78rem;
+  color: var(--text-muted, #64748b);
+}
+.btn-lagre-kunde {
+  margin-top: 0.75rem;
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  border: none;
+  background: var(--accent, #2563eb);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+}
+.btn-lagre-kunde:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.btn-lagre-kunde.lagret {
+  background: #16a34a;
+}
+.btn-lagre-kunde.feil {
+  background: #dc2626;
+}

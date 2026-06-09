@@ -1,3 +1,4 @@
+import KundeInfo from './KundeInfo.jsx'
 import PdfTemavelger from './PdfTemavelger.jsx'
 import { useState } from 'react'
 
@@ -142,28 +143,20 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
         </section>
 
         {/* KUNDE */}
-        <section className="skjema-seksjon">
-          <div className="seksjon-tittel-rad">
-            <h2 className="seksjon-tittel">Kunde</h2>
-            <button className="btn-lenke roed" onClick={() => {
-              ;['kundenavn','kundeAdresse','kundeEpost','beskrivelse'].forEach(f => oppdater(f, ''))
-              oppdater('materialer', [])
-              oppdater('arbeidere', [{id:Date.now(), timer:'', timepris: (() => { try { return localStorage.getItem('timepris')||'' } catch { return '' } })()}])
-            }}>Nullstill kunde/jobb</button>
-          </div>
-          <div className="felt-gruppe">
-            <label>Kundenavn <span className="paakrevd">*</span></label>
-            <input type="text" placeholder="Kari Nordmann" value={skjema.kundenavn} onChange={e => oppdater('kundenavn', e.target.value)} />
-          </div>
-          <div className="felt-gruppe">
-            <label>Adresse</label>
-            <input type="text" placeholder="Hjemveien 5, 0002 Oslo" value={skjema.kundeAdresse} onChange={e => oppdater('kundeAdresse', e.target.value)} />
-          </div>
-          <div className="felt-gruppe">
-            <label>E-post</label>
-            <input type="email" placeholder="kari@epost.no" value={skjema.kundeEpost} onChange={e => oppdater('kundeEpost', e.target.value)} />
-          </div>
-        </section>
+        <KundeInfo
+          kunde={{
+            kundenavn: skjema.kundenavn,
+            kundeAdresse: skjema.kundeAdresse,
+            kundeEpost: skjema.kundeEpost,
+            kundeMobil: skjema.kundeMobil || '',
+          }}
+          onChange={oppdater}
+          onNullstill={() => {
+            ;['kundenavn','kundeAdresse','kundeEpost','kundeMobil','beskrivelse'].forEach(f => oppdater(f, ''))
+            oppdater('materialer', [])
+            oppdater('arbeidere', [{id:Date.now(), timer:'', timepris: (() => { try { return localStorage.getItem('timepris')||'' } catch { return '' } })()}])
+          }}
+        />
 
         {/* JOBB */}
         <section className="skjema-seksjon">
