@@ -225,7 +225,7 @@ function AppInnhold() {
         </div>
       )}
 
-      <main className="app-main">
+      <main className={`app-main${steg === 'landing' ? ' app-main--landing' : ''}`}>
         {steg === 'landing' ? (
           <Landingsside onStart={() => setSteg('skjema')} />
         ) : steg === 'skjema' ? (

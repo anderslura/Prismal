@@ -101,7 +101,9 @@ export default function Landingsside({ onStart }) {
             <span className="l2-tittel-grad">På minutter.</span>
           </h1>
           <p className="l2-undertittel">
-            Fyll inn jobb og priser — AI skriver tilbudsteksten. Last ned ferdig PDF.
+            Legg inn bedriften din én gang. Kunder og materialer huskes automatisk.
+            <br />Det som før tok tid å sy sammen — priser, tekst og oppsett — 
+            gjøres nå fra mobil eller PC på sekunder, og ser mer profesjonelt ut enn noensinne.
           </p>
           <button className="l2-cta" onClick={onStart}>
             Prøv gratis
