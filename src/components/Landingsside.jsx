@@ -1,126 +1,186 @@
-function IkonRakett() {
+/* ── Landingsside v2 — premium redesign ── */
+
+function IkonLyn() {
   return (
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M16 3C16 3 22 8 22 16H10C10 8 16 3 16 3Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"/>
-      <rect x="10" y="16" width="12" height="6" rx="1" stroke="currentColor" strokeWidth="1.8"/>
-      <path d="M13 22L11 27M19 22L21 27" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
-      <circle cx="16" cy="12" r="2" stroke="currentColor" strokeWidth="1.8"/>
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <path d="M15.5 3L5 16h9l-1.5 9L23 13h-9l1.5-10z" fill="url(#lynGrad)" stroke="none"/>
+      <defs>
+        <linearGradient id="lynGrad" x1="5" y1="3" x2="23" y2="25" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#60a5fa"/>
+          <stop offset="100%" stopColor="#818cf8"/>
+        </linearGradient>
+      </defs>
     </svg>
   )
 }
-function IkonAI() {
+
+function IkonSparkle() {
   return (
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="4" y="8" width="24" height="16" rx="3" stroke="currentColor" strokeWidth="1.8"/>
-      <path d="M9 18L12 13L15 17L18 14L23 18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-      <circle cx="9" cy="18" r="1" fill="currentColor"/>
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <path d="M14 3l2.2 6.8H23l-5.6 4.1 2.1 6.8L14 16.6l-5.5 4.1 2.1-6.8L5 9.8h6.8L14 3z" fill="url(#sparkGrad)"/>
+      <circle cx="22" cy="6" r="2" fill="#a78bfa" opacity="0.7"/>
+      <circle cx="6" cy="21" r="1.5" fill="#60a5fa" opacity="0.6"/>
+      <defs>
+        <linearGradient id="sparkGrad" x1="5" y1="3" x2="23" y2="25" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#a78bfa"/>
+          <stop offset="100%" stopColor="#818cf8"/>
+        </linearGradient>
+      </defs>
     </svg>
   )
 }
-function IkonHusk() {
+
+function IkonDatabase() {
   return (
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="6" y="4" width="20" height="24" rx="3" stroke="currentColor" strokeWidth="1.8"/>
-      <path d="M11 11H21M11 16H21M11 21H17" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <ellipse cx="14" cy="8" rx="9" ry="4" fill="url(#dbGrad1)"/>
+      <path d="M5 8v5c0 2.2 4 4 9 4s9-1.8 9-4V8" fill="url(#dbGrad2)" opacity="0.85"/>
+      <path d="M5 13v5c0 2.2 4 4 9 4s9-1.8 9-4v-5" fill="url(#dbGrad3)" opacity="0.7"/>
+      <defs>
+        <linearGradient id="dbGrad1" x1="5" y1="5" x2="23" y2="12" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#34d399"/>
+          <stop offset="100%" stopColor="#059669"/>
+        </linearGradient>
+        <linearGradient id="dbGrad2" x1="5" y1="8" x2="23" y2="17" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#34d399"/>
+          <stop offset="100%" stopColor="#059669"/>
+        </linearGradient>
+        <linearGradient id="dbGrad3" x1="5" y1="13" x2="23" y2="22" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#34d399"/>
+          <stop offset="100%" stopColor="#059669"/>
+        </linearGradient>
+      </defs>
     </svg>
   )
 }
-function IkonPDF() {
+
+function IkonDokument() {
   return (
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M8 4H20L26 10V28H8V4Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"/>
-      <path d="M20 4V10H26" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"/>
-      <path d="M12 16H20M12 20H17" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+      <path d="M7 3h10l6 6v16H7V3z" fill="url(#docGrad1)"/>
+      <path d="M17 3v6h6" fill="none" stroke="#fb923c" strokeWidth="1.5" strokeLinejoin="round"/>
+      <path d="M11 13h8M11 17h6M11 21h4" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.9"/>
+      <defs>
+        <linearGradient id="docGrad1" x1="7" y1="3" x2="23" y2="25" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#fb923c"/>
+          <stop offset="100%" stopColor="#ea580c"/>
+        </linearGradient>
+      </defs>
     </svg>
   )
 }
+
+const FEATURES = [
+  {
+    ikon: <IkonLyn />,
+    farge: 'blaa',
+    tittel: 'Raskt',
+    tekst: 'Fra blankt skjema til ferdig PDF på under 2 minutter.',
+  },
+  {
+    ikon: <IkonSparkle />,
+    farge: 'lilla',
+    tittel: 'AI-tekst',
+    tekst: 'Beskriv jobben kort — AI skriver profesjonelt tilbudsspråk.',
+  },
+  {
+    ikon: <IkonDatabase />,
+    farge: 'gronn',
+    tittel: 'Husker alt',
+    tekst: 'Kunder, materialer og priser lagres. Neste tilbud går dobbelt så raskt.',
+  },
+  {
+    ikon: <IkonDokument />,
+    farge: 'oransje',
+    tittel: 'Klar PDF',
+    tekst: 'Med logo, prisoversikt og akseptklausul — klar til å sende.',
+  },
+]
 
 export default function Landingsside({ onStart }) {
   return (
-    <div className="landing-wrapper">
+    <div className="l2-wrapper">
 
-      {/* HERO */}
-      <section className="landing-hero">
-        <h1 className="landing-tittel">Profesjonelle tilbud på minutter</h1>
-        <p className="landing-undertittel">
-          Fyll inn jobb og priser — AI skriver tilbudsteksten. Last ned ferdig PDF.
-        </p>
-        <button className="btn btn-primary landing-cta" onClick={onStart}>
-          Lag ditt første tilbud gratis →
-        </button>
-        <p className="landing-cta-hint">Ingen registrering. Ingen kredittkort.</p>
-      </section>
-
-      {/* FEATURES — Office 365-stil */}
-      <section className="landing-features">
-        <div className="feature-kort feature-blaa">
-          <div className="feature-ikon-boks feature-ikon-boks-blaa"><IkonRakett /></div>
-          <h3>Raskt</h3>
-          <p>Fra blankt skjema til ferdig PDF på under 2 minutter.</p>
-        </div>
-        <div className="feature-kort feature-lilla">
-          <div className="feature-ikon-boks feature-ikon-boks-lilla"><IkonAI /></div>
-          <h3>AI-tekst</h3>
-          <p>Beskriv jobben kort — AI skriver profesjonelt tilbudsspråk.</p>
-        </div>
-        <div className="feature-kort feature-gronn">
-          <div className="feature-ikon-boks feature-ikon-boks-gronn"><IkonHusk /></div>
-          <h3>Husker prisene</h3>
-          <p>Materialer og timepriser lagres. Neste tilbud går raskere.</p>
-        </div>
-        <div className="feature-kort feature-oransje">
-          <div className="feature-ikon-boks feature-ikon-boks-oransje"><IkonPDF /></div>
-          <h3>Klar PDF</h3>
-          <p>Med logo, prisoversikt og akseptklausul — klar til å sende.</p>
+      {/* ── HERO ── */}
+      <section className="l2-hero">
+        <div className="l2-hero-glow l2-glow-1" />
+        <div className="l2-hero-glow l2-glow-2" />
+        <div className="l2-hero-inner">
+          <div className="l2-badge">Verktøyet selvstendige håndverkere mangler</div>
+          <h1 className="l2-tittel">
+            Profesjonelle tilbud.<br />
+            <span className="l2-tittel-grad">På minutter.</span>
+          </h1>
+          <p className="l2-undertittel">
+            Fyll inn jobb og priser — AI skriver tilbudsteksten.<br />Last ned ferdig PDF.
+          </p>
+          <button className="l2-cta" onClick={onStart}>
+            Lag ditt første tilbud gratis
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style={{marginLeft:6}}>
+              <path d="M4 9h10M10 5l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+          <p className="l2-cta-hint">Ingen registrering &nbsp;·&nbsp; Ingen kredittkort &nbsp;·&nbsp; 3 gratis tilbud</p>
         </div>
       </section>
 
-      {/* PRIS */}
-      <section className="landing-pris">
-        <h2 className="landing-seksjon-tittel">To enkle valg</h2>
-        <div className="pris-grid pris-grid-to">
+      {/* ── FEATURES ── */}
+      <section className="l2-features">
+        {FEATURES.map(f => (
+          <div key={f.tittel} className={`l2-kort l2-kort-${f.farge}`}>
+            <div className={`l2-ikon-boks l2-ikon-${f.farge}`}>{f.ikon}</div>
+            <h3 className="l2-kort-tittel">{f.tittel}</h3>
+            <p className="l2-kort-tekst">{f.tekst}</p>
+          </div>
+        ))}
+      </section>
 
-          <div className="pris-kort pris-kort-gratis">
-            <h3>Gratis</h3>
-            <p className="pris-beloep">0 kr</p>
-            <p style={{fontSize:'12px',color:'var(--tekst-sekundaer)',marginBottom:'12px',lineHeight:'1.5'}}>
-              Prøv Prismal uten registrering. Passer om du vil se hvordan det fungerer før du bestemmer deg.
-            </p>
-            <ul className="pris-liste">
-              <li>✓ 3 tilbud totalt</li>
-              <li>✓ AI-generert tilbudstekst</li>
-              <li>✓ Last ned PDF</li>
-              <li className="pris-nei">✗ Ingen firmalogo i PDF</li>
-              <li className="pris-nei">✗ "Laget med Prismal" i footer</li>
-              <li className="pris-nei">✗ Ingen lagrede prislinjer</li>
-              <li className="pris-nei">✗ Ingen tilbudshistorikk</li>
+      {/* ── PRIS ── */}
+      <section className="l2-pris">
+        <p className="l2-pris-overst">Enkel prising</p>
+        <h2 className="l2-pris-tittel">To tydelige valg</h2>
+        <div className="l2-pris-grid">
+
+          {/* GRATIS */}
+          <div className="l2-pris-kort l2-gratis">
+            <div className="l2-plan-navn">Gratis</div>
+            <div className="l2-plan-pris">0 <span>kr</span></div>
+            <p className="l2-plan-sub">Prøv Prismal uten registrering. Se hvordan det fungerer.</p>
+            <ul className="l2-plan-liste">
+              <li className="ok">3 tilbud totalt</li>
+              <li className="ok">AI-generert tilbudstekst</li>
+              <li className="ok">Last ned PDF</li>
+              <li className="nei">Firmalogo i PDF</li>
+              <li className="nei">Kundedatabase</li>
+              <li className="nei">Materialbibliotek</li>
+              <li className="nei">Tilbudshistorikk</li>
             </ul>
-            <button className="btn btn-secondary btn-full" onClick={onStart}>Prøv gratis</button>
+            <button className="l2-btn-gratis" onClick={onStart}>Prøv gratis</button>
           </div>
 
-          <div className="pris-kort pris-kort-pro">
-            <div className="pro-badge pro-badge-gull">Anbefalt</div>
-            <h3>Pro</h3>
-            <p className="pris-beloep">99 kr<span>/mnd</span></p>
-            <p style={{fontSize:'12px',color:'var(--tekst-sekundaer)',marginBottom:'12px',lineHeight:'1.5'}}>
-              Alt du trenger for å sende profesjonelle tilbud raskt — uten kompromisser.
-            </p>
-            <ul className="pris-liste">
-              <li>✓ Ubegrenset antall tilbud</li>
-              <li>✓ AI-generert tilbudstekst</li>
-              <li>✓ PDF med din firmalogo</li>
-              <li>✓ Lagrede prislinjer — raskere neste gang</li>
-              <li>✓ Påslagskalkulator</li>
-              <li>✓ Ingen Prismal-branding i PDF</li>
-              <li>✓ Tilbudshistorikk</li>
-              <li>✓ Send tilbud direkte på e-post</li>
-              <li>✓ Tidlig tilgang til nye funksjoner</li>
+          {/* PRO */}
+          <div className="l2-pris-kort l2-pro">
+            <div className="l2-pro-badge">Anbefalt</div>
+            <div className="l2-plan-navn">Pro</div>
+            <div className="l2-plan-pris l2-plan-pris-gull">99 <span>kr / mnd</span></div>
+            <p className="l2-plan-sub">Alt du trenger for å sende profesjonelle tilbud — uten kompromisser.</p>
+            <ul className="l2-plan-liste">
+              <li className="ok">Ubegrenset antall tilbud</li>
+              <li className="ok">AI-generert tilbudstekst</li>
+              <li className="ok">PDF med din firmalogo</li>
+              <li className="ok">Kundedatabase med søk</li>
+              <li className="ok">Materialbibliotek</li>
+              <li className="ok">Påslagskalkulator</li>
+              <li className="ok">Ingen Prismal-branding</li>
+              <li className="ok">Tilbudshistorikk</li>
+              <li className="ok">Send tilbud på e-post</li>
+              <li className="ok">Tidlig tilgang til nye funksjoner</li>
             </ul>
-            <button className="btn btn-primary btn-full btn-gull" onClick={onStart}>Kom i gang med Pro</button>
+            <button className="l2-btn-pro" onClick={onStart}>Kom i gang med Pro</button>
           </div>
 
         </div>
-        <p className="pris-sammenligning">Tilsvarende løsninger koster opptil 499 kr/mnd. Prismal Pro: 99 kr.</p>
+        <p className="l2-pris-sammenligning">Tilsvarende løsninger koster opptil 499 kr/mnd. Prismal Pro: 99 kr.</p>
       </section>
 
     </div>
