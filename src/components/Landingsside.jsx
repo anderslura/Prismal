@@ -3,7 +3,7 @@
 function IkonLyn() {
   return (
     <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-      <path d="M15.5 3L5 16h9l-1.5 9L23 13h-9l1.5-10z" fill="url(#lynGrad)" stroke="none"/>
+      <path d="M15.5 3L5 16h9l-1.5 9L23 13h-9l1.5-10z" fill="url(#lynGrad)"/>
       <defs>
         <linearGradient id="lynGrad" x1="5" y1="3" x2="23" y2="25" gradientUnits="userSpaceOnUse">
           <stop offset="0%" stopColor="#60a5fa"/>
@@ -115,12 +115,12 @@ export default function Landingsside({ onStart }) {
             Fyll inn jobb og priser — AI skriver tilbudsteksten.<br />Last ned ferdig PDF.
           </p>
           <button className="l2-cta" onClick={onStart}>
-            Lag ditt første tilbud gratis
+            Prøv gratis — ingen registrering
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style={{marginLeft:6}}>
               <path d="M4 9h10M10 5l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
-          <p className="l2-cta-hint">Ingen registrering &nbsp;·&nbsp; Ingen kredittkort &nbsp;·&nbsp; 3 gratis tilbud</p>
+          <p className="l2-cta-hint">3 gratis tilbud &nbsp;·&nbsp; Ingen kredittkort &nbsp;·&nbsp; Fortsett for 99 kr/mnd</p>
         </div>
       </section>
 
@@ -138,49 +138,49 @@ export default function Landingsside({ onStart }) {
       {/* ── PRIS ── */}
       <section className="l2-pris">
         <p className="l2-pris-overst">Enkel prising</p>
-        <h2 className="l2-pris-tittel">To tydelige valg</h2>
-        <div className="l2-pris-grid">
+        <h2 className="l2-pris-tittel">Prøv gratis. Fortsett når du er klar.</h2>
 
-          {/* GRATIS */}
-          <div className="l2-pris-kort l2-gratis">
-            <div className="l2-plan-navn">Gratis</div>
-            <div className="l2-plan-pris">0 <span>kr</span></div>
-            <p className="l2-plan-sub">Prøv Prismal uten registrering. Se hvordan det fungerer.</p>
-            <ul className="l2-plan-liste">
-              <li className="ok">3 tilbud totalt</li>
-              <li className="ok">AI-generert tilbudstekst</li>
-              <li className="ok">Last ned PDF</li>
-              <li className="nei">Firmalogo i PDF</li>
-              <li className="nei">Kundedatabase</li>
-              <li className="nei">Materialbibliotek</li>
-              <li className="nei">Tilbudshistorikk</li>
-            </ul>
-            <button className="l2-btn-gratis" onClick={onStart}>Prøv gratis</button>
+        <div className="l2-pro-solo">
+          <div className="l2-pro-solo-topp">
+            <div>
+              <div className="l2-plan-navn">Prismal Pro</div>
+              <div className="l2-plan-pris l2-plan-pris-gull">99 <span>kr / mnd</span></div>
+            </div>
+            <div className="l2-trial-boks">
+              <div className="l2-trial-tall">3</div>
+              <div className="l2-trial-tekst">gratis tilbud<br/>ingen registrering</div>
+            </div>
           </div>
 
-          {/* PRO */}
-          <div className="l2-pris-kort l2-pro">
-            <div className="l2-pro-badge">Anbefalt</div>
-            <div className="l2-plan-navn">Pro</div>
-            <div className="l2-plan-pris l2-plan-pris-gull">99 <span>kr / mnd</span></div>
-            <p className="l2-plan-sub">Alt du trenger for å sende profesjonelle tilbud — uten kompromisser.</p>
+          <p className="l2-plan-sub">
+            Start helt gratis. Etter 3 tilbud registrerer du deg og fortsetter for 99 kr/mnd — 
+            det samme som en kaffe på kafé, men noe du faktisk tjener penger på.
+          </p>
+
+          <div className="l2-pro-kolonner">
             <ul className="l2-plan-liste">
               <li className="ok">Ubegrenset antall tilbud</li>
               <li className="ok">AI-generert tilbudstekst</li>
               <li className="ok">PDF med din firmalogo</li>
               <li className="ok">Kundedatabase med søk</li>
-              <li className="ok">Materialbibliotek</li>
+              <li className="ok">Materialbibliotek med priser</li>
+            </ul>
+            <ul className="l2-plan-liste">
               <li className="ok">Påslagskalkulator</li>
-              <li className="ok">Ingen Prismal-branding</li>
               <li className="ok">Tilbudshistorikk</li>
               <li className="ok">Send tilbud på e-post</li>
+              <li className="ok">Ingen Prismal-branding</li>
               <li className="ok">Tidlig tilgang til nye funksjoner</li>
             </ul>
-            <button className="l2-btn-pro" onClick={onStart}>Kom i gang med Pro</button>
           </div>
 
+          <button className="l2-btn-pro" onClick={onStart}>
+            Start gratis nå
+          </button>
+          <p className="l2-pris-sammenligning">
+            Tilsvarende løsninger koster 299–499 kr/mnd. Prismal: 99 kr.
+          </p>
         </div>
-        <p className="l2-pris-sammenligning">Tilsvarende løsninger koster opptil 499 kr/mnd. Prismal Pro: 99 kr.</p>
       </section>
 
     </div>

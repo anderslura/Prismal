@@ -1122,6 +1122,7 @@ textarea { resize: vertical; }
 }
 
 /* ── FEATURES ── */
+/* seamless join with hero */
 .l2-features {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -1129,22 +1130,24 @@ textarea { resize: vertical; }
   max-width: 1040px;
   margin: 0 auto;
   padding: 40px 24px;
-  background: var(--bakgrunn);
+  background: #0c0f1a;
 }
 .l2-kort {
-  background: var(--hvit);
-  border: 1px solid var(--kant);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.09);
   border-radius: 14px;
   padding: 22px 18px 20px;
   display: flex;
   flex-direction: column;
   gap: 11px;
-  transition: box-shadow 0.18s, transform 0.18s;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  transition: box-shadow 0.18s, transform 0.18s, background 0.18s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  backdrop-filter: blur(8px);
 }
 .l2-kort:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 32px rgba(0,0,0,0.10);
+  background: rgba(255,255,255,0.07);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.40);
 }
 .l2-kort-blaa    { border-top: 3px solid #3b82f6; }
 .l2-kort-lilla   { border-top: 3px solid #7c3aed; }
@@ -1163,22 +1166,22 @@ textarea { resize: vertical; }
 .l2-kort-tittel {
   font-size: 15px;
   font-weight: 700;
-  color: var(--tekst);
+  color: #f1f5f9;
   margin: 0;
 }
 .l2-kort-tekst {
   font-size: 12.5px;
-  color: var(--tekst-sekundaer);
+  color: #94a3b8;
   line-height: 1.55;
   margin: 0;
 }
 
 /* ── PRIS ── */
 .l2-pris {
-  background: var(--bakgrunn);
-  padding: 48px 24px 60px;
+  background: linear-gradient(180deg, #0c0f1a 0%, #0f1422 100%);
+  padding: 48px 24px 72px;
   text-align: center;
-  border-top: 1px solid var(--kant);
+  border-top: 1px solid rgba(255,255,255,0.06);
 }
 .l2-pris-overst {
   font-size: 12px;
@@ -1191,7 +1194,7 @@ textarea { resize: vertical; }
 .l2-pris-tittel {
   font-size: clamp(22px, 3.5vw, 34px);
   font-weight: 800;
-  color: var(--tekst);
+  color: #f1f5f9;
   margin-bottom: 36px;
 }
 .l2-pris-grid {
@@ -1202,8 +1205,8 @@ textarea { resize: vertical; }
   margin: 0 auto 20px;
 }
 .l2-pris-kort {
-  background: var(--hvit);
-  border: 1px solid var(--kant);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.09);
   border-radius: 18px;
   padding: 32px 28px 28px;
   text-align: left;
@@ -1212,7 +1215,7 @@ textarea { resize: vertical; }
   position: relative;
 }
 .l2-gratis {
-  opacity: 0.88;
+  opacity: 0.75;
 }
 .l2-pro {
   background: #0d1224;
@@ -1236,21 +1239,21 @@ textarea { resize: vertical; }
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--tekst-sekundaer);
+  color: #94a3b8;
   margin-bottom: 8px;
 }
 .l2-pro .l2-plan-navn { color: #94a3b8; }
 .l2-plan-pris {
   font-size: 40px;
   font-weight: 800;
-  color: #1e50c8;
+  color: #60a5fa;
   line-height: 1;
   margin-bottom: 12px;
 }
 .l2-plan-pris span {
   font-size: 14px;
   font-weight: 500;
-  color: var(--tekst-sekundaer);
+  color: #64748b;
 }
 .l2-plan-pris-gull {
   background: linear-gradient(135deg, #fbbf24, #f59e0b);
@@ -1260,7 +1263,7 @@ textarea { resize: vertical; }
 }
 .l2-plan-sub {
   font-size: 12.5px;
-  color: var(--tekst-sekundaer);
+  color: #64748b;
   line-height: 1.55;
   margin-bottom: 20px;
 }
@@ -1276,7 +1279,7 @@ textarea { resize: vertical; }
 }
 .l2-plan-liste li {
   font-size: 12.5px;
-  color: var(--tekst-sekundaer);
+  color: #94a3b8;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1303,17 +1306,17 @@ textarea { resize: vertical; }
   width: 100%;
   padding: 12px;
   border-radius: 10px;
-  border: 1.5px solid var(--kant);
-  background: var(--hvit);
-  color: var(--tekst);
+  border: 1.5px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.05);
+  color: #e2e8f0;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s;
 }
 .l2-btn-gratis:hover {
-  background: var(--bakgrunn);
-  border-color: #94a3b8;
+  background: rgba(255,255,255,0.09);
+  border-color: rgba(255,255,255,0.25);
 }
 .l2-btn-pro {
   width: 100%;
@@ -1334,9 +1337,63 @@ textarea { resize: vertical; }
 }
 .l2-pris-sammenligning {
   font-size: 11px;
-  color: var(--tekst-sekundaer);
+  color: #475569;
   font-style: italic;
   margin-top: 6px;
+}
+
+
+/* ── Pro-solo card ── */
+.l2-pro-solo {
+  max-width: 640px;
+  margin: 0 auto;
+  background: #0d1224;
+  border: 1px solid rgba(99,102,241,0.35);
+  box-shadow: 0 0 0 1px rgba(99,102,241,0.12), 0 24px 64px rgba(99,102,241,0.20);
+  border-radius: 22px;
+  padding: 36px 36px 28px;
+  text-align: left;
+}
+.l2-pro-solo-topp {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  gap: 20px;
+}
+.l2-trial-boks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(99,102,241,0.15);
+  border: 1px solid rgba(99,102,241,0.30);
+  border-radius: 14px;
+  padding: 12px 18px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.l2-trial-tall {
+  font-size: 36px;
+  font-weight: 800;
+  color: #a5b4fc;
+  line-height: 1;
+}
+.l2-trial-tekst {
+  font-size: 11px;
+  color: #7c8db5;
+  line-height: 1.4;
+  margin-top: 4px;
+}
+.l2-pro-kolonner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 24px;
+  margin-bottom: 28px;
+}
+@media (max-width: 520px) {
+  .l2-pro-solo { padding: 28px 22px 24px; }
+  .l2-pro-kolonner { grid-template-columns: 1fr; }
+  .l2-pro-solo-topp { flex-direction: column; }
 }
 
 /* ── RESPONSIVE ── */
