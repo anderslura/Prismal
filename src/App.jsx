@@ -41,7 +41,8 @@ function hentLagretPrisliste() {
 function AppInnhold() {
   const {
     bruker, laster: authLaster, loggUt, isPro,
-    kanBrukeForsok, forsokGjenstaende, registrerForsok, MAKS_GRATIS_FORSOK
+    kanBrukeForsok, forsokGjenstaende, registrerForsok, MAKS_GRATIS_FORSOK,
+    trengerRegistrering, trengerOppgradering
   } = useAuth()
 
   const [skjema, setSkjema] = useState(() => ({
@@ -212,12 +213,17 @@ function AppInnhold() {
       {/* Banner — gratis forsøk-teller */}
       {!isPro && steg === 'skjema' && (
         <div className="gratis-banner">
-          {kanBrukeForsok ? (
-            <span>
-              Prøveversjon — <strong>{forsokGjenstaende} av {MAKS_GRATIS_FORSOK} gratis forsøk</strong> gjenstår · Firmainfo og logo krever Pro
-            </span>
+          {trengerRegistrering ? (
+            <span>Registrer deg gratis for å fortsette — du får {MAKS_GRATIS_FORSOK} tilbud inkludert</span>
+          ) : trengerOppgradering ? (
+            <span>Du har brukt alle {MAKS_GRATIS_FORSOK} gratis tilbud — oppgrader til Pro for å fortsette</span>
           ) : (
-            <span>Du har brukt alle gratis forsøk</span>
+            <span>
+              {bruker
+                ? <><strong>{forsokGjenstaende} av {MAKS_GRATIS_FORSOK} gratis tilbud</strong> gjenstår · Firmainfo og logo krever Pro</>
+                : <><strong>1 gratis prøvetilbud</strong> — registrer deg for {MAKS_GRATIS_FORSOK} totalt</>
+              }
+            </span>
           )}
           <button className="btn-pro-oppgrader" onClick={() => setVisOppgrader(true)}>
             Oppgrader til Pro — 99 kr/mnd eks. mva
