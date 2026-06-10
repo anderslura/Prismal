@@ -1,8 +1,7 @@
 import { hentTemaFarger } from './PdfTemavelger.jsx'
-import PdfTemavelger from './PdfTemavelger.jsx'
 import PrismalLogo from './PrismalLogo.jsx'
 
-export default function TilbudPreview({ skjema, oppdaterTekst, oppdaterTema, onLastNed, onTilbake, onNyttTilbud, isPro = true }) {
+export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilbake, onNyttTilbud, isPro = true }) {
   const totalArbeid = (skjema.arbeidere || []).reduce((s, a) => s + (parseFloat(a.timer)||0)*(parseFloat(a.timepris)||0), 0)
   const totalMaterialer = skjema.materialer.reduce((s, m) => s + (parseFloat(m.sum) || (parseFloat(m.antall)||1) * (parseFloat(m.pris)||0)), 0)
   const materialerMedPaaslag = skjema.materialer.reduce((s, m) => s + (m.hasPaaslag ? (parseFloat(m.sum) || (parseFloat(m.antall)||1) * (parseFloat(m.pris)||0)) : 0), 0)
@@ -35,15 +34,6 @@ export default function TilbudPreview({ skjema, oppdaterTekst, oppdaterTema, onL
           <div className="preview-paaslag-notat">Påslag er kun intern kalkyle — vises ikke på PDF som sendes kunden. Beløpet er allerede innbakt i totalprisen.</div>
         )}
 
-        {oppdaterTema && (
-          <div className="preview-tema-panel">
-            <p className="preview-tema-tittel">Velg fargetema</p>
-            <PdfTemavelger
-              valgtTema={skjema.pdfTema}
-              onChange={oppdaterTema}
-            />
-          </div>
-        )}
       </div>
 
       <div className="tilbud-dokument">
@@ -96,6 +86,7 @@ export default function TilbudPreview({ skjema, oppdaterTekst, oppdaterTema, onL
         <div className="dok-seksjon">
           <h3 className="dok-seksjon-tittel">Tilbud</h3>
           <div className="tilbudstekst-wrapper">
+            <p className="preview-rediger-hint">✏️ Tilbudsteksten kan redigeres direkte — klikk i feltet under.</p>
             <textarea
               className="tilbudstekst-editor"
               value={skjema.tilbudstekst}
