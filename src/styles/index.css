@@ -1641,6 +1641,27 @@ textarea { resize: vertical; }
 }
 @media (max-width: 480px) {
   .pris-grid-to { grid-template-columns: 1fr; }
+  /* Material-tabell: tettere på liten skjerm */
+  .mat-header,
+  .mat-rad {
+    grid-template-columns: 1fr 44px 58px 52px 26px 50px;
+    gap: 4px;
+  }
+  .mat-header span:nth-child(5) { font-size: 0; } /* skjul "Påslag" tekst */
+  .mat-header span:nth-child(5)::after { content: "P"; font-size: 9px; }
+
+  /* Transport-tabell: tettere */
+  .trans-header,
+  .trans-rad {
+    grid-template-columns: 1fr 54px 60px 52px 22px;
+    gap: 4px;
+  }
+
+  /* Skjema: ingen side-padding som presser innholdet */
+  .skjema-seksjon { padding: 10px; }
+
+  /* Sikre ingen overflow på hele siden */
+  .app, .app-main, .skjema-layout, .skjema-kolonne { max-width: 100%; overflow-x: hidden; }
 }
 
 /* ===========================
@@ -2412,42 +2433,51 @@ textarea { resize: vertical; }
   color: #fff;
 }
 
-/* === TRANSPORT === */
-.transport-grid   { display: flex; flex-direction: column; gap: 14px; }
-.transport-gruppe { display: flex; flex-direction: column; gap: 4px; }
-.transport-label  { font-size: 12px; font-weight: 600; color: var(--tekst-sekundaer); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 2px; }
-.transport-inline-rad {
+/* === TRANSPORT (same grid style as materialer) === */
+.trans-header,
+.trans-rad {
+  display: grid;
+  grid-template-columns: 1fr 62px 70px 60px 26px;
+  gap: 6px;
+  align-items: center;
+  padding: 5px 2px;
+  border-bottom: 1px solid var(--kant);
+}
+.trans-header {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--tekst-sekundaer);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  padding-bottom: 6px;
+  margin-bottom: 2px;
+}
+.trans-header span:nth-child(2),
+.trans-header span:nth-child(3) { text-align: right; }
+.trans-rad:last-of-type { border-bottom: none; }
+.trans-navn { font-size: 13px; font-weight: 500; }
+.trans-input {
+  width: 100% !important;
+  text-align: right;
+  padding: 5px 6px !important;
+  font-size: 13px;
+}
+.trans-sum {
+  background: var(--bakgrunn);
+  border: 1px solid var(--kant);
+  border-radius: var(--radius-liten);
+  padding: 5px 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--blaa-mork);
+  text-align: right;
+  min-height: 32px;
   display: flex;
   align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
+  justify-content: flex-end;
 }
-.transport-input-sm {
-  width: 72px;
-  padding: 5px 8px;
-  border: 1.5px solid var(--kant);
-  border-radius: var(--radius-liten);
-  font-size: 14px;
-  font-family: inherit;
-  color: var(--tekst);
-  background: var(--bakgrunn);
-  text-align: right;
-}
-.transport-input-sm:focus {
-  outline: none;
-  border-color: var(--blaa);
-  box-shadow: 0 0 0 3px rgba(30,80,200,0.08);
-}
-.transport-enhet { font-size: 12px; color: var(--tekst-sekundaer); }
-.transport-x     { font-size: 14px; color: var(--tekst-sekundaer); font-weight: 300; padding: 0 1px; }
-.transport-sum   { font-weight: 700; font-size: 13px; color: var(--blaa); margin-left: 2px; }
-.transport-fjern {
-  background: none; border: none; cursor: pointer;
-  color: var(--tekst-sekundaer); font-size: 16px; padding: 0 2px; line-height: 1;
-}
-.transport-fjern:hover { color: #c0392b; }
-.transport-legg-til {
-  margin-top: 3px;
+.trans-legg-til {
+  margin: 6px 0 4px;
   background: none;
   border: 1.5px dashed var(--kant);
   border-radius: var(--radius-liten);
@@ -2457,4 +2487,4 @@ textarea { resize: vertical; }
   cursor: pointer;
   width: fit-content;
 }
-.transport-legg-til:hover { border-color: var(--blaa); color: var(--blaa); }
+.trans-legg-til:hover { border-color: var(--blaa); color: var(--blaa); }
