@@ -1679,6 +1679,27 @@ textarea { resize: vertical; }
   background: rgba(255,255,255,0.08);
 }
 
+
+.preview-tilbake-hint {
+  font-size: 11.5px;
+  color: var(--tekst-sekundaer);
+  margin: -4px 0 8px;
+  font-style: italic;
+}
+.preview-tema-panel {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--kant);
+}
+.preview-tema-tittel {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--tekst-sekundaer);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+
 .preview-paaslag-notat {
   background: #fffbeb;
   border: 1px solid #f59e0b;

@@ -1,7 +1,8 @@
 import { hentTemaFarger } from './PdfTemavelger.jsx'
+import PdfTemavelger from './PdfTemavelger.jsx'
 import PrismalLogo from './PrismalLogo.jsx'
 
-export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilbake, onNyttTilbud, isPro = true }) {
+export default function TilbudPreview({ skjema, oppdaterTekst, oppdaterTema, onLastNed, onTilbake, onNyttTilbud, isPro = true }) {
   const totalArbeid = (skjema.arbeidere || []).reduce((s, a) => s + (parseFloat(a.timer)||0)*(parseFloat(a.timepris)||0), 0)
   const totalMaterialer = skjema.materialer.reduce((s, m) => s + (parseFloat(m.sum) || (parseFloat(m.antall)||1) * (parseFloat(m.pris)||0)), 0)
   const materialerMedPaaslag = skjema.materialer.reduce((s, m) => s + (m.hasPaaslag ? (parseFloat(m.sum) || (parseFloat(m.antall)||1) * (parseFloat(m.pris)||0)) : 0), 0)
@@ -13,19 +14,35 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
     <div className="preview-layout">
       <div className="preview-actions">
         <h2 className="preview-tittel">Forhåndsvisning av tilbud</h2>
+
         <div className="preview-knapper">
-          <button className="btn btn-secondary" onClick={() => oppdaterTekst(skjema.tilbudstekst)}>
-            Rediger tekst
-          </button>
           <button className="btn btn-primary" onClick={onLastNed}>
             ⬇ Last ned PDF
+          </button>
+          <button className="btn btn-secondary" onClick={onTilbake} title="Alt du har fylt inn er bevart">
+            ✏️ Endre tilbud
           </button>
           <button className="btn btn-secondary" onClick={onNyttTilbud} style={{borderColor: '#16a34a', color: '#16a34a'}}>
             + Nytt tilbud
           </button>
         </div>
+
+        <p className="preview-tilbake-hint">
+          Trykk «Endre tilbud» for å justere — alt du har fylt inn er bevart.
+        </p>
+
         {paaslag > 0 && (
           <div className="preview-paaslag-notat">Påslag er kun intern kalkyle — vises ikke på PDF som sendes kunden. Beløpet er allerede innbakt i totalprisen.</div>
+        )}
+
+        {oppdaterTema && (
+          <div className="preview-tema-panel">
+            <p className="preview-tema-tittel">Velg fargetema</p>
+            <PdfTemavelger
+              valgtTema={skjema.pdfTema}
+              onChange={oppdaterTema}
+            />
+          </div>
         )}
       </div>
 

@@ -249,6 +249,7 @@ function AppInnhold() {
           <TilbudPreview
             skjema={skjema}
             oppdaterTekst={(tekst) => oppdater('tilbudstekst', tekst)}
+            oppdaterTema={(tema) => oppdater('pdfTema', tema)}
             onLastNed={() => lastNedPDF(skjema, isPro)}
             onTilbake={() => setSteg('skjema')}
             onNyttTilbud={nullstill}
