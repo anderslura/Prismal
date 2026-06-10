@@ -2488,3 +2488,21 @@ textarea { resize: vertical; }
   width: fit-content;
 }
 .trans-legg-til:hover { border-color: var(--blaa); color: var(--blaa); }
+
+.trans-legg-til-inline {
+  background: var(--blaa);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex-shrink: 0;
+}
+.trans-legg-til-inline:hover { background: var(--blaa-mork); }
