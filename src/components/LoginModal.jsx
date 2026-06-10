@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext.jsx'
+import { supabase } from '../lib/supabase.js'
 
 export default function LoginModal({ onLukk }) {
   const { loggInn, registrer } = useAuth()
-  const [modus, setModus] = useState('logginn') // 'logginn' | 'registrer'
+  const [modus, setModus] = useState('logginn') // 'logginn' | 'registrer' | 'glemt'
   const [epost, setEpost] = useState('')
   const [passord, setPassord] = useState('')
   const [feil, setFeil] = useState('')
@@ -18,8 +19,14 @@ export default function LoginModal({ onLukk }) {
       if (modus === 'logginn') {
         await loggInn(epost, passord)
         onLukk?.()
-      } else {
+      } else if (modus === 'registrer') {
         await registrer(epost, passord)
+        setBekreftelse(true)
+      } else if (modus === 'glemt') {
+        const { error } = await supabase.auth.resetPasswordForEmail(epost, {
+          redirectTo: `${window.location.origin}/`,
+        })
+        if (error) throw error
         setBekreftelse(true)
       }
     } catch (err) {
@@ -35,17 +42,23 @@ export default function LoginModal({ onLukk }) {
     }
   }
 
+  const titler = { logginn: 'Logg inn', registrer: 'Opprett konto', glemt: 'Glemt passord' }
+
   return (
     <div className="modal-bakgrunn" onClick={onLukk}>
       <div className="modal-boks" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>{modus === 'logginn' ? 'Logg inn' : 'Opprett konto'}</h2>
+          <h2>{titler[modus]}</h2>
           <button className="modal-lukk" onClick={onLukk}>✕</button>
         </div>
 
         {bekreftelse ? (
           <div className="modal-bekreftelse">
-            <p>✅ Sjekk e-posten din og klikk bekreftelseslenken for å aktivere kontoen.</p>
+            {modus === 'glemt' ? (
+              <p>✅ Sjekk e-posten din — vi har sendt en lenke for å tilbakestille passordet.</p>
+            ) : (
+              <p>✅ Sjekk e-posten din og klikk bekreftelseslenken for å aktivere kontoen.</p>
+            )}
             <button className="btn btn-primary" onClick={() => { setModus('logginn'); setBekreftelse(false) }}>
               Gå til innlogging
             </button>
@@ -63,28 +76,48 @@ export default function LoginModal({ onLukk }) {
                 autoFocus
               />
             </label>
-            <label>
-              Passord
-              <input
-                type="password"
-                value={passord}
-                onChange={e => setPassord(e.target.value)}
-                placeholder={modus === 'registrer' ? 'Minst 6 tegn' : ''}
-                required
-              />
-            </label>
+
+            {modus !== 'glemt' && (
+              <label>
+                Passord
+                <input
+                  type="password"
+                  value={passord}
+                  onChange={e => setPassord(e.target.value)}
+                  placeholder={modus === 'registrer' ? 'Minst 6 tegn' : ''}
+                  required
+                />
+              </label>
+            )}
+
+            {modus === 'logginn' && (
+              <div style={{ textAlign: 'right', marginTop: '-8px', marginBottom: '4px' }}>
+                <button
+                  type="button"
+                  className="modal-lenke"
+                  onClick={() => { setModus('glemt'); setFeil('') }}
+                >
+                  Glemt passord?
+                </button>
+              </div>
+            )}
 
             {feil && <p className="modal-feil">{feil}</p>}
 
             <button className="btn btn-primary" type="submit" disabled={laster}>
-              {laster ? 'Venter...' : modus === 'logginn' ? 'Logg inn' : 'Opprett konto'}
+              {laster ? 'Venter...' :
+               modus === 'logginn'   ? 'Logg inn' :
+               modus === 'registrer' ? 'Opprett konto' :
+                                       'Send tilbakestillingslenke'}
             </button>
 
             <p className="modal-bytt">
               {modus === 'logginn' ? (
                 <>Ny bruker? <button type="button" onClick={() => { setModus('registrer'); setFeil('') }}>Opprett konto</button></>
-              ) : (
+              ) : modus === 'registrer' ? (
                 <>Har konto? <button type="button" onClick={() => { setModus('logginn'); setFeil('') }}>Logg inn</button></>
+              ) : (
+                <><button type="button" onClick={() => { setModus('logginn'); setFeil('') }}>← Tilbake til innlogging</button></>
               )}
             </p>
           </form>

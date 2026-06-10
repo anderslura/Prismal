@@ -1812,6 +1812,18 @@ textarea { resize: vertical; }
   margin: 0;
 }
 
+.modal-lenke {
+  background: none;
+  border: none;
+  color: var(--tekst-sekundaer);
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 0;
+  text-decoration: underline;
+  opacity: 0.75;
+}
+.modal-lenke:hover { opacity: 1; }
+
 .modal-bytt button {
   background: none;
   border: none;
