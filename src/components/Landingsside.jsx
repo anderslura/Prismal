@@ -101,9 +101,7 @@ export default function Landingsside({ onStart, onRegistrer }) {
             <span className="l2-tittel-grad">På minutter.</span>
           </h1>
           <p className="l2-undertittel">
-            Legg inn bedriften én gang — kunder, materialer og priser huskes automatisk.
-            Det som før krevde timevis å sette sammen, gjøres nå fra mobil eller PC
-            på sekunder. Resultatet ser mer profesjonelt ut enn noensinne.
+            Spar timer hver uke på tilbudsskriving. Kunder, materialer og priser huskes — du fyller inn, AI formulerer, tilbudet sendes. Fungerer for én mann og små team.
           </p>
           <div className="l2-cta-rad">
             <div className="l2-cta-alternativ">
