@@ -95,7 +95,7 @@ export default function Landingsside({ onStart, onRegistrer }) {
         <div className="l2-hero-glow l2-glow-1" />
         <div className="l2-hero-glow l2-glow-2" />
         <div className="l2-hero-inner">
-          <div className="l2-badge">For selvstendige håndverkere</div>
+          <div className="l2-badge">For fagfolk som sender tilbud</div>
           <h1 className="l2-tittel">
             Profesjonelle tilbud.<br />
             <span className="l2-tittel-grad">På minutter.</span>
