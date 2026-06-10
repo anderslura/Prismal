@@ -138,7 +138,7 @@ export async function lastNedPDF(skjema, isPro = true) {
   doc.setFont('helvetica', 'normal')
   doc.text('TILBUD TIL', margin, cy)
 
-  cy += 5
+  cy += 4
   doc.setTextColor(...fargeMork)
   doc.setFontSize(11)
   doc.setFont('helvetica', 'bold')
@@ -161,16 +161,16 @@ export async function lastNedPDF(skjema, isPro = true) {
   doc.setFontSize(11)
   doc.setFont('helvetica', 'bold')
   doc.text(`Tilbud`, margin, cy)
-  cy += 7
+  cy += 5
 
   doc.setTextColor(...fargeMork)
-  doc.setFontSize(9)
+  doc.setFontSize(8.5)
   doc.setFont('helvetica', 'normal')
 
   if (skjema.tilbudstekst) {
     const linjer = doc.splitTextToSize(skjema.tilbudstekst, sideBredde - margin * 2)
     doc.text(linjer, margin, cy)
-    cy += linjer.length * 5 + 8
+    cy += linjer.length * 4.5 + 5
   }
 
   // --- PRISTABELL ---
@@ -251,13 +251,13 @@ export async function lastNedPDF(skjema, isPro = true) {
 
   // --- GYLDIGHET + AKSEPTKLAUSUL ---
   const sideHoyde = doc.internal.pageSize.getHeight()
-  let gy = doc.lastAutoTable.finalY + 10
+  let gy = doc.lastAutoTable.finalY + 6
 
   // Sjekk om aksept-boks får plass, legg til side om ikke
   const akseptTekstTest = `For å godta dette tilbudet må skriftlig aksept sendes til ${skjema.firmaEpost || 'firmaets e-post'} innen tilbudets gyldighetsperiode. Muntlig aksept er ikke bindende.`
   const testLinjer = doc.splitTextToSize(akseptTekstTest, sideBredde - margin * 2 - 6)
   const behovHoyde = 8 + testLinjer.length * 5 + 24 + 20 // gyldighet + aksept + bunntekst + buffer
-  if (gy + behovHoyde > sideHoyde - 10) {
+  if (gy + behovHoyde > sideHoyde - 8) {
     doc.addPage()
     gy = margin
   }

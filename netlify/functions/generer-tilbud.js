@@ -43,7 +43,7 @@ DETALJER OM OPPDRAGET:
 - Materialer som inngår: ${materialListe}
 
 INSTRUKSJONER:
-- Skriv 3 korte avsnitt med vanlig løpende tekst
+- Skriv 2 korte avsnitt med vanlig løpende tekst
 - Start med en høflig innledning til kunden ved navn
 - Beskriv hva som skal gjøres og hvordan dere vil utføre det
 - Nevn eventuelle forbehold (f.eks. uforutsette forhold under arbeidet)
@@ -54,7 +54,7 @@ INSTRUKSJONER:
 - IKKE bruk plassholdere som [Telefonnummer] eller [E-postadresse]
 - Ren løpende tekst, ingen overskrifter, ingen lister, ingen punkter
 - Profesjonell, varm og norsk tone
-- Totalt ca. 200–250 ord`
+- Totalt maks 120–140 ord — vær konsis`
 
   try {
     const respons = await fetch('https://api.anthropic.com/v1/messages', {
@@ -66,7 +66,7 @@ INSTRUKSJONER:
       },
       body: JSON.stringify({
         model: brukModell,
-        max_tokens: 600,
+        max_tokens: 380,
         messages: [{ role: 'user', content: prompt }],
       }),
     })
