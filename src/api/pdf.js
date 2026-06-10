@@ -250,7 +250,17 @@ export async function lastNedPDF(skjema, isPro = true) {
   })
 
   // --- GYLDIGHET + AKSEPTKLAUSUL ---
+  const sideHoyde = doc.internal.pageSize.getHeight()
   let gy = doc.lastAutoTable.finalY + 10
+
+  // Sjekk om aksept-boks får plass, legg til side om ikke
+  const akseptTekstTest = `For å godta dette tilbudet må skriftlig aksept sendes til ${skjema.firmaEpost || 'firmaets e-post'} innen tilbudets gyldighetsperiode. Muntlig aksept er ikke bindende.`
+  const testLinjer = doc.splitTextToSize(akseptTekstTest, sideBredde - margin * 2 - 6)
+  const behovHoyde = 8 + testLinjer.length * 5 + 24 + 20 // gyldighet + aksept + bunntekst + buffer
+  if (gy + behovHoyde > sideHoyde - 10) {
+    doc.addPage()
+    gy = margin
+  }
 
   doc.setFontSize(8.5)
   doc.setTextColor(...fargeGraa)

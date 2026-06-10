@@ -295,11 +295,10 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
             <span title="Påslag">Påslag</span>
             <span></span>
           </div>
+          <p className="mat-info-tekst mat-info-antall">Kun linjer med antall &gt; 0 kommer med i tilbudet. 🗑 sletter fra biblioteket.</p>
 
           {/* EKSISTERENDE LINJER */}
-          {skjema.materialer.some(m => !m.antall || m.antall == 0) && (
-            <div className="mat-mal-hint"><span>Lagrede linjer — fyll inn antall for å ta dem med i tilbudet.</span><span className="mat-hint-piller"><span className="mat-hint-pill mat-hint-pill--x"><strong>×</strong> fjerner fra tilbudet</span><span className="mat-hint-pill mat-hint-pill--slett">🗑 sletter fra biblioteket</span></span></div>
-          )}
+
           {skjema.materialer.map(m => (
             <div key={m.id} className={`mat-rad${(!m.antall || m.antall == 0) ? ' mat-rad-mal' : ''}`}>
               <span className="mat-fast-navn">{m.navn}</span>
@@ -314,15 +313,11 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
               <span className="mat-sum">{formaterKr(m.sum||m.pris||0)}</span>
               <input type="checkbox" className="mat-paaslag-cb" checked={m.hasPaaslag}
                 onChange={e => oppdater('materialer', skjema.materialer.map(x => x.id===m.id ? {...x, hasPaaslag:e.target.checked} : x))} />
-              <div className="mat-knapp-gruppe">
-                <button className="btn-fjern" title="Fjern fra tilbudet" onClick={() => fjernMaterial(m.id)}>×</button>
-                <button className="btn-slett-lib" title="Slett fra bibliotek" onClick={() => slettFraLibraryOgTilbud(m.id)}>🗑</button>
-              </div>
+              <button className="btn-slett-lib" title="Slett fra bibliotek" onClick={() => slettFraLibraryOgTilbud(m.id)}>🗑</button>
             </div>
           ))}
 
           {/* NY LINJE */}
-          <p className="mat-info-tekst">Skriv beskrivelse for forslag fra biblioteket. Ny linje lagres automatisk.</p>
           <div className="mat-ny-wrapper">
             <div className="mat-rad mat-ny-rad">
               <div className="mat-ny-navn-wrapper">

@@ -103,6 +103,7 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
         {/* PRISTABELL */}
         <div className="dok-seksjon">
           <h3 className="dok-seksjon-tittel">Prisoversikt</h3>
+          <div className="pris-tabell-scroll">
           <table className="pris-tabell">
             <thead>
               <tr>
@@ -185,6 +186,7 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
               </tr>
             </tfoot>
           </table>
+          </div>
         </div>
 
         {/* BUNNTEKST */}

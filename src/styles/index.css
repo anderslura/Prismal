@@ -416,6 +416,11 @@ textarea { resize: vertical; }
 }
 
 /* === PRISTABELL === */
+.pris-tabell-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 -2px;
+}
 .pris-tabell {
   width: 100%;
   border-collapse: collapse;
@@ -863,7 +868,7 @@ textarea { resize: vertical; }
 /* === NY MATERIALTABELL === */
 .mat-header {
   display: grid;
-  grid-template-columns: 4fr 60px 80px 70px 32px 72px;
+  grid-template-columns: 4fr 60px 80px 70px 32px 36px;
   gap: 6px;
   font-size: 11px;
   font-weight: 600;
@@ -876,7 +881,7 @@ textarea { resize: vertical; }
 }
 .mat-rad {
   display: grid;
-  grid-template-columns: 4fr 60px 80px 70px 32px 72px;
+  grid-template-columns: 4fr 60px 80px 70px 32px 36px;
   gap: 6px;
   align-items: center;
   padding: 5px 2px;
@@ -924,6 +929,11 @@ textarea { resize: vertical; }
   padding-bottom: 1px;
 }
 
+.mat-info-antall {
+  font-size: 11px;
+  color: var(--tekst-sekundaer);
+  margin-bottom: 8px;
+}
 .mat-info-tekst {
   font-size: 11px;
   color: var(--tekst-sekundaer);
@@ -1644,7 +1654,7 @@ textarea { resize: vertical; }
   /* Material-tabell: tettere på liten skjerm */
   .mat-header,
   .mat-rad {
-    grid-template-columns: 1fr 44px 58px 52px 26px 50px;
+    grid-template-columns: 1fr 44px 58px 52px 26px 30px;
     gap: 4px;
   }
   .mat-header span:nth-child(5) { font-size: 0; } /* skjul "Påslag" tekst */
@@ -1661,7 +1671,7 @@ textarea { resize: vertical; }
   .skjema-seksjon { padding: 10px; }
 
   /* Sikre ingen overflow på hele siden */
-  .app, .app-main, .skjema-layout, .skjema-kolonne { max-width: 100%; overflow-x: hidden; }
+  .app, .app-main, .skjema-layout, .skjema-kolonne { max-width: 100%; }
 }
 
 /* ===========================
@@ -1962,6 +1972,9 @@ textarea { resize: vertical; }
     min-width: 120px;
     justify-content: center;
   }
+
+  /* Dokument padding */
+  .tilbud-dokument { padding: 20px 16px; }
 
   /* Dokument-layout */
   .dok-hode {
