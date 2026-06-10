@@ -292,7 +292,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
             <span>Ant.</span>
             <span>Kr</span>
             <span>Sum</span>
-            <span title="Påslag">Påslag</span>
+            <span title="Påslag">%</span>
             <span></span>
           </div>
           <p className="mat-info-tekst mat-info-antall">Kun linjer med antall kommer med i tilbudet.</p>
@@ -370,7 +370,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
             <input type="number" min="0" max="200" step="5" placeholder="0" value={skjema.paaslagProsent}
               onChange={e => oppdater('paaslagProsent', e.target.value)} className="paaslag-input" />
             <span className="paaslag-symbol">%</span>
-            {[10, 15, 20].map(p => (
+            {[10, 20, 30].map(p => (
               <button
                 key={p}
                 className={`paaslag-hurtig${parseFloat(skjema.paaslagProsent) === p ? ' aktiv' : ''}`}
