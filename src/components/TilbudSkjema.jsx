@@ -290,7 +290,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
 
           {/* EKSISTERENDE LINJER */}
           {skjema.materialer.some(m => !m.antall || m.antall == 0) && (
-            <p className="mat-mal-hint">Lagrede linjer — fyll inn antall for å ta dem med i tilbudet. × fjerner fra tilbudet · 🗑 sletter fra biblioteket.</p>
+            <div className="mat-mal-hint"><span>Lagrede linjer — fyll inn antall for å ta dem med i tilbudet.</span><span className="mat-hint-piller"><span className="mat-hint-pill mat-hint-pill--x"><strong>×</strong> fjerner fra tilbudet</span><span className="mat-hint-pill mat-hint-pill--slett">🗑 sletter fra biblioteket</span></span></div>
           )}
           {skjema.materialer.map(m => (
             <div key={m.id} className={`mat-rad${(!m.antall || m.antall == 0) ? ' mat-rad-mal' : ''}`}>
