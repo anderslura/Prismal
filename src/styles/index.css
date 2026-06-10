@@ -2411,3 +2411,37 @@ textarea { resize: vertical; }
   background: var(--blaa);
   color: #fff;
 }
+
+/* === TRANSPORT === */
+.transport-grid { display: flex; flex-direction: column; gap: 10px; }
+.transport-rad { display: flex; flex-direction: column; gap: 4px; }
+.transport-label { font-size: 13px; font-weight: 600; color: var(--tekst); }
+.transport-felt-rad {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.transport-input {
+  width: 80px;
+  padding: 6px 8px;
+  border: 1.5px solid var(--kant);
+  border-radius: var(--radius-liten);
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--tekst);
+  background: var(--bakgrunn);
+}
+.transport-input:focus {
+  outline: none;
+  border-color: var(--blaa);
+  box-shadow: 0 0 0 3px rgba(30,80,200,0.08);
+}
+.transport-sep { font-size: 13px; color: var(--tekst-sekundaer); }
+.transport-x   { font-size: 16px; color: var(--tekst-sekundaer); font-weight: 300; }
+.transport-sum {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--blaa);
+  margin-left: 4px;
+}

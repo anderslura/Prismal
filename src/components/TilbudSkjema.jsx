@@ -74,7 +74,10 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
   const totalMaterialer = skjema.materialer.reduce((s, m) => s + (parseFloat(m.sum)||0), 0)
   const materialerMedPaaslag = skjema.materialer.reduce((s, m) => s + (m.hasPaaslag ? (parseFloat(m.sum)||0) : 0), 0)
   const paaslag = materialerMedPaaslag * (parseFloat(skjema.paaslagProsent)||0) / 100
-  const totalSum = totalArbeid + totalMaterialer + paaslag
+  const kjoringSum = (parseFloat(skjema.kjoringKm)||0) * (parseFloat(skjema.kjoringSats)||0)
+  const bomSum     = (parseFloat(skjema.bomAntall)||0) * (parseFloat(skjema.bomPris)||0)
+  const totalTransport = kjoringSum + bomSum
+  const totalSum = totalArbeid + totalMaterialer + paaslag + totalTransport
 
   return (
     <div className="skjema-layout">
@@ -380,6 +383,54 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
           </div>
         </section>
 
+        {/* TRANSPORT */}
+        <section className="skjema-seksjon">
+          <h2 className="seksjon-tittel">Transport</h2>
+          <div className="transport-grid">
+            <div className="transport-rad">
+              <label className="transport-label">🚗 Kjøring</label>
+              <div className="transport-felt-rad">
+                <input
+                  type="number" min="0" placeholder="km"
+                  className="transport-input"
+                  value={skjema.kjoringKm}
+                  onChange={e => oppdater('kjoringKm', e.target.value)}
+                />
+                <span className="transport-sep">km</span>
+                <span className="transport-x">×</span>
+                <input
+                  type="number" min="0" step="0.1" placeholder="kr/km"
+                  className="transport-input"
+                  value={skjema.kjoringSats}
+                  onChange={e => oppdater('kjoringSats', e.target.value)}
+                />
+                <span className="transport-sep">kr/km</span>
+                {kjoringSum > 0 && <span className="transport-sum">{formaterKr(kjoringSum)}</span>}
+              </div>
+            </div>
+            <div className="transport-rad">
+              <label className="transport-label">🛣️ Bom / parkering</label>
+              <div className="transport-felt-rad">
+                <input
+                  type="number" min="0" placeholder="antall"
+                  className="transport-input"
+                  value={skjema.bomAntall}
+                  onChange={e => oppdater('bomAntall', e.target.value)}
+                />
+                <span className="transport-sep">×</span>
+                <input
+                  type="number" min="0" step="1" placeholder="kr"
+                  className="transport-input"
+                  value={skjema.bomPris}
+                  onChange={e => oppdater('bomPris', e.target.value)}
+                />
+                <span className="transport-sep">kr</span>
+                {bomSum > 0 && <span className="transport-sum">{formaterKr(bomSum)}</span>}
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* SUM */}
         {totalSum > 0 && (
           <section className="skjema-seksjon sum-seksjon">
@@ -388,6 +439,8 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
               {totalArbeid > 0 && <div className="sum-linje"><span>Arbeid</span><span>{formaterKr(totalArbeid)}</span></div>}
               {totalMaterialer > 0 && <div className="sum-linje"><span>Materialer</span><span>{formaterKr(totalMaterialer)}</span></div>}
               {paaslag > 0 && <div className="sum-linje"><span>Påslag {skjema.paaslagProsent}%</span><span>{formaterKr(paaslag)}</span></div>}
+              {kjoringSum > 0 && <div className="sum-linje"><span>Kjøring</span><span>{formaterKr(kjoringSum)}</span></div>}
+              {bomSum > 0 && <div className="sum-linje"><span>Bom / parkering</span><span>{formaterKr(bomSum)}</span></div>}
               <div className="sum-linje sum-total"><span>Total eks. mva</span><span>{formaterKr(totalSum)}</span></div>
               <div className="sum-linje sum-mva"><span>Inkl. 25% mva</span><span>{formaterKr(totalSum * 1.25)}</span></div>
             </div>

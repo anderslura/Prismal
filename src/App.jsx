@@ -15,6 +15,7 @@ const TOM_SKJEMA = {
   firmaOrgnr: '', firmaNettside: '', kundenavn: '', kundeAdresse: '',
   kundeEpost: '', kundeMobil: '', beskrivelse: '', arbeidere: [], materialer: [],
   logoUrl: '', tilbudstekst: '', pdfTema: 'standard',
+  kjoringKm: '', kjoringSats: '', bomAntall: '', bomPris: '',
   tilbudsnummer: '', dato: new Date().toLocaleDateString('no-NO'),
 }
 
@@ -249,7 +250,7 @@ function AppInnhold() {
           <TilbudPreview
             skjema={skjema}
             oppdaterTekst={(tekst) => oppdater('tilbudstekst', tekst)}
-            onLastNed={() => lastNedPDF(skjema, isPro)}
+            onLastNed={async () => await lastNedPDF(skjema, isPro)}
             onTilbake={() => setSteg('skjema')}
             onNyttTilbud={nullstill}
             isPro={isPro}

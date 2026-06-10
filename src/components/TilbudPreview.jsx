@@ -6,7 +6,9 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
   const totalMaterialer = skjema.materialer.reduce((s, m) => s + (parseFloat(m.sum) || (parseFloat(m.antall)||1) * (parseFloat(m.pris)||0)), 0)
   const materialerMedPaaslag = skjema.materialer.reduce((s, m) => s + (m.hasPaaslag ? (parseFloat(m.sum) || (parseFloat(m.antall)||1) * (parseFloat(m.pris)||0)) : 0), 0)
   const paaslag = materialerMedPaaslag * (parseFloat(skjema.paaslagProsent) || 0) / 100
-  const totalEksMva = totalArbeid + totalMaterialer + paaslag
+  const kjoringSum = (parseFloat(skjema.kjoringKm)||0) * (parseFloat(skjema.kjoringSats)||0)
+  const bomSum     = (parseFloat(skjema.bomAntall)||0) * (parseFloat(skjema.bomPris)||0)
+  const totalEksMva = totalArbeid + totalMaterialer + paaslag + kjoringSum + bomSum
   const totalInklMva = totalEksMva * 1.25
 
   return (
@@ -131,6 +133,22 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
                   <td className="td-antall"></td>
                   <td className="td-pris"></td>
                   <td className="td-sum">{formaterKr(paaslag)}</td>
+                </tr>
+              )}
+              {kjoringSum > 0 && (
+                <tr>
+                  <td>Kjøring</td>
+                  <td className="td-antall">{skjema.kjoringKm} km</td>
+                  <td className="td-pris">{formaterKr(skjema.kjoringSats)}/km</td>
+                  <td className="td-sum">{formaterKr(kjoringSum)}</td>
+                </tr>
+              )}
+              {bomSum > 0 && (
+                <tr>
+                  <td>Bom / parkering</td>
+                  <td className="td-antall">{skjema.bomAntall}</td>
+                  <td className="td-pris">{formaterKr(skjema.bomPris)}</td>
+                  <td className="td-sum">{formaterKr(bomSum)}</td>
                 </tr>
               )}
             </tbody>

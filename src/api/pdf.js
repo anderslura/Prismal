@@ -18,7 +18,27 @@ function temaFarge(temaId) {
   return kart[temaId] || kart.standard
 }
 
-export function lastNedPDF(skjema, isPro = true) {
+// Konverterer logo-URL til høy-res PNG via canvas (bevarer transparens, støtter SVG)
+async function logoTilPngData(url) {
+  return new Promise((resolve) => {
+    const img = new Image()
+    img.crossOrigin = 'anonymous'
+    img.onload = () => {
+      const skala = 3
+      const w = img.naturalWidth  * skala
+      const h = img.naturalHeight * skala
+      const canvas = document.createElement('canvas')
+      canvas.width  = w
+      canvas.height = h
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h)
+      resolve({ dataUrl: canvas.toDataURL('image/png'), w: img.naturalWidth, h: img.naturalHeight })
+    }
+    img.onerror = () => resolve(null)
+    img.src = url
+  })
+}
+
+export async function lastNedPDF(skjema, isPro = true) {
   const doc = new jsPDF({ unit: 'mm', format: 'a4' })
   const sideBredde = doc.internal.pageSize.getWidth()
   const margin = 20
@@ -64,14 +84,13 @@ export function lastNedPDF(skjema, isPro = true) {
   // Logo / firmanavn i header
   let tekstStartX = margin
   if (isPro && skjema.logoUrl) {
-    try {
-      const img = new Image()
-      img.src = skjema.logoUrl
+    const logoData = await logoTilPngData(skjema.logoUrl)
+    if (logoData) {
       const logoH = 16
-      const logoW = img.width && img.height ? (img.width / img.height) * logoH : logoH
-      doc.addImage(skjema.logoUrl, 'PNG', margin, 6, logoW, logoH)
+      const logoW = logoData.w && logoData.h ? (logoData.w / logoData.h) * logoH : logoH
+      doc.addImage(logoData.dataUrl, 'PNG', margin, 6, logoW, logoH)
       tekstStartX = margin + logoW + 4
-    } catch {}
+    }
   } else if (!isPro) {
     // Prismal-logo: tre diagonale striper (parallelogrammer)
     const sx = margin, sy = 6, sh = 16, sw = 14, gap = 1.5, w = 3.5
@@ -159,7 +178,9 @@ export function lastNedPDF(skjema, isPro = true) {
   const totalMaterialer = skjema.materialer.filter(m => (parseFloat(m.antall)||0) > 0).reduce((s, m) => s + (parseFloat(m.sum) || (parseFloat(m.pris)||0)*(parseFloat(m.antall)||1)), 0)
   const materialerMedPaaslag = skjema.materialer.filter(m => (parseFloat(m.antall)||0) > 0).reduce((s, m) => s + (m.hasPaaslag ? (parseFloat(m.sum)||(parseFloat(m.pris)||0)*(parseFloat(m.antall)||1)) : 0), 0)
   const paaslag = materialerMedPaaslag * (parseFloat(skjema.paaslagProsent) || 0) / 100
-  const totalEksMva = totalArbeid + totalMaterialer + paaslag
+  const kjoringSum2 = (parseFloat(skjema.kjoringKm)||0) * (parseFloat(skjema.kjoringSats)||0)
+  const bomSum2     = (parseFloat(skjema.bomAntall)||0) * (parseFloat(skjema.bomPris)||0)
+  const totalEksMva = totalArbeid + totalMaterialer + paaslag + kjoringSum2 + bomSum2
   const mva = totalEksMva * 0.25
   const totalInklMva = totalEksMva + mva
 
@@ -182,6 +203,20 @@ export function lastNedPDF(skjema, isPro = true) {
     const sumMedPaaslag = prisMedPaaslag * ant
     rader.push([m.navn, String(ant), kr(prisMedPaaslag), kr(sumMedPaaslag)])
   })
+
+  // Transport-rader
+  const kjoringKm   = parseFloat(skjema.kjoringKm)  || 0
+  const kjoringSats = parseFloat(skjema.kjoringSats) || 0
+  const kjoringSum  = kjoringKm * kjoringSats
+  if (kjoringKm > 0 && kjoringSats > 0) {
+    rader.push([`Kjøring`, `${kjoringKm} km`, kr(kjoringSats) + '/km', kr(kjoringSum)])
+  }
+  const bomAntall = parseFloat(skjema.bomAntall) || 0
+  const bomPris   = parseFloat(skjema.bomPris)   || 0
+  const bomSum    = bomAntall * bomPris
+  if (bomAntall > 0 && bomPris > 0) {
+    rader.push([`Bom/parkering`, String(bomAntall), kr(bomPris), kr(bomSum)])
+  }
 
   doc.autoTable({
     startY: cy,
