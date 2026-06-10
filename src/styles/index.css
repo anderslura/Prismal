@@ -2389,16 +2389,17 @@ textarea { resize: vertical; }
   align-items: center;
 }
 .btn-slett-lib {
-  background: none;
-  border: none;
+  background: #fff0f0;
+  border: 1px solid #fecaca;
+  border-radius: 5px;
   font-size: 0.85rem;
   cursor: pointer;
-  padding: 0 3px;
-  opacity: 0.25;
-  transition: opacity 0.15s;
+  padding: 3px 5px;
+  color: #e57373;
+  transition: background 0.15s, color 0.15s;
   line-height: 1;
 }
-.btn-slett-lib:hover { opacity: 1; }
+.btn-slett-lib:hover { background: #fee2e2; color: #c0392b; border-color: #f87171; }
 
 /* PDF-tema – hvit fargeprøve trenger border */
 .tema-fargeprøve-lys {
@@ -2519,3 +2520,19 @@ textarea { resize: vertical; }
   flex-shrink: 0;
 }
 .trans-legg-til-inline:hover { background: var(--blaa-mork); }
+
+.btn-legg-til-mat {
+  padding: 0 14px;
+  height: 34px;
+  background: var(--blaa);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+.btn-legg-til-mat:hover { background: var(--blaa-mork); }

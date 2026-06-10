@@ -295,7 +295,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
             <span title="Påslag">Påslag</span>
             <span></span>
           </div>
-          <p className="mat-info-tekst mat-info-antall">Kun linjer med antall &gt; 0 kommer med i tilbudet. 🗑 sletter fra biblioteket.</p>
+          <p className="mat-info-tekst mat-info-antall">Kun linjer med antall kommer med i tilbudet.</p>
 
           {/* EKSISTERENDE LINJER */}
 
@@ -355,7 +355,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                 className="mat-pris" onKeyDown={e => e.key==='Enter' && leggTilMaterial()} />
               <span className="mat-sum">{nyPris && nyAnt ? formaterKr((parseFloat(nyPris)||0)*(parseFloat(nyAnt)||1)) : ''}</span>
               <input type="checkbox" className="mat-paaslag-cb" checked={nyHasPaaslag} onChange={e => setNyHasPaaslag(e.target.checked)} />
-              <button onClick={leggTilMaterial} style={{padding:"0 12px",height:"34px",border:"1.5px solid var(--blaa)",borderRadius:"6px",background:"var(--hvit)",color:"var(--blaa)",fontWeight:600,fontSize:"13px",cursor:"pointer",whiteSpace:"nowrap"}}>Legg til</button>
+              <button onClick={leggTilMaterial} className="btn-legg-til-mat">Legg til</button>
             </div>
           </div>
         </section>
