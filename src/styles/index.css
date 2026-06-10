@@ -2536,3 +2536,6 @@ textarea { resize: vertical; }
   align-items: center;
 }
 .btn-legg-til-mat:hover { background: var(--blaa-mork); }
+
+.kunde-adr-wrapper { position: relative; }
+.adr-dropdown { position: absolute; top: 100%; left: 0; right: 0; z-index: 20; }

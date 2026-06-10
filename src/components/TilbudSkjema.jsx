@@ -254,7 +254,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
           <div className="felt-gruppe">
             <label>Beskrivelse av jobben <span className="paakrevd">*</span></label>
             <textarea rows={5} placeholder="Eks: male stue, bytte vinduer på bad, legge terrassebord..." value={skjema.beskrivelse} onChange={e => oppdater('beskrivelse', e.target.value)} />
-            <p className="felt-hint">AI skriver profesjonelt tilbudsspråk basert på dette. Adresse hentes fra kundeinformasjon. Teksten kan redigeres etter generering.</p>
+            <p className="felt-hint">Skriv gjerne i stikkord, ufullstendige setninger eller med skrivefeil — AI omformer dette til profesjonell tilbudstekst. Du kan alltid redigere resultatet etterpå.</p>
           </div>
         </section>
 

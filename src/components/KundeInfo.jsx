@@ -21,6 +21,8 @@ export default function KundeInfo({ kunde, onChange, onNullstill }) {
   const [endret, setEndret] = useState(false)
   const [slettStatus, setSlettStatus] = useState('') // '' | 'bekreft' | 'laster'
   const navnTimer = useRef(null)
+  const adrTimer  = useRef(null)
+  const [adrForslag, setAdrForslag] = useState([])
 
   // Sync ved nullstill fra parent
   useEffect(() => {
@@ -75,6 +77,18 @@ export default function KundeInfo({ kunde, onChange, onNullstill }) {
     } catch (err) {
       console.error('Slett feilet:', err)
     }
+  }
+
+  async function sokAdresse(verdi) {
+    if (verdi.length < 3) { setAdrForslag([]); return }
+    clearTimeout(adrTimer.current)
+    adrTimer.current = setTimeout(async () => {
+      try {
+        const res = await fetch(`https://api.adresse.data.no/sok?sok=${encodeURIComponent(verdi)}&treffPerSide=6&asciiKompatibel=true`)
+        const json = await res.json()
+        setAdrForslag((json.adresser || []).map(a => `${a.adressetekst}, ${a.postnummer} ${a.poststed}`))
+      } catch {}
+    }, 250)
   }
 
   async function lagreKlikk() {
@@ -172,14 +186,25 @@ export default function KundeInfo({ kunde, onChange, onNullstill }) {
         )}
       </div>
 
-      <div className="felt-gruppe">
+      <div className="felt-gruppe kunde-adr-wrapper">
         <label>Adresse</label>
         <input
           type="text"
           placeholder="Hjemveien 5, 0002 Oslo"
           value={kunde.kundeAdresse}
-          onChange={e => { onChange('kundeAdresse', e.target.value); setEndret(true) }}
+          autoComplete="off"
+          onChange={e => { onChange('kundeAdresse', e.target.value); setEndret(true); sokAdresse(e.target.value) }}
+          onBlur={() => setTimeout(() => setAdrForslag([]), 200)}
         />
+        {adrForslag.length > 0 && (
+          <ul className="kunde-dropdown adr-dropdown">
+            {adrForslag.map((adr, i) => (
+              <li key={i} onMouseDown={() => { onChange('kundeAdresse', adr); setEndret(true); setAdrForslag([]) }}>
+                <span className="kunde-dropdown-navn">{adr}</span>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       <div className="felt-gruppe">
