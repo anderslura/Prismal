@@ -7,8 +7,9 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
   const materialerMedPaaslag = skjema.materialer.reduce((s, m) => s + (m.hasPaaslag ? (parseFloat(m.sum) || (parseFloat(m.antall)||1) * (parseFloat(m.pris)||0)) : 0), 0)
   const paaslag = materialerMedPaaslag * (parseFloat(skjema.paaslagProsent) || 0) / 100
   const kjoringSum = (parseFloat(skjema.kjoringKm)||0) * (parseFloat(skjema.kjoringSats)||0)
-  const bomSum     = (parseFloat(skjema.bomAntall)||0) * (parseFloat(skjema.bomPris)||0)
-  const totalEksMva = totalArbeid + totalMaterialer + paaslag + kjoringSum + bomSum
+  const bomSum     = (skjema.bom   || []).reduce((s, b) => s + (parseFloat(b.antall)||0)*(parseFloat(b.pris)||0), 0)
+  const fergeSum   = (skjema.ferge || []).reduce((s, f) => s + (parseFloat(f.antall)||0)*(parseFloat(f.pris)||0), 0)
+  const totalEksMva = totalArbeid + totalMaterialer + paaslag + kjoringSum + bomSum + fergeSum
   const totalInklMva = totalEksMva * 1.25
 
   return (
@@ -143,14 +144,22 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
                   <td className="td-sum">{formaterKr(kjoringSum)}</td>
                 </tr>
               )}
-              {bomSum > 0 && (
-                <tr>
+              {(skjema.bom || []).filter(b => (parseFloat(b.antall)||0)*(parseFloat(b.pris)||0) > 0).map((b, i) => (
+                <tr key={b.id || i}>
                   <td>Bom / parkering</td>
-                  <td className="td-antall">{skjema.bomAntall}</td>
-                  <td className="td-pris">{formaterKr(skjema.bomPris)}</td>
-                  <td className="td-sum">{formaterKr(bomSum)}</td>
+                  <td className="td-antall">{b.antall}</td>
+                  <td className="td-pris">{formaterKr(b.pris)}</td>
+                  <td className="td-sum">{formaterKr((parseFloat(b.antall)||0)*(parseFloat(b.pris)||0))}</td>
                 </tr>
-              )}
+              ))}
+              {(skjema.ferge || []).filter(f => (parseFloat(f.antall)||0)*(parseFloat(f.pris)||0) > 0).map((f, i) => (
+                <tr key={f.id || i}>
+                  <td>Ferge</td>
+                  <td className="td-antall">{f.antall}</td>
+                  <td className="td-pris">{formaterKr(f.pris)}</td>
+                  <td className="td-sum">{formaterKr((parseFloat(f.antall)||0)*(parseFloat(f.pris)||0))}</td>
+                </tr>
+              ))}
             </tbody>
             <tfoot>
               <tr className="tfoot-eks-mva">

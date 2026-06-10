@@ -179,8 +179,9 @@ export async function lastNedPDF(skjema, isPro = true) {
   const materialerMedPaaslag = skjema.materialer.filter(m => (parseFloat(m.antall)||0) > 0).reduce((s, m) => s + (m.hasPaaslag ? (parseFloat(m.sum)||(parseFloat(m.pris)||0)*(parseFloat(m.antall)||1)) : 0), 0)
   const paaslag = materialerMedPaaslag * (parseFloat(skjema.paaslagProsent) || 0) / 100
   const kjoringSum2 = (parseFloat(skjema.kjoringKm)||0) * (parseFloat(skjema.kjoringSats)||0)
-  const bomSum2     = (parseFloat(skjema.bomAntall)||0) * (parseFloat(skjema.bomPris)||0)
-  const totalEksMva = totalArbeid + totalMaterialer + paaslag + kjoringSum2 + bomSum2
+  const bomSum2     = (skjema.bom   || []).reduce((s, b) => s + (parseFloat(b.antall)||0)*(parseFloat(b.pris)||0), 0)
+  const fergeSum2   = (skjema.ferge || []).reduce((s, f) => s + (parseFloat(f.antall)||0)*(parseFloat(f.pris)||0), 0)
+  const totalEksMva = totalArbeid + totalMaterialer + paaslag + kjoringSum2 + bomSum2 + fergeSum2
   const mva = totalEksMva * 0.25
   const totalInklMva = totalEksMva + mva
 
@@ -209,14 +210,16 @@ export async function lastNedPDF(skjema, isPro = true) {
   const kjoringSats = parseFloat(skjema.kjoringSats) || 0
   const kjoringSum  = kjoringKm * kjoringSats
   if (kjoringKm > 0 && kjoringSats > 0) {
-    rader.push([`Kjøring`, `${kjoringKm} km`, kr(kjoringSats) + '/km', kr(kjoringSum)])
+    rader.push(['Kjøring', `${kjoringKm} km`, kr(kjoringSats) + '/km', kr(kjoringSum)])
   }
-  const bomAntall = parseFloat(skjema.bomAntall) || 0
-  const bomPris   = parseFloat(skjema.bomPris)   || 0
-  const bomSum    = bomAntall * bomPris
-  if (bomAntall > 0 && bomPris > 0) {
-    rader.push([`Bom/parkering`, String(bomAntall), kr(bomPris), kr(bomSum)])
-  }
+  ;(skjema.bom || []).forEach(b => {
+    const ant = parseFloat(b.antall)||0, pris = parseFloat(b.pris)||0
+    if (ant > 0 && pris > 0) rader.push(['Bom / parkering', String(ant), kr(pris), kr(ant*pris)])
+  })
+  ;(skjema.ferge || []).forEach(f => {
+    const ant = parseFloat(f.antall)||0, pris = parseFloat(f.pris)||0
+    if (ant > 0 && pris > 0) rader.push(['Ferge', String(ant), kr(pris), kr(ant*pris)])
+  })
 
   doc.autoTable({
     startY: cy,

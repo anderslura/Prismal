@@ -15,7 +15,7 @@ const TOM_SKJEMA = {
   firmaOrgnr: '', firmaNettside: '', kundenavn: '', kundeAdresse: '',
   kundeEpost: '', kundeMobil: '', beskrivelse: '', arbeidere: [], materialer: [],
   logoUrl: '', tilbudstekst: '', pdfTema: 'standard',
-  kjoringKm: '', kjoringSats: '', bomAntall: '', bomPris: '',
+  kjoringKm: '', kjoringSats: '', bom: [], ferge: [],
   tilbudsnummer: '', dato: new Date().toLocaleDateString('no-NO'),
 }
 
@@ -38,6 +38,15 @@ function hentLagretLogo() {
 function hentLagretPrisliste() {
   try { return JSON.parse(localStorage.getItem('prisliste') || '[]') } catch { return [] }
 }
+function hentLagretKjoringSats() {
+  try { return localStorage.getItem('transport_kjoring_sats') || '' } catch { return '' }
+}
+function hentLagretTransportMal(key) {
+  try {
+    const priser = JSON.parse(localStorage.getItem(key) || '[""]')
+    return priser.map((pris, i) => ({ id: i + 1, antall: '', pris: String(pris || '') }))
+  } catch { return [{ id: 1, antall: '', pris: '' }] }
+}
 
 function AppInnhold() {
   const {
@@ -52,6 +61,9 @@ function AppInnhold() {
     logoUrl: isPro ? hentLagretLogo() : '',
     arbeidere: [{ id: 1, navn: 'Fagarbeider', timer: '', timepris: hentLagretTimepris() }],
     materialer: hentLagretMaterialMal(),
+    kjoringSats: hentLagretKjoringSats(),
+    bom: hentLagretTransportMal('transport_bom_priser'),
+    ferge: hentLagretTransportMal('transport_ferge_priser'),
     tilbudsnummer: genererTilbudsnummer(),
   }))
   const [prisliste, setPrisliste] = useState(hentLagretPrisliste)
@@ -136,6 +148,12 @@ function AppInnhold() {
     localStorage.setItem('prisliste', JSON.stringify(prisliste))
   }, [prisliste])
 
+  useEffect(() => {
+    localStorage.setItem('transport_kjoring_sats', skjema.kjoringSats || '')
+    if (skjema.bom?.length) localStorage.setItem('transport_bom_priser', JSON.stringify(skjema.bom.map(b => b.pris)))
+    if (skjema.ferge?.length) localStorage.setItem('transport_ferge_priser', JSON.stringify(skjema.ferge.map(f => f.pris)))
+  }, [skjema.kjoringSats, skjema.bom, skjema.ferge])
+
   function oppdater(felt, verdi) {
     setSkjema(prev => ({ ...prev, [felt]: verdi }))
   }
@@ -172,6 +190,10 @@ function AppInnhold() {
       logoUrl: isPro ? hentLagretLogo() : '',
       arbeidere: [{ id: Date.now(), navn: 'Fagarbeider', timer: '', timepris: hentLagretTimepris() }],
       materialer: forhandslagte,
+      kjoringKm: '',
+      kjoringSats: hentLagretKjoringSats(),
+      bom: hentLagretTransportMal('transport_bom_priser'),
+      ferge: hentLagretTransportMal('transport_ferge_priser'),
       tilbudsnummer: genererTilbudsnummer(),
     })
     setSteg('skjema')

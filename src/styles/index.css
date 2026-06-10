@@ -2413,35 +2413,48 @@ textarea { resize: vertical; }
 }
 
 /* === TRANSPORT === */
-.transport-grid { display: flex; flex-direction: column; gap: 10px; }
-.transport-rad { display: flex; flex-direction: column; gap: 4px; }
-.transport-label { font-size: 13px; font-weight: 600; color: var(--tekst); }
-.transport-felt-rad {
+.transport-grid   { display: flex; flex-direction: column; gap: 14px; }
+.transport-gruppe { display: flex; flex-direction: column; gap: 4px; }
+.transport-label  { font-size: 12px; font-weight: 600; color: var(--tekst-sekundaer); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 2px; }
+.transport-inline-rad {
   display: flex;
   align-items: center;
   gap: 6px;
   flex-wrap: wrap;
 }
-.transport-input {
-  width: 80px;
-  padding: 6px 8px;
+.transport-input-sm {
+  width: 72px;
+  padding: 5px 8px;
   border: 1.5px solid var(--kant);
   border-radius: var(--radius-liten);
   font-size: 14px;
   font-family: inherit;
   color: var(--tekst);
   background: var(--bakgrunn);
+  text-align: right;
 }
-.transport-input:focus {
+.transport-input-sm:focus {
   outline: none;
   border-color: var(--blaa);
   box-shadow: 0 0 0 3px rgba(30,80,200,0.08);
 }
-.transport-sep { font-size: 13px; color: var(--tekst-sekundaer); }
-.transport-x   { font-size: 16px; color: var(--tekst-sekundaer); font-weight: 300; }
-.transport-sum {
-  font-weight: 700;
-  font-size: 14px;
-  color: var(--blaa);
-  margin-left: 4px;
+.transport-enhet { font-size: 12px; color: var(--tekst-sekundaer); }
+.transport-x     { font-size: 14px; color: var(--tekst-sekundaer); font-weight: 300; padding: 0 1px; }
+.transport-sum   { font-weight: 700; font-size: 13px; color: var(--blaa); margin-left: 2px; }
+.transport-fjern {
+  background: none; border: none; cursor: pointer;
+  color: var(--tekst-sekundaer); font-size: 16px; padding: 0 2px; line-height: 1;
 }
+.transport-fjern:hover { color: #c0392b; }
+.transport-legg-til {
+  margin-top: 3px;
+  background: none;
+  border: 1.5px dashed var(--kant);
+  border-radius: var(--radius-liten);
+  padding: 3px 10px;
+  font-size: 12px;
+  color: var(--tekst-sekundaer);
+  cursor: pointer;
+  width: fit-content;
+}
+.transport-legg-til:hover { border-color: var(--blaa); color: var(--blaa); }

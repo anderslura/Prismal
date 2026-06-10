@@ -44,6 +44,8 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
   }
 
 
+  function oppdaterBomRad(id, felt, val) { oppdater('bom', skjema.bom.map(b => b.id === id ? {...b, [felt]: val} : b)) }
+  function oppdaterFergeRad(id, felt, val) { oppdater('ferge', skjema.ferge.map(f => f.id === id ? {...f, [felt]: val} : f)) }
   function oppdaterMaterial(id, felt, verdi) {
     oppdater('materialer', skjema.materialer.map(m => {
       if (m.id !== id) return m
@@ -74,9 +76,10 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
   const totalMaterialer = skjema.materialer.reduce((s, m) => s + (parseFloat(m.sum)||0), 0)
   const materialerMedPaaslag = skjema.materialer.reduce((s, m) => s + (m.hasPaaslag ? (parseFloat(m.sum)||0) : 0), 0)
   const paaslag = materialerMedPaaslag * (parseFloat(skjema.paaslagProsent)||0) / 100
-  const kjoringSum = (parseFloat(skjema.kjoringKm)||0) * (parseFloat(skjema.kjoringSats)||0)
-  const bomSum     = (parseFloat(skjema.bomAntall)||0) * (parseFloat(skjema.bomPris)||0)
-  const totalTransport = kjoringSum + bomSum
+  const kjoringSum    = (parseFloat(skjema.kjoringKm)||0) * (parseFloat(skjema.kjoringSats)||0)
+  const bomSum        = (skjema.bom   || []).reduce((s, b) => s + (parseFloat(b.antall)||0)*(parseFloat(b.pris)||0), 0)
+  const fergeSum      = (skjema.ferge || []).reduce((s, f) => s + (parseFloat(f.antall)||0)*(parseFloat(f.pris)||0), 0)
+  const totalTransport = kjoringSum + bomSum + fergeSum
   const totalSum = totalArbeid + totalMaterialer + paaslag + totalTransport
 
   return (
@@ -387,47 +390,68 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
         <section className="skjema-seksjon">
           <h2 className="seksjon-tittel">Transport</h2>
           <div className="transport-grid">
-            <div className="transport-rad">
-              <label className="transport-label">🚗 Kjøring</label>
-              <div className="transport-felt-rad">
-                <input
-                  type="number" min="0" placeholder="km"
-                  className="transport-input"
-                  value={skjema.kjoringKm}
-                  onChange={e => oppdater('kjoringKm', e.target.value)}
-                />
-                <span className="transport-sep">km</span>
+
+            {/* Kjøring */}
+            <div className="transport-gruppe">
+              <span className="transport-label">Kjøring</span>
+              <div className="transport-inline-rad">
+                <input type="number" min="0" placeholder="0" className="transport-input-sm"
+                  value={skjema.kjoringKm} onChange={e => oppdater('kjoringKm', e.target.value)} />
+                <span className="transport-enhet">km</span>
                 <span className="transport-x">×</span>
-                <input
-                  type="number" min="0" step="0.1" placeholder="kr/km"
-                  className="transport-input"
-                  value={skjema.kjoringSats}
-                  onChange={e => oppdater('kjoringSats', e.target.value)}
-                />
-                <span className="transport-sep">kr/km</span>
+                <input type="number" min="0" step="0.1" placeholder="0" className="transport-input-sm"
+                  value={skjema.kjoringSats} onChange={e => oppdater('kjoringSats', e.target.value)} />
+                <span className="transport-enhet">kr/km</span>
                 {kjoringSum > 0 && <span className="transport-sum">{formaterKr(kjoringSum)}</span>}
               </div>
             </div>
-            <div className="transport-rad">
-              <label className="transport-label">🛣️ Bom / parkering</label>
-              <div className="transport-felt-rad">
-                <input
-                  type="number" min="0" placeholder="antall"
-                  className="transport-input"
-                  value={skjema.bomAntall}
-                  onChange={e => oppdater('bomAntall', e.target.value)}
-                />
-                <span className="transport-sep">×</span>
-                <input
-                  type="number" min="0" step="1" placeholder="kr"
-                  className="transport-input"
-                  value={skjema.bomPris}
-                  onChange={e => oppdater('bomPris', e.target.value)}
-                />
-                <span className="transport-sep">kr</span>
-                {bomSum > 0 && <span className="transport-sum">{formaterKr(bomSum)}</span>}
-              </div>
+
+            {/* Bom */}
+            <div className="transport-gruppe">
+              <span className="transport-label">Bom / parkering</span>
+              {(skjema.bom || []).map(b => {
+                const s = (parseFloat(b.antall)||0)*(parseFloat(b.pris)||0)
+                return (
+                  <div key={b.id} className="transport-inline-rad">
+                    <input type="number" min="0" placeholder="0" className="transport-input-sm"
+                      value={b.antall} onChange={e => oppdaterBomRad(b.id, 'antall', e.target.value)} />
+                    <span className="transport-x">×</span>
+                    <input type="number" min="0" placeholder="0" className="transport-input-sm"
+                      value={b.pris} onChange={e => oppdaterBomRad(b.id, 'pris', e.target.value)} />
+                    <span className="transport-enhet">kr</span>
+                    {s > 0 && <span className="transport-sum">{formaterKr(s)}</span>}
+                    {skjema.bom.length > 1 && (
+                      <button className="transport-fjern" onClick={() => oppdater('bom', skjema.bom.filter(x => x.id !== b.id))}>×</button>
+                    )}
+                  </div>
+                )
+              })}
+              <button className="transport-legg-til" onClick={() => oppdater('bom', [...(skjema.bom||[]), { id: Date.now(), antall: '', pris: '' }])}>+ Legg til rad</button>
             </div>
+
+            {/* Ferge */}
+            <div className="transport-gruppe">
+              <span className="transport-label">Ferge</span>
+              {(skjema.ferge || []).map(f => {
+                const s = (parseFloat(f.antall)||0)*(parseFloat(f.pris)||0)
+                return (
+                  <div key={f.id} className="transport-inline-rad">
+                    <input type="number" min="0" placeholder="0" className="transport-input-sm"
+                      value={f.antall} onChange={e => oppdaterFergeRad(f.id, 'antall', e.target.value)} />
+                    <span className="transport-x">×</span>
+                    <input type="number" min="0" placeholder="0" className="transport-input-sm"
+                      value={f.pris} onChange={e => oppdaterFergeRad(f.id, 'pris', e.target.value)} />
+                    <span className="transport-enhet">kr</span>
+                    {s > 0 && <span className="transport-sum">{formaterKr(s)}</span>}
+                    {skjema.ferge.length > 1 && (
+                      <button className="transport-fjern" onClick={() => oppdater('ferge', skjema.ferge.filter(x => x.id !== f.id))}>×</button>
+                    )}
+                  </div>
+                )
+              })}
+              <button className="transport-legg-til" onClick={() => oppdater('ferge', [...(skjema.ferge||[]), { id: Date.now(), antall: '', pris: '' }])}>+ Legg til rad</button>
+            </div>
+
           </div>
         </section>
 
@@ -440,7 +464,8 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
               {totalMaterialer > 0 && <div className="sum-linje"><span>Materialer</span><span>{formaterKr(totalMaterialer)}</span></div>}
               {paaslag > 0 && <div className="sum-linje"><span>Påslag {skjema.paaslagProsent}%</span><span>{formaterKr(paaslag)}</span></div>}
               {kjoringSum > 0 && <div className="sum-linje"><span>Kjøring</span><span>{formaterKr(kjoringSum)}</span></div>}
-              {bomSum > 0 && <div className="sum-linje"><span>Bom / parkering</span><span>{formaterKr(bomSum)}</span></div>}
+              {bomSum   > 0 && <div className="sum-linje"><span>Bom / parkering</span><span>{formaterKr(bomSum)}</span></div>}
+              {fergeSum > 0 && <div className="sum-linje"><span>Ferge</span><span>{formaterKr(fergeSum)}</span></div>}
               <div className="sum-linje sum-total"><span>Total eks. mva</span><span>{formaterKr(totalSum)}</span></div>
               <div className="sum-linje sum-mva"><span>Inkl. 25% mva</span><span>{formaterKr(totalSum * 1.25)}</span></div>
             </div>
