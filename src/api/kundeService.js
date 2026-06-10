@@ -11,6 +11,18 @@ export async function hentKundePaMobil(mobil) {
   return data // null hvis ikke funnet
 }
 
+// Live adresse-søk
+export async function sokKunderPaAdresse(sok) {
+  const { data, error } = await supabase
+    .from('kunder')
+    .select('*')
+    .ilike('adresse', `%${sok}%`)
+    .order('navn')
+    .limit(6)
+  if (error) throw error
+  return data ?? []
+}
+
 // Live navn-søk (etter 2 tegn)
 export async function sokKunderPaNavn(sok) {
   const { data, error } = await supabase

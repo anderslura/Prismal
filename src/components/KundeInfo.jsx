@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { hentKundePaMobil, sokKunderPaNavn, lagreKunde, slettKunde } from '../api/kundeService.js'
+import { hentKundePaMobil, sokKunderPaNavn, sokKunderPaAdresse, lagreKunde, slettKunde } from '../api/kundeService.js'
 import { useAuth } from '../contexts/AuthContext.jsx'
 
 /**
@@ -80,14 +80,10 @@ export default function KundeInfo({ kunde, onChange, onNullstill }) {
   }
 
   async function sokAdresse(verdi) {
-    if (verdi.length < 3) { setAdrForslag([]); return }
+    if (!innlogget || verdi.length < 2) { setAdrForslag([]); return }
     clearTimeout(adrTimer.current)
     adrTimer.current = setTimeout(async () => {
-      try {
-        const res = await fetch(`https://api.adresse.data.no/sok?sok=${encodeURIComponent(verdi)}&treffPerSide=6&asciiKompatibel=true`)
-        const json = await res.json()
-        setAdrForslag((json.adresser || []).map(a => `${a.adressetekst}, ${a.postnummer} ${a.poststed}`))
-      } catch {}
+      try { setAdrForslag(await sokKunderPaAdresse(verdi)) } catch {}
     }, 250)
   }
 
@@ -198,9 +194,12 @@ export default function KundeInfo({ kunde, onChange, onNullstill }) {
         />
         {adrForslag.length > 0 && (
           <ul className="kunde-dropdown adr-dropdown">
-            {adrForslag.map((adr, i) => (
-              <li key={i} onMouseDown={() => { onChange('kundeAdresse', adr); setEndret(true); setAdrForslag([]) }}>
-                <span className="kunde-dropdown-navn">{adr}</span>
+            {adrForslag.map(k => (
+              <li key={k.id} onMouseDown={() => { fyllInnKunde(k); setLastetFraDb(true); setAdrForslag([]) }}>
+                <div className="kunde-dropdown-info">
+                  <span className="kunde-dropdown-navn">{k.adresse}</span>
+                  <span className="kunde-dropdown-meta">{k.navn}{k.mobil ? ` · ${k.mobil}` : ''}</span>
+                </div>
               </li>
             ))}
           </ul>
