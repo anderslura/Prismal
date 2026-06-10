@@ -45,6 +45,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
 
 
   function oppdaterBomRad(id, felt, val) { oppdater('bom', skjema.bom.map(b => b.id === id ? {...b, [felt]: val} : b)) }
+  function oppdaterParkeringRad(id, felt, val) { oppdater('parkering', skjema.parkering.map(p => p.id === id ? {...p, [felt]: val} : p)) }
   function oppdaterFergeRad(id, felt, val) { oppdater('ferge', skjema.ferge.map(f => f.id === id ? {...f, [felt]: val} : f)) }
   function oppdaterMaterial(id, felt, verdi) {
     oppdater('materialer', skjema.materialer.map(m => {
@@ -77,9 +78,10 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
   const materialerMedPaaslag = skjema.materialer.reduce((s, m) => s + (m.hasPaaslag ? (parseFloat(m.sum)||0) : 0), 0)
   const paaslag = materialerMedPaaslag * (parseFloat(skjema.paaslagProsent)||0) / 100
   const kjoringSum    = (parseFloat(skjema.kjoringKm)||0) * (parseFloat(skjema.kjoringSats)||0)
-  const bomSum        = (skjema.bom   || []).reduce((s, b) => s + (parseFloat(b.antall)||0)*(parseFloat(b.pris)||0), 0)
-  const fergeSum      = (skjema.ferge || []).reduce((s, f) => s + (parseFloat(f.antall)||0)*(parseFloat(f.pris)||0), 0)
-  const totalTransport = kjoringSum + bomSum + fergeSum
+  const bomSum        = (skjema.bom       || []).reduce((s, b) => s + (parseFloat(b.antall)||0)*(parseFloat(b.pris)||0), 0)
+  const parkeringSum  = (skjema.parkering  || []).reduce((s, p) => s + (parseFloat(p.antall)||0)*(parseFloat(p.pris)||0), 0)
+  const fergeSum      = (skjema.ferge      || []).reduce((s, f) => s + (parseFloat(f.antall)||0)*(parseFloat(f.pris)||0), 0)
+  const totalTransport = kjoringSum + bomSum + parkeringSum + fergeSum
   const totalSum = totalArbeid + totalMaterialer + paaslag + totalTransport
 
   return (
@@ -417,7 +419,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
             const s = (parseFloat(b.antall)||0)*(parseFloat(b.pris)||0)
             return (
               <div key={b.id} className="trans-rad">
-                <span className="trans-navn">Bom / parkering</span>
+                <span className="trans-navn">Bom</span>
                 <input type="number" min="0" placeholder="0"
                   className="trans-input" value={b.antall}
                   onChange={e => oppdaterBomRad(b.id, 'antall', e.target.value)} />
@@ -433,6 +435,29 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
           })}
           <button className="trans-legg-til" onClick={() => oppdater('bom', [...(skjema.bom||[]), { id: Date.now(), antall: '', pris: '' }])}>
             + Legg til bom-rad
+          </button>
+
+          {/* Parkering */}
+          {(skjema.parkering || []).map(p => {
+            const s = (parseFloat(p.antall)||0)*(parseFloat(p.pris)||0)
+            return (
+              <div key={p.id} className="trans-rad">
+                <span className="trans-navn">Parkering</span>
+                <input type="number" min="0" placeholder="0"
+                  className="trans-input" value={p.antall}
+                  onChange={e => oppdaterParkeringRad(p.id, 'antall', e.target.value)} />
+                <input type="number" min="0" placeholder="0"
+                  className="trans-input" value={p.pris}
+                  onChange={e => oppdaterParkeringRad(p.id, 'pris', e.target.value)} />
+                <span className="trans-sum">{s > 0 ? formaterKr(s) : ''}</span>
+                {skjema.parkering.length > 1
+                  ? <button className="btn-fjern" onClick={() => oppdater('parkering', skjema.parkering.filter(x => x.id !== p.id))}>×</button>
+                  : <span></span>}
+              </div>
+            )
+          })}
+          <button className="trans-legg-til" onClick={() => oppdater('parkering', [...(skjema.parkering||[]), { id: Date.now(), antall: '', pris: '' }])}>
+            + Legg til parkering-rad
           </button>
 
           {/* Ferge */}
@@ -469,8 +494,9 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
               {totalMaterialer > 0 && <div className="sum-linje"><span>Materialer</span><span>{formaterKr(totalMaterialer)}</span></div>}
               {paaslag > 0 && <div className="sum-linje"><span>Påslag {skjema.paaslagProsent}%</span><span>{formaterKr(paaslag)}</span></div>}
               {kjoringSum > 0 && <div className="sum-linje"><span>Kjøring</span><span>{formaterKr(kjoringSum)}</span></div>}
-              {bomSum   > 0 && <div className="sum-linje"><span>Bom / parkering</span><span>{formaterKr(bomSum)}</span></div>}
-              {fergeSum > 0 && <div className="sum-linje"><span>Ferge</span><span>{formaterKr(fergeSum)}</span></div>}
+              {bomSum       > 0 && <div className="sum-linje"><span>Bom</span><span>{formaterKr(bomSum)}</span></div>}
+              {parkeringSum > 0 && <div className="sum-linje"><span>Parkering</span><span>{formaterKr(parkeringSum)}</span></div>}
+              {fergeSum     > 0 && <div className="sum-linje"><span>Ferge</span><span>{formaterKr(fergeSum)}</span></div>}
               <div className="sum-linje sum-total"><span>Total eks. mva</span><span>{formaterKr(totalSum)}</span></div>
               <div className="sum-linje sum-mva"><span>Inkl. 25% mva</span><span>{formaterKr(totalSum * 1.25)}</span></div>
             </div>

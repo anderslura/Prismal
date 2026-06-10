@@ -15,7 +15,7 @@ const TOM_SKJEMA = {
   firmaOrgnr: '', firmaNettside: '', kundenavn: '', kundeAdresse: '',
   kundeEpost: '', kundeMobil: '', beskrivelse: '', arbeidere: [], materialer: [],
   logoUrl: '', tilbudstekst: '', pdfTema: 'standard',
-  kjoringKm: '', kjoringSats: '', bom: [], ferge: [],
+  kjoringKm: '', kjoringSats: '', bom: [], parkering: [], ferge: [],
   tilbudsnummer: '', dato: new Date().toLocaleDateString('no-NO'),
 }
 
@@ -63,6 +63,7 @@ function AppInnhold() {
     materialer: hentLagretMaterialMal(),
     kjoringSats: hentLagretKjoringSats(),
     bom: hentLagretTransportMal('transport_bom_priser'),
+    parkering: hentLagretTransportMal('transport_parkering_priser'),
     ferge: hentLagretTransportMal('transport_ferge_priser'),
     tilbudsnummer: genererTilbudsnummer(),
   }))
@@ -151,8 +152,9 @@ function AppInnhold() {
   useEffect(() => {
     localStorage.setItem('transport_kjoring_sats', skjema.kjoringSats || '')
     if (skjema.bom?.length) localStorage.setItem('transport_bom_priser', JSON.stringify(skjema.bom.map(b => b.pris)))
+    if (skjema.parkering?.length) localStorage.setItem('transport_parkering_priser', JSON.stringify(skjema.parkering.map(p => p.pris)))
     if (skjema.ferge?.length) localStorage.setItem('transport_ferge_priser', JSON.stringify(skjema.ferge.map(f => f.pris)))
-  }, [skjema.kjoringSats, skjema.bom, skjema.ferge])
+  }, [skjema.kjoringSats, skjema.bom, skjema.parkering, skjema.ferge])
 
   function oppdater(felt, verdi) {
     setSkjema(prev => ({ ...prev, [felt]: verdi }))
@@ -193,6 +195,7 @@ function AppInnhold() {
       kjoringKm: '',
       kjoringSats: hentLagretKjoringSats(),
       bom: hentLagretTransportMal('transport_bom_priser'),
+      parkering: hentLagretTransportMal('transport_parkering_priser'),
       ferge: hentLagretTransportMal('transport_ferge_priser'),
       tilbudsnummer: genererTilbudsnummer(),
     })
