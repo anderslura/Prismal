@@ -2539,3 +2539,30 @@ textarea { resize: vertical; }
 
 .kunde-adr-wrapper { position: relative; }
 .adr-dropdown { position: absolute; top: 100%; left: 0; right: 0; z-index: 20; }
+
+/* ── Stripe Pro-toast ─────────────────────────────────────────────── */
+.pro-toast {
+  position: fixed;
+  top: 72px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  animation: toastInn 0.3s ease;
+}
+.pro-toast--suksess {
+  background: #16a34a;
+  color: #fff;
+}
+.pro-toast--avbrutt {
+  background: #6b7280;
+  color: #fff;
+}
+@keyframes toastInn {
+  from { opacity: 0; transform: translateX(-50%) translateY(-8px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}

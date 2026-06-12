@@ -50,7 +50,7 @@ function hentLagretTransportMal(key) {
 
 function AppInnhold() {
   const {
-    bruker, laster: authLaster, loggUt, isPro,
+    bruker, laster: authLaster, loggUt, isPro, stripeKundeId,
     kanBrukeForsok, forsokGjenstaende, registrerForsok, MAKS_GRATIS_FORSOK,
     trengerRegistrering, trengerOppgradering
   } = useAuth()
@@ -67,12 +67,31 @@ function AppInnhold() {
     ferge: hentLagretTransportMal('transport_ferge_priser'),
     tilbudsnummer: genererTilbudsnummer(),
   }))
-  const [prisliste, setPrisliste] = useState(hentLagretPrisliste)
-  const [laster, setLaster] = useState(false)
-  const [feil, setFeil] = useState('')
-  const [steg, setSteg] = useState('landing')
-  const [visLogin, setVisLogin] = useState(false)
+  const [prisliste, setPrisliste]       = useState(hentLagretPrisliste)
+  const [laster, setLaster]             = useState(false)
+  const [feil, setFeil]                 = useState('')
+  const [steg, setSteg]                 = useState('landing')
+  const [visLogin, setVisLogin]         = useState(false)
   const [visOppgrader, setVisOppgrader] = useState(false)
+  const [checkoutLaster, setCheckoutLaster] = useState(false)
+  const [portalLaster, setPortalLaster]     = useState(false)
+  const [proMelding, setProMelding]         = useState(null)
+
+  // ── Håndter Stripe redirect-parametere ──────────────────────────────
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const proParam = params.get('pro')
+    if (proParam === 'suksess') {
+      setProMelding('suksess')
+      // Fjern param fra URL uten reload
+      window.history.replaceState({}, '', window.location.pathname)
+      setTimeout(() => setProMelding(null), 6000)
+    } else if (proParam === 'avbrutt') {
+      setProMelding('avbrutt')
+      window.history.replaceState({}, '', window.location.pathname)
+      setTimeout(() => setProMelding(null), 4000)
+    }
+  }, [])
 
   useEffect(() => {
     if (bruker && visLogin) {
@@ -81,7 +100,7 @@ function AppInnhold() {
     }
   }, [bruker])
 
-  // Last firmaprofil fra Supabase ved innlogging
+  // ── Last firmaprofil fra Supabase ved innlogging ─────────────────────
   useEffect(() => {
     if (!bruker || !isPro) return
     hentFirma().then(f => {
@@ -96,12 +115,11 @@ function AppInnhold() {
     }).catch(e => console.error('Kunne ikke hente firma:', e))
   }, [bruker])
 
-  // Last materialbibliotek fra Supabase ved innlogging
+  // ── Last materialbibliotek fra Supabase ved innlogging ───────────────
   useEffect(() => {
     if (!bruker) return
     hentMaterialer().then(liste => {
       if (!liste.length) return
-      // Bygg mal-linjer (antall=0) fra Supabase – erstatter localStorage-biblioteket
       const malLinjer = liste.map(m => ({
         id: Date.now() + Math.random(),
         navn: m.navn,
@@ -111,11 +129,9 @@ function AppInnhold() {
         hasPaaslag: m.has_paaslag,
       }))
       setSkjema(prev => {
-        // Behold linjer med antall > 0 (bruker har allerede fylt inn noe)
-        const aktive = prev.materialer.filter(m => m.antall > 0)
-        // Legg til mal-linjer som ikke allerede er lagt til aktivt
+        const aktive    = prev.materialer.filter(m => m.antall > 0)
         const aktivNavn = new Set(aktive.map(m => m.navn.toLowerCase()))
-        const nye = malLinjer.filter(m => !aktivNavn.has(m.navn.toLowerCase()))
+        const nye       = malLinjer.filter(m => !aktivNavn.has(m.navn.toLowerCase()))
         return { ...prev, materialer: [...aktive, ...nye] }
       })
     }).catch(e => console.error('Kunne ikke hente materialer:', e))
@@ -151,9 +167,9 @@ function AppInnhold() {
 
   useEffect(() => {
     localStorage.setItem('transport_kjoring_sats', skjema.kjoringSats || '')
-    if (skjema.bom?.length) localStorage.setItem('transport_bom_priser', JSON.stringify(skjema.bom.map(b => b.pris)))
+    if (skjema.bom?.length)      localStorage.setItem('transport_bom_priser',      JSON.stringify(skjema.bom.map(b => b.pris)))
     if (skjema.parkering?.length) localStorage.setItem('transport_parkering_priser', JSON.stringify(skjema.parkering.map(p => p.pris)))
-    if (skjema.ferge?.length) localStorage.setItem('transport_ferge_priser', JSON.stringify(skjema.ferge.map(f => f.pris)))
+    if (skjema.ferge?.length)    localStorage.setItem('transport_ferge_priser',     JSON.stringify(skjema.ferge.map(f => f.pris)))
   }, [skjema.kjoringSats, skjema.bom, skjema.parkering, skjema.ferge])
 
   function oppdater(felt, verdi) {
@@ -203,6 +219,58 @@ function AppInnhold() {
     setFeil('')
   }
 
+  // ── Stripe: start checkout ───────────────────────────────────────────
+  async function startCheckout() {
+    if (!bruker) { setVisOppgrader(false); setVisLogin(true); return }
+    setCheckoutLaster(true)
+    try {
+      const res = await fetch('/.netlify/functions/create-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          epost:             bruker.email,
+          bruker_id:         bruker.id,
+          stripe_customer_id: stripeKundeId || undefined,
+        }),
+      })
+      const json = await res.json()
+      if (json.url) {
+        window.location.href = json.url
+      } else {
+        alert('Noe gikk galt. Prøv igjen eller kontakt support.')
+      }
+    } catch (e) {
+      console.error('Checkout-feil:', e)
+      alert('Noe gikk galt. Prøv igjen.')
+    } finally {
+      setCheckoutLaster(false)
+    }
+  }
+
+  // ── Stripe: åpne Customer Portal ─────────────────────────────────────
+  async function aapnePortal() {
+    if (!stripeKundeId) return
+    setPortalLaster(true)
+    try {
+      const res = await fetch('/.netlify/functions/create-portal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ stripe_customer_id: stripeKundeId }),
+      })
+      const json = await res.json()
+      if (json.url) {
+        window.location.href = json.url
+      } else {
+        alert('Kunne ikke åpne abonnementsportal. Prøv igjen.')
+      }
+    } catch (e) {
+      console.error('Portal-feil:', e)
+      alert('Noe gikk galt. Prøv igjen.')
+    } finally {
+      setPortalLaster(false)
+    }
+  }
+
   if (authLaster) return <div className="auth-laster">Laster...</div>
 
   return (
@@ -227,6 +295,18 @@ function AppInnhold() {
                 {bruker ? 'Lag tilbud →' : 'Kom i gang →'}
               </button>
             )}
+            {/* Pro-bruker: administrer abonnement */}
+            {bruker && isPro && stripeKundeId && (
+              <button
+                className="btn btn-secondary"
+                style={{ fontSize: '0.8rem', opacity: 0.8 }}
+                onClick={aapnePortal}
+                disabled={portalLaster}
+                title="Administrer abonnement"
+              >
+                {portalLaster ? 'Laster...' : '⚡ Pro'}
+              </button>
+            )}
             {bruker && (
               <button className="btn btn-secondary" style={{ fontSize: '0.8rem', opacity: 0.7 }} onClick={loggUt} title={bruker.email}>
                 Logg ut
@@ -235,6 +315,18 @@ function AppInnhold() {
           </div>
         </div>
       </header>
+
+      {/* Toast — Stripe redirect-tilbakemelding */}
+      {proMelding === 'suksess' && (
+        <div className="pro-toast pro-toast--suksess">
+          🎉 Betaling mottatt! Prismal Pro er nå aktivert på kontoen din.
+        </div>
+      )}
+      {proMelding === 'avbrutt' && (
+        <div className="pro-toast pro-toast--avbrutt">
+          Betalingen ble avbrutt. Du kan prøve igjen når du vil.
+        </div>
+      )}
 
       {/* Banner — gratis forsøk-teller */}
       {!isPro && steg === 'skjema' && (
@@ -289,6 +381,7 @@ function AppInnhold() {
 
       {visLogin && <LoginModal onLukk={() => setVisLogin(false)} />}
 
+      {/* Oppgrader til Pro — modal */}
       {visOppgrader && (
         <div className="modal-bakgrunn" onClick={() => setVisOppgrader(false)}>
           <div className="modal-boks oppgrader-modal" onClick={e => e.stopPropagation()}>
@@ -303,9 +396,13 @@ function AppInnhold() {
               <li>✓ Lagrede prislinjer og historikk</li>
             </ul>
             <div className="oppgrader-pris">99 kr <span>/mnd eks. mva</span></div>
-            <button className="btn btn-primary" style={{ width: '100%', padding: '12px', fontSize: '15px' }}
-              onClick={() => { alert('Stripe-betaling kommer snart!'); setVisOppgrader(false) }}>
-              Kom i gang med Pro
+            <button
+              className="btn btn-primary"
+              style={{ width: '100%', padding: '12px', fontSize: '15px' }}
+              onClick={startCheckout}
+              disabled={checkoutLaster}
+            >
+              {checkoutLaster ? 'Sender til betaling...' : 'Kom i gang med Pro →'}
             </button>
             {!bruker && (
               <p className="oppgrader-logginn">
@@ -329,8 +426,8 @@ export default function App() {
 
 function genererTilbudsnummer() {
   const dato = new Date()
-  const aar = dato.getFullYear().toString().slice(-2)
-  const mnd = String(dato.getMonth() + 1).padStart(2, '0')
+  const aar  = dato.getFullYear().toString().slice(-2)
+  const mnd  = String(dato.getMonth() + 1).padStart(2, '0')
   const tilfeldig = Math.floor(Math.random() * 900 + 100)
   return `T${aar}${mnd}-${tilfeldig}`
 }
