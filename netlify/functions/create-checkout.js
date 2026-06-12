@@ -49,6 +49,7 @@ exports.handler = async (event) => {
       cancel_url:  'https://prismal.no/?pro=avbrutt',
       // Norsk lokalisering i Stripe Checkout
       locale: 'nb',
+      automatic_tax: { enabled: true },
     }
 
     // Bruk eksisterende Stripe-kunde for å unngå duplikater ved re-abonnement
