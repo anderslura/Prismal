@@ -73,96 +73,16 @@ const FEATURES = [
 /* ── FLIP-DEMO ── */
 function SkjemaMock() {
   return (
-    <div className="mock-skjema">
-      <div className="mock-seksjon-header">Din bedrift</div>
-      <div className="mock-felt-rad">
-        <div className="mock-felt"><span className="mock-label">Firmanavn</span><div className="mock-input">Hjelpeportalen AS</div></div>
-      </div>
-      <div className="mock-felt-rad to-kol">
-        <div className="mock-felt"><span className="mock-label">Telefon</span><div className="mock-input">900 00 000</div></div>
-        <div className="mock-felt"><span className="mock-label">E-post</span><div className="mock-input">post@firma.no</div></div>
-      </div>
-
-      <div className="mock-seksjon-header" style={{marginTop:12}}>Arbeid</div>
-      <div className="mock-felt-rad to-kol">
-        <div className="mock-felt"><span className="mock-label">Timer</span><div className="mock-input">12</div></div>
-        <div className="mock-felt"><span className="mock-label">Kr/time</span><div className="mock-input">650</div></div>
-      </div>
-
-      <div className="mock-seksjon-header" style={{marginTop:12}}>Materialer &amp; utgifter</div>
-      <div className="mock-mat-header"><span>Beskrivelse</span><span>Ant.</span><span>Kr</span><span>Sum</span></div>
-      <div className="mock-mat-rad"><span>impregnert trevirke</span><span>8</span><span>99</span><span className="mock-sum">792 kr</span></div>
-      <div className="mock-mat-rad"><span>skrue pakke</span><span>2</span><span>100</span><span className="mock-sum">200 kr</span></div>
-
-      <div className="mock-seksjon-header" style={{marginTop:12}}>Påslag materialer</div>
-      <div className="mock-paslag-rad">
-        <div className="mock-paslag-felt">20 %</div>
-        <div className="mock-paslag-chip">10%</div>
-        <div className="mock-paslag-chip aktiv">20%</div>
-        <div className="mock-paslag-chip">30%</div>
-        <span className="mock-paslag-res">= +158 kr</span>
-      </div>
-
-      <div className="mock-total-bar">
-        <span>Estimert total</span>
-        <span>9 556 kr</span>
-      </div>
+    <div className="mock-bilde-wrapper">
+      <img src="/skjema.png" alt="Prismal skjema" className="mock-bilde" />
     </div>
   )
 }
 
 function PdfMock() {
   return (
-    <div className="mock-pdf">
-      <div className="mock-pdf-header">
-        <div className="mock-pdf-venstre">
-          <div className="mock-pdf-logo-sirkel">H</div>
-          <div>
-            <div className="mock-pdf-firma">Hjelpeportalen AS</div>
-            <div className="mock-pdf-info">Os · 900 00 000</div>
-            <div className="mock-pdf-info">post@firma.no · Org.nr: 937 141 319</div>
-          </div>
-        </div>
-        <div className="mock-pdf-hoyre">
-          <div className="mock-pdf-tilbud-label">TILBUD</div>
-          <div className="mock-pdf-meta">Nr: T2606-908</div>
-          <div className="mock-pdf-meta">Dato: 13.6.2026</div>
-          <div className="mock-pdf-meta">Gyldig til: 13.7.2026</div>
-        </div>
-      </div>
-
-      <div className="mock-pdf-til">
-        <div className="mock-pdf-til-label">TILBUD TIL</div>
-        <div className="mock-pdf-til-navn">Kari Nordmann</div>
-        <div className="mock-pdf-til-info">Hjemveien 5, 0002 Oslo</div>
-        <div className="mock-pdf-til-info">kari@post.no</div>
-      </div>
-
-      <div className="mock-pdf-innledning">
-        Vi er glade for forespørselen din om terrasse på Hjemveien 5. Vi skal bygge en solid og vakker terrasse på 20 kvadratmeter med impregnert trevirke av god kvalitet.
-      </div>
-
-      <table className="mock-pdf-tabell">
-        <thead>
-          <tr><th>Beskrivelse</th><th>Antall</th><th>Enhetspris</th><th>Sum</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Arbeid</td><td>12 t</td><td>650 kr</td><td>7 800 kr</td></tr>
-          <tr><td>impregnert trevirke</td><td>8</td><td>119 kr</td><td>950 kr</td></tr>
-          <tr><td>Kjøring</td><td>20 km</td><td>7 kr/km</td><td>140 kr</td></tr>
-          <tr><td>Bom</td><td>2</td><td>12 kr</td><td>24 kr</td></tr>
-        </tbody>
-      </table>
-
-      <div className="mock-pdf-summer">
-        <div><span>Sum eks. mva</span><span>8 914 kr</span></div>
-        <div><span>MVA 25%</span><span>2 229 kr</span></div>
-        <div className="mock-pdf-total"><span>Totalt inkl. mva</span><span>11 143 kr</span></div>
-      </div>
-
-      <div className="mock-pdf-aksept">
-        <strong>Aksept av tilbud:</strong> For å godta dette tilbudet må skriftlig aksept sendes til post@firma.no innen tilbudets gyldighetsperiode.
-      </div>
+    <div className="mock-bilde-wrapper">
+      <img src="/pdf.png" alt="Ferdig tilbud PDF" className="mock-bilde" />
     </div>
   )
 }

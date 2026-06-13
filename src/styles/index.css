@@ -1263,16 +1263,29 @@ textarea { resize: vertical; }
 }
 .flip-scene {
   perspective: 1400px;
-  max-width: 720px;
+  max-width: 480px;
   margin: 0 auto 28px;
 }
 .flip-kort {
   position: relative;
-  height: 480px;
+  height: 720px;
   transform-style: preserve-3d;
   transition: transform 0.85s cubic-bezier(0.4, 0.2, 0.2, 1);
 }
 .flip-kort.er-flipped { transform: rotateY(180deg); }
+
+.mock-bilde-wrapper {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.mock-bilde {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
 .flip-side {
   position: absolute;
   inset: 0;
@@ -1739,7 +1752,7 @@ textarea { resize: vertical; }
 /* ── RESPONSIVE ── */
 @media (max-width: 840px) {
   .l2-features { grid-template-columns: 1fr 1fr; padding: 28px 20px 32px; gap: 14px; }
-  .flip-kort { height: 560px; }
+  .flip-kort { height: 680px; }
 }
 @media (max-width: 520px) {
   .l2-hero { padding: 44px 18px 40px; }
@@ -1748,7 +1761,7 @@ textarea { resize: vertical; }
   .l2-pro-solo { padding: 26px 20px 22px; }
   .l2-pro-kolonner { grid-template-columns: 1fr; }
   .l2-pro-solo-topp { flex-direction: column; }
-  .flip-kort { height: 620px; }
+  .flip-kort { height: 760px; }
   .flip-seksjon { padding: 40px 16px 48px; }
 }
    DEMO-ANIMASJON
