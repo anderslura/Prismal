@@ -2303,14 +2303,17 @@ textarea { resize: vertical; }
   .dok-body { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .pris-tabell { min-width: 420px; }
 
-  /* Preview knapper: wrap */
+  /* Preview knapper: 2-kolonne grid på mobil */
   .preview-knapper {
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
   }
   .preview-knapper .btn {
-    flex: 1;
-    min-width: 120px;
+    width: 100%;
     justify-content: center;
+    font-size: 13px;
+    padding: 9px 10px;
   }
 
   /* Dokument padding */
