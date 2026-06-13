@@ -50,6 +50,7 @@ exports.handler = async (event) => {
       // Norsk lokalisering i Stripe Checkout
       locale: 'nb',
       automatic_tax: { enabled: true },
+      allow_promotion_codes: true,
     }
 
     // Bruk eksisterende Stripe-kunde for å unngå duplikater ved re-abonnement
