@@ -1089,7 +1089,7 @@ textarea { resize: vertical; }
   position: relative;
   background: linear-gradient(160deg, #f8faff 0%, #eef2ff 55%, #f3f8ff 100%);
   text-align: center;
-  padding: 52px 24px 56px;
+  padding: 72px 32px 80px;
   overflow: hidden;
 }
 .l2-hero-glow {
@@ -1118,7 +1118,7 @@ textarea { resize: vertical; }
 .l2-hero-inner {
   position: relative;
   z-index: 1;
-  max-width: 860px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 .l2-badge {
@@ -1134,7 +1134,7 @@ textarea { resize: vertical; }
   letter-spacing: 0.02em;
 }
 .l2-tittel {
-  font-size: clamp(38px, 5.5vw, 70px);
+  font-size: clamp(44px, 6.5vw, 96px);
   font-weight: 800;
   line-height: 1.12;
   color: #111827;
@@ -1160,8 +1160,9 @@ textarea { resize: vertical; }
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px 32px;
-  max-width: 640px;
+  max-width: 860px;
   text-align: left;
+  gap: 12px 56px;
 }
 .l2-punkter li {
   font-size: clamp(15px, 1.4vw, 17px);
@@ -1274,13 +1275,13 @@ textarea { resize: vertical; }
 /* ── FLIP DEMO ── */
 .flip-seksjon {
   background: linear-gradient(180deg, #f3f6ff 0%, #edf1fb 100%);
-  padding: 56px 24px 64px;
+  padding: 72px 40px 80px;
   text-align: center;
   border-top: 1px solid rgba(99,102,241,0.08);
 }
 @media (max-width: 600px) {
   .flip-seksjon {
-    padding: 36px 16px 40px;
+    padding: 28px 12px 32px;
   }
   .flip-scene {
     max-width: 100%;
@@ -1296,21 +1297,21 @@ textarea { resize: vertical; }
   margin-bottom: 8px;
 }
 .flip-tittel {
-  font-size: clamp(18px, 2.8vw, 28px);
+  font-size: clamp(20px, 2.8vw, 36px);
   font-weight: 800;
   color: #111827;
   margin: 0;
 }
 .flip-scene {
   perspective: 1400px;
-  max-width: 700px;
+  max-width: 840px;
   width: 100%;
   margin: 0 auto 0;
 }
 .flip-kort {
   position: relative;
   width: 100%;
-  aspect-ratio: 71 / 100;
+  aspect-ratio: 3 / 4;
   transform-style: preserve-3d;
   transition: transform 0.85s cubic-bezier(0.4, 0.2, 0.2, 1);
 }
@@ -1325,7 +1326,8 @@ textarea { resize: vertical; }
 .mock-bilde {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
+  object-position: top center;
   display: block;
 }
 .flip-side {
@@ -1596,7 +1598,7 @@ textarea { resize: vertical; }
 /* ── FEATURES — lys ── */
 .l2-features {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 260px));
+  grid-template-columns: repeat(4, minmax(0, 320px));
   justify-content: center;
   gap: 16px;
   width: 100%;
