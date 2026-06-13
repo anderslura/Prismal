@@ -3107,3 +3107,12 @@ textarea { resize: vertical; }
     padding: 6px 8px !important;
   }
 }
+
+/* Hint-tekst under skjemafelt */
+.felt-hint {
+  display: block;
+  font-size: 11px;
+  color: var(--tekst-sekundaer, #9ca3af);
+  margin-top: 4px;
+  line-height: 1.3;
+}

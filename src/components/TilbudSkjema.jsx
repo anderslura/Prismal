@@ -107,6 +107,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
             <div className="felt-gruppe">
               <label>E-post</label>
               <input type="email" placeholder="post@firma.no" value={skjema.firmaEpost} onChange={e => oppdater('firmaEpost', e.target.value)} />
+              <span className="felt-hint">Mottar kopi av alle sendte tilbud</span>
             </div>
           </div>
           <div className="felt-gruppe">
