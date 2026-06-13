@@ -139,9 +139,11 @@ export default function Landingsside({ onStart, onRegistrer }) {
             Profesjonelle tilbud.<br />
             <span className="l2-tittel-grad">På minutter.</span>
           </h1>
-          <p className="l2-undertittel">
-            Spar timer hver uke på tilbudsskriving. Kunder, materialer og priser huskes — du fyller inn, AI formulerer, tilbudet sendes. Fungerer for én mann og små team.
-          </p>
+          <ul className="l2-punkter">
+            <li>Fyll inn jobben — AI skriver profesjonell tekst</li>
+            <li>PDF med din logo klar på under 2 minutter</li>
+            <li>Kunder, materialer og priser huskes automatisk</li>
+          </ul>
           <div className="l2-cta-rad">
             <div className="l2-cta-alternativ">
               <button className="l2-cta" onClick={onRegistrer}>

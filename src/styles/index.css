@@ -1153,6 +1153,33 @@ textarea { resize: vertical; }
   margin: 0 auto 26px;
   line-height: 1.6;
 }
+.l2-punkter {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  align-items: center;
+  max-width: 480px;
+}
+.l2-punkter li {
+  font-size: clamp(14px, 1.4vw, 16px);
+  color: #374151;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  text-align: left;
+  line-height: 1.4;
+}
+.l2-punkter li::before {
+  content: '✓';
+  color: #6366f1;
+  font-weight: 800;
+  font-size: 15px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
 .l2-cta {
   display: inline-flex;
   align-items: center;
@@ -1246,6 +1273,14 @@ textarea { resize: vertical; }
   text-align: center;
   border-top: 1px solid rgba(99,102,241,0.08);
 }
+@media (max-width: 600px) {
+  .flip-seksjon {
+    padding: 36px 16px 40px;
+  }
+  .flip-scene {
+    max-width: 100%;
+  }
+}
 .flip-intro { margin-bottom: 36px; }
 .flip-overst {
   font-size: 11.5px;
@@ -1263,7 +1298,7 @@ textarea { resize: vertical; }
 }
 .flip-scene {
   perspective: 1400px;
-  max-width: 620px;
+  max-width: 700px;
   width: 100%;
   margin: 0 auto 0;
 }
