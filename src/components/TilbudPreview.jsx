@@ -26,7 +26,7 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
     setFeilmelding('')
     try {
       const pdfBase64 = await genererPdfBase64(skjema, isPro)
-      const res = await fetch('/.netlify/functions/send-tilbud', {
+      const res = await fetch('/.netlify/functions/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
