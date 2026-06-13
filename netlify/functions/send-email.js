@@ -23,32 +23,29 @@ exports.handler = async (event) => {
     ? `${(skjema.firmanavn || 'Tilbud').substring(0, 50)} via Prismal <kontakt@prismal.no>`
     : 'Prismal Tilbud <kontakt@prismal.no>'
 
-  const resendPayload = {
-    from: fraAdr,
-    to: [tilEpost],
-    subject: `Tilbud nr. ${skjema.tilbudsnummer} fra ${skjema.firmanavn || 'Prismal'}`,
-    html: byggHtml(skjema, isPro),
-    attachments: [{ filename: filnavn, content: pdfBase64 }],
-  }
-
-  if (brukerEpost) {
-    resendPayload.reply_to = brukerEpost
-    resendPayload.cc = [brukerEpost]
-  }
-
   let resendData
   try {
-    const res = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(resendPayload),
+    // Dynamic import unngår ESM/CJS-konflikt og gir oss contentDisposition: 'inline'
+    const { Resend } = await import('resend')
+    const resend = new Resend(process.env.RESEND_API_KEY)
+
+    const { data, error } = await resend.emails.send({
+      from: fraAdr,
+      to: [tilEpost],
+      reply_to: brukerEpost || undefined,
+      cc: brukerEpost ? [brukerEpost] : undefined,
+      subject: `Tilbud nr. ${skjema.tilbudsnummer} fra ${skjema.firmanavn || 'Prismal'}`,
+      html: byggHtml(skjema, isPro),
+      attachments: [{
+        filename: filnavn,
+        content: Buffer.from(pdfBase64, 'base64'),
+        contentType: 'application/pdf',
+        contentDisposition: 'inline',   // iOS Mail viser PDF inline i e-posten
+      }],
     })
-    const text = await res.text()
-    try { resendData = JSON.parse(text) } catch { resendData = { raw: text } }
-    if (!res.ok) throw new Error(resendData?.message || resendData?.raw || `HTTP ${res.status}`)
+
+    if (error) throw new Error(error.message || JSON.stringify(error))
+    resendData = data
   } catch (err) {
     console.error('Resend feil:', err.message)
     return {
@@ -58,6 +55,7 @@ exports.handler = async (event) => {
     }
   }
 
+  // Lagre i Supabase (non-blocking)
   if (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
     try {
       const sb = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY)
