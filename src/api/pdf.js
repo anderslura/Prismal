@@ -20,7 +20,7 @@ async function logoTilPngData(url) {
     const img = new Image()
     img.crossOrigin = 'anonymous'
     img.onload = () => {
-      const skala = 3
+      const skala = 1
       const w = img.naturalWidth  * skala
       const h = img.naturalHeight * skala
       const canvas = document.createElement('canvas')
