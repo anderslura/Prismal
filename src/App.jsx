@@ -4,6 +4,7 @@ import TilbudPreview from './components/TilbudPreview.jsx'
 import { genererTilbudstekst } from './api/claude.js'
 import { lastNedPDF } from './api/pdf.js'
 import Landingsside from './components/Landingsside.jsx'
+import SendteHistorikk from './components/SendteHistorikk.jsx'
 import PrismalLogo from './components/PrismalLogo.jsx'
 import LoginModal from './components/LoginModal.jsx'
 import { AuthProvider, useAuth } from './contexts/AuthContext.jsx'
@@ -282,6 +283,14 @@ function AppInnhold() {
             {steg === 'preview' && (
               <button className="btn btn-secondary" onClick={() => setSteg('skjema')}>← Tilbake</button>
             )}
+            {steg === 'historikk' && (
+              <button className="btn btn-secondary" onClick={() => setSteg('skjema')}>← Tilbake</button>
+            )}
+            {bruker && isPro && steg !== 'landing' && steg !== 'historikk' && (
+              <button className="btn btn-secondary" style={{ fontSize: '0.85rem' }} onClick={() => setSteg('historikk')}>
+                Historikk
+              </button>
+            )}
             {steg !== 'landing' && (
               <button className="btn btn-secondary" style={{ borderColor: '#16a34a', color: '#16a34a' }} onClick={nullstill}>
                 + Nytt tilbud
@@ -363,6 +372,8 @@ function AppInnhold() {
             setPrisliste={setPrisliste}
             isPro={isPro}
           />
+        ) : steg === 'historikk' ? (
+          <SendteHistorikk onTilbake={() => setSteg('skjema')} />
         ) : (
           <TilbudPreview
             skjema={skjema}
@@ -371,6 +382,7 @@ function AppInnhold() {
             onTilbake={() => setSteg('skjema')}
             onNyttTilbud={nullstill}
             isPro={isPro}
+            bruker={bruker}
           />
         )}
       </main>

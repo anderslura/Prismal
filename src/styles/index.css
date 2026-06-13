@@ -3008,3 +3008,91 @@ textarea { resize: vertical; }
   margin: 0 0 6px;
   color: #374151;
 }
+
+/* ── Historikk ─────────────────────────────────────────────────────── */
+.historikk-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+.historikk-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.historikk-header h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+.historikk-laster,
+.historikk-tom {
+  color: var(--text-muted, #888);
+  padding: 40px 0;
+  text-align: center;
+}
+.historikk-feil {
+  color: #dc2626;
+  padding: 12px;
+  background: #fef2f2;
+  border-radius: 6px;
+}
+.historikk-tabell-wrapper {
+  overflow-x: auto;
+  border-radius: 10px;
+  border: 1px solid var(--border, #e5e7eb);
+}
+.historikk-tabell {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.historikk-tabell thead {
+  background: var(--bg-secondary, #f9fafb);
+}
+.historikk-tabell th {
+  text-align: left;
+  padding: 10px 14px;
+  font-weight: 600;
+  color: var(--text-muted, #6b7280);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--border, #e5e7eb);
+}
+.historikk-tabell td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border, #f3f4f6);
+  color: var(--text);
+  vertical-align: middle;
+}
+.historikk-tabell tbody tr:last-child td {
+  border-bottom: none;
+}
+.historikk-tabell tbody tr:hover {
+  background: var(--bg-secondary, #f9fafb);
+}
+.historikk-dato {
+  white-space: nowrap;
+  color: var(--text-muted, #6b7280);
+  font-size: 0.85rem;
+}
+.historikk-nr {
+  font-family: monospace;
+  font-size: 0.85rem;
+}
+.historikk-epost {
+  color: #4f46e5;
+  text-decoration: none;
+}
+.historikk-epost:hover {
+  text-decoration: underline;
+}
+@media (max-width: 600px) {
+  .historikk-tabell th:nth-child(2),
+  .historikk-tabell td:nth-child(2) {
+    display: none;
+  }
+}
