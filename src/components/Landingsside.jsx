@@ -109,16 +109,16 @@ function FlipDemo() {
         <h2 className="flip-tittel">Fra skjema til profesjonelt tilbud — på sekunder</h2>
       </div>
 
+      <div className="flip-toggle">
+        <button className={!flipped ? 'aktiv' : ''} onClick={() => setFlipped(false)}>Skjema</button>
+        <button className={flipped ? 'aktiv' : ''} onClick={() => setFlipped(true)}>Ferdig tilbud</button>
+      </div>
+
       <div className="flip-scene">
         <div className={`flip-kort ${flipped ? 'er-flipped' : ''}`}>
           <div className="flip-side flip-front"><SkjemaMock /></div>
           <div className="flip-side flip-back"><PdfMock /></div>
         </div>
-      </div>
-
-      <div className="flip-toggle">
-        <button className={!flipped ? 'aktiv' : ''} onClick={() => setFlipped(false)}>Skjema</button>
-        <button className={flipped ? 'aktiv' : ''} onClick={() => setFlipped(true)}>Ferdig tilbud</button>
       </div>
     </section>
   )
