@@ -1312,9 +1312,8 @@ textarea { resize: vertical; }
 .flip-kort {
   position: relative;
   width: 100%;
-  aspect-ratio: 76 / 100;
   transform-style: preserve-3d;
-  transition: transform 0.85s cubic-bezier(0.4, 0.2, 0.2, 1);
+  transition: transform 0.85s cubic-bezier(0.4, 0.2, 0.2, 1), aspect-ratio 0.4s ease;
 }
 .flip-kort.er-flipped { transform: rotateY(180deg); }
 

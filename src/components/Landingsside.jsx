@@ -115,7 +115,7 @@ function FlipDemo() {
       </div>
 
       <div className="flip-scene">
-        <div className={`flip-kort ${flipped ? 'er-flipped' : ''}`}>
+        <div className={`flip-kort ${flipped ? 'er-flipped' : ''}`} style={{ aspectRatio: flipped ? '746 / 1052' : '744 / 974' }}>
           <div className="flip-side flip-front"><SkjemaMock /></div>
           <div className="flip-side flip-back"><PdfMock /></div>
         </div>
