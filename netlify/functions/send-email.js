@@ -23,29 +23,35 @@ exports.handler = async (event) => {
     ? `${(skjema.firmanavn || 'Tilbud').substring(0, 50)} via Prismal <kontakt@prismal.no>`
     : 'Prismal Tilbud <kontakt@prismal.no>'
 
+  const firmaEpost = skjema.firmaEpost || ''
+
   let resendData
   try {
-    // Dynamic import unngår ESM/CJS-konflikt og gir oss contentDisposition: 'inline'
-    const { Resend } = await import('resend')
-    const resend = new Resend(process.env.RESEND_API_KEY)
-
-    const { data, error } = await resend.emails.send({
+    const payload = {
       from: fraAdr,
       to: [tilEpost],
-      reply_to: skjema.firmaEpost || brukerEpost || undefined,
-      cc: skjema.firmaEpost ? [skjema.firmaEpost] : (brukerEpost ? [brukerEpost] : undefined),
       subject: `Tilbud nr. ${skjema.tilbudsnummer} fra ${skjema.firmanavn || 'Prismal'}`,
       html: byggHtml(skjema, isPro),
-      attachments: [{
-        filename: filnavn,
-        content: Buffer.from(pdfBase64, 'base64'),
-        contentType: 'application/pdf',
-        contentDisposition: 'inline',   // iOS Mail viser PDF inline i e-posten
-      }],
-    })
+      attachments: [{ filename: filnavn, content: pdfBase64 }],
+    }
 
-    if (error) throw new Error(error.message || JSON.stringify(error))
-    resendData = data
+    // Svar-til og kopi går alltid til firma-epost (ikke login-epost)
+    if (firmaEpost) {
+      payload.reply_to = firmaEpost
+      payload.cc = [firmaEpost]
+    }
+
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    })
+    const text = await res.text()
+    try { resendData = JSON.parse(text) } catch { resendData = { raw: text } }
+    if (!res.ok) throw new Error(resendData?.message || resendData?.raw || `HTTP ${res.status}`)
   } catch (err) {
     console.error('Resend feil:', err.message)
     return {
