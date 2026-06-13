@@ -287,7 +287,7 @@ function AppInnhold() {
               <button className="btn btn-secondary" onClick={() => setSteg('skjema')}>← Tilbake</button>
             )}
             {bruker && isPro && steg !== 'landing' && steg !== 'historikk' && (
-              <button className="btn btn-secondary" style={{ fontSize: '0.85rem' }} onClick={() => setSteg('historikk')}>
+              <button className="btn btn-secondary historikk-btn" style={{ fontSize: '0.85rem' }} onClick={() => setSteg('historikk')}>
                 Historikk
               </button>
             )}

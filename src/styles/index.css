@@ -3096,3 +3096,14 @@ textarea { resize: vertical; }
     display: none;
   }
 }
+
+/* Historikk-knapp: synlig på alle skjermstørrelser */
+.historikk-btn {
+  white-space: nowrap;
+}
+@media (max-width: 480px) {
+  .historikk-btn {
+    font-size: 12px !important;
+    padding: 6px 8px !important;
+  }
+}

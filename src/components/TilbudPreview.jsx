@@ -115,6 +115,7 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
                   <p>📎 PDF-tilbudet legges ved automatisk.</p>
                   <p>↩️ Kunden svarer direkte til <strong>{skjema.firmaEpost || 'din e-post'}</strong>.</p>
                   <p>📬 Du får kopi i din innboks.</p>
+                  <p>📋 Tilbudet lagres i din Prismal-historikk.</p>
                 </div>
 
                 {senderStatus === 'feil' && (
