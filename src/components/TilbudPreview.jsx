@@ -26,17 +26,16 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
     setFeilmelding('')
     try {
       const pdfBase64 = await genererPdfBase64(skjema, isPro)
-      const bodyStr = JSON.stringify({ tilEpost: mottakerEpost, skjema, pdfBase64, brukerEpost: bruker?.email || skjema.firmaEpost || '', bruker_id: bruker?.id || null, isPro })
-      console.log('[send-email] body size KB:', Math.round(bodyStr.length / 1024))
+      // Stripp logoUrl (base64-bilde) — PDF er allerede generert, ikke send logo på nytt
+      const { logoUrl: _logo, ...skjemaUtenLogo } = skjema
       const res = await fetch('/.netlify/functions/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           tilEpost:    mottakerEpost,
-          skjema,
+          skjema:      skjemaUtenLogo,
           pdfBase64,
           brukerEpost: bruker?.email || skjema.firmaEpost || '',
-          brukerNavn:  bruker?.user_metadata?.full_name || skjema.firmanavn || '',
           bruker_id:   bruker?.id || null,
           isPro,
         }),
