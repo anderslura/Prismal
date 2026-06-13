@@ -1084,34 +1084,36 @@ textarea { resize: vertical; }
 
 .l2-wrapper { width: 100%; overflow-x: hidden; }
 
-/* ── HERO — kompakt mørk ── */
+/* ── HERO — lys, moderne ── */
 .l2-hero {
   position: relative;
-  background: linear-gradient(160deg, #0c0f1a 0%, #141729 60%, #0d1322 100%);
+  background: linear-gradient(160deg, #f8faff 0%, #eef2ff 55%, #f3f8ff 100%);
   text-align: center;
   padding: 52px 24px 56px;
   overflow: hidden;
-  /* jevn overgang ned til lys seksjon */
-  -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
-  mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
 }
 .l2-hero-glow {
   position: absolute;
   border-radius: 50%;
-  filter: blur(70px);
+  filter: blur(80px);
   pointer-events: none;
   z-index: 0;
 }
 .l2-glow-1 {
-  width: 420px; height: 280px;
-  top: -80px; left: 50%;
-  transform: translateX(-55%);
-  background: radial-gradient(ellipse, rgba(99,102,241,0.28) 0%, transparent 70%);
+  width: 500px; height: 320px;
+  top: -100px; left: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse, rgba(99,102,241,0.14) 0%, transparent 70%);
 }
 .l2-glow-2 {
-  width: 300px; height: 200px;
-  top: 20px; right: -40px;
-  background: radial-gradient(ellipse, rgba(59,130,246,0.18) 0%, transparent 70%);
+  width: 280px; height: 220px;
+  top: 30px; right: -60px;
+  background: radial-gradient(ellipse, rgba(59,130,246,0.10) 0%, transparent 70%);
+}
+.l2-glow-3 {
+  width: 240px; height: 200px;
+  bottom: -40px; left: -40px;
+  background: radial-gradient(ellipse, rgba(168,85,247,0.09) 0%, transparent 70%);
 }
 .l2-hero-inner {
   position: relative;
@@ -1121,9 +1123,9 @@ textarea { resize: vertical; }
 }
 .l2-badge {
   display: inline-block;
-  background: rgba(99,102,241,0.15);
-  border: 1px solid rgba(99,102,241,0.30);
-  color: #a5b4fc;
+  background: rgba(99,102,241,0.10);
+  border: 1px solid rgba(99,102,241,0.22);
+  color: #6366f1;
   font-size: 11.5px;
   font-weight: 600;
   padding: 4px 13px;
@@ -1135,18 +1137,18 @@ textarea { resize: vertical; }
   font-size: clamp(28px, 5vw, 50px);
   font-weight: 800;
   line-height: 1.12;
-  color: #f1f5f9;
+  color: #111827;
   margin: 0 0 14px;
 }
 .l2-tittel-grad {
-  background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 .l2-undertittel {
   font-size: clamp(13px, 2vw, 16px);
-  color: #94a3b8;
+  color: #4b5563;
   max-width: 500px;
   margin: 0 auto 26px;
   line-height: 1.6;
@@ -1162,22 +1164,19 @@ textarea { resize: vertical; }
   border-radius: 50px;
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 20px rgba(99,102,241,0.38);
+  box-shadow: 0 4px 20px rgba(99,102,241,0.30);
   transition: transform 0.15s, box-shadow 0.15s;
 }
 .l2-cta:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(99,102,241,0.52);
+  box-shadow: 0 8px 28px rgba(99,102,241,0.45);
 }
 .l2-cta-hint {
   margin-top: 10px;
   font-size: 11px;
-  color: #94a3b8;
+  color: #6b7280;
   letter-spacing: 0.01em;
 }
-
-
-/* ── Dobbel CTA-rad ── */
 .l2-cta-rad {
   display: flex;
   align-items: center;
@@ -1194,30 +1193,32 @@ textarea { resize: vertical; }
 }
 .l2-cta-eller {
   font-size: 12px;
-  color: #475569;
+  color: #9ca3af;
   font-style: italic;
   flex-shrink: 0;
-  padding-bottom: 24px; /* align with buttons, offset for hint text */
+  padding-bottom: 24px;
 }
 .l2-cta-sekundaer {
   display: inline-flex;
   align-items: center;
-  background: transparent;
-  color: #94a3b8;
+  background: rgba(255,255,255,0.7);
+  color: #374151;
   font-size: 14px;
   font-weight: 600;
   padding: 11px 22px;
   border-radius: 50px;
-  border: 1.5px solid rgba(148,163,184,0.35);
+  border: 1.5px solid rgba(0,0,0,0.14);
   cursor: pointer;
-  transition: border-color 0.15s, color 0.15s;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  backdrop-filter: blur(8px);
 }
 .l2-cta-sekundaer:hover {
-  border-color: rgba(148,163,184,0.65);
-  color: #cbd5e1;
+  border-color: rgba(0,0,0,0.28);
+  color: #111827;
+  background: rgba(255,255,255,0.9);
 }
 .l2-cta-hint-prim {
-  color: #c7d2fe !important;
+  color: #6366f1 !important;
   line-height: 1.5;
   text-align: center;
   font-size: 11.5px;
@@ -1225,11 +1226,11 @@ textarea { resize: vertical; }
 }
 .l2-cta-hint-prim span {
   font-size: 10.5px;
-  color: #7c8db5;
+  color: #9ca3af;
   font-weight: 400;
 }
 .l2-cta-hint-sek {
-  color: #64748b !important;
+  color: #9ca3af !important;
   font-size: 11px !important;
   text-align: center;
 }
@@ -1238,7 +1239,295 @@ textarea { resize: vertical; }
   .l2-cta-eller { padding-bottom: 0; }
 }
 
-/* ── FEATURES — lyst, glass-kort ── */
+/* ── FLIP DEMO ── */
+.flip-seksjon {
+  background: linear-gradient(180deg, #f3f6ff 0%, #edf1fb 100%);
+  padding: 56px 24px 64px;
+  text-align: center;
+  border-top: 1px solid rgba(99,102,241,0.08);
+}
+.flip-intro { margin-bottom: 36px; }
+.flip-overst {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  color: #6366f1;
+  margin-bottom: 8px;
+}
+.flip-tittel {
+  font-size: clamp(18px, 2.8vw, 28px);
+  font-weight: 800;
+  color: #111827;
+  margin: 0;
+}
+.flip-scene {
+  perspective: 1400px;
+  max-width: 720px;
+  margin: 0 auto 28px;
+}
+.flip-kort {
+  position: relative;
+  height: 480px;
+  transform-style: preserve-3d;
+  transition: transform 0.85s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+.flip-kort.er-flipped { transform: rotateY(180deg); }
+.flip-side {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 16px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 0 16px 56px rgba(0,0,0,0.13), 0 2px 8px rgba(0,0,0,0.06);
+}
+.flip-front { background: #f5f7fa; }
+.flip-back {
+  background: #fff;
+  transform: rotateY(180deg);
+}
+
+/* Toggle-knapper */
+.flip-toggle {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+.flip-toggle button {
+  padding: 8px 20px;
+  border-radius: 50px;
+  border: 1.5px solid rgba(99,102,241,0.25);
+  background: transparent;
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.flip-toggle button.aktiv {
+  background: linear-gradient(135deg, #6366f1, #3b82f6);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 14px rgba(99,102,241,0.30);
+}
+
+/* ── SKJEMA MOCKUP ── */
+.mock-skjema {
+  padding: 18px 20px 20px;
+  font-family: inherit;
+  height: 100%;
+  box-sizing: border-box;
+}
+.mock-seksjon-header {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  color: #3b82f6;
+  margin-bottom: 8px;
+}
+.mock-felt-rad {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.mock-felt-rad.to-kol .mock-felt { flex: 1; }
+.mock-felt {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
+.mock-label {
+  font-size: 10px;
+  color: #6b7280;
+  font-weight: 500;
+}
+.mock-input {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 7px;
+  padding: 6px 10px;
+  font-size: 11.5px;
+  color: #111827;
+  font-weight: 500;
+}
+.mock-mat-header {
+  display: grid;
+  grid-template-columns: 2fr 0.5fr 0.8fr 1fr;
+  gap: 6px;
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0 4px;
+  margin-bottom: 4px;
+}
+.mock-mat-rad {
+  display: grid;
+  grid-template-columns: 2fr 0.5fr 0.8fr 1fr;
+  gap: 6px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 7px;
+  padding: 6px 10px;
+  font-size: 11px;
+  color: #374151;
+  margin-bottom: 4px;
+  align-items: center;
+}
+.mock-sum { color: #3b82f6; font-weight: 700; }
+.mock-paslag-rad {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.mock-paslag-felt {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 7px;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #111827;
+  min-width: 42px;
+  text-align: center;
+}
+.mock-paslag-chip {
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 11px;
+  color: #6b7280;
+  font-weight: 600;
+}
+.mock-paslag-chip.aktiv {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  color: #fff;
+}
+.mock-paslag-res { font-size: 11px; color: #10b981; font-weight: 700; }
+.mock-total-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #1e3a5f, #1e40af);
+  color: #fff;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-top: 14px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ── PDF MOCKUP ── */
+.mock-pdf {
+  padding: 20px 24px;
+  font-family: inherit;
+  font-size: 11px;
+  color: #374151;
+  height: 100%;
+  box-sizing: border-box;
+}
+.mock-pdf-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: #1e3a5f;
+  color: #fff;
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+.mock-pdf-venstre {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.mock-pdf-logo-sirkel {
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,0.2);
+  border: 2px solid rgba(255,255,255,0.5);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 800;
+  color: #fff;
+}
+.mock-pdf-firma { font-size: 14px; font-weight: 800; color: #fff; }
+.mock-pdf-info { font-size: 10px; color: rgba(255,255,255,0.75); line-height: 1.5; }
+.mock-pdf-hoyre { text-align: right; }
+.mock-pdf-tilbud-label { font-size: 13px; font-weight: 800; color: #fff; letter-spacing: 0.08em; }
+.mock-pdf-meta { font-size: 10px; color: rgba(255,255,255,0.75); line-height: 1.6; }
+.mock-pdf-til { margin-bottom: 12px; }
+.mock-pdf-til-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #6b7280; margin-bottom: 3px; }
+.mock-pdf-til-navn { font-size: 13px; font-weight: 700; color: #111827; }
+.mock-pdf-til-info { font-size: 10.5px; color: #6b7280; line-height: 1.5; }
+.mock-pdf-innledning {
+  font-size: 10.5px;
+  color: #4b5563;
+  line-height: 1.6;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f3f4f6;
+}
+.mock-pdf-tabell {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 12px;
+  font-size: 10.5px;
+}
+.mock-pdf-tabell thead tr {
+  background: #1e3a5f;
+  color: #fff;
+}
+.mock-pdf-tabell th {
+  padding: 7px 10px;
+  text-align: left;
+  font-size: 10px;
+  font-weight: 700;
+}
+.mock-pdf-tabell td {
+  padding: 6px 10px;
+  border-bottom: 1px solid #f3f4f6;
+  color: #374151;
+}
+.mock-pdf-tabell tbody tr:nth-child(even) { background: #fafafa; }
+.mock-pdf-summer {
+  text-align: right;
+  font-size: 11px;
+  color: #374151;
+}
+.mock-pdf-summer div {
+  display: flex;
+  justify-content: flex-end;
+  gap: 32px;
+  padding: 3px 0;
+}
+.mock-pdf-total {
+  font-weight: 800;
+  font-size: 12.5px;
+  color: #111827;
+  padding-top: 6px !important;
+  border-top: 1.5px solid #e5e7eb;
+  margin-top: 4px;
+}
+.mock-pdf-aksept {
+  margin-top: 14px;
+  background: #f8fafc;
+  border-left: 3px solid #3b82f6;
+  padding: 9px 12px;
+  font-size: 10px;
+  color: #4b5563;
+  line-height: 1.6;
+  border-radius: 0 6px 6px 0;
+}
+
+/* ── FEATURES — lys ── */
 .l2-features {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -1246,14 +1535,11 @@ textarea { resize: vertical; }
   max-width: 1100px;
   margin: 0 auto;
   padding: 32px 32px 40px;
-  background: #f0f4f9;
+  background: #edf1fb;
 }
-/* Seamless overgang: hero border-bottom matches features bg */
-
-/* Apple glass-kort */
 .l2-kort {
-  background: rgba(255,255,255,0.78);
-  border: 1px solid rgba(255,255,255,0.90);
+  background: rgba(255,255,255,0.82);
+  border: 1px solid rgba(255,255,255,0.95);
   border-radius: 16px;
   padding: 20px 17px 18px;
   display: flex;
@@ -1261,16 +1547,12 @@ textarea { resize: vertical; }
   gap: 10px;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  box-shadow:
-    0 2px 12px rgba(0,0,0,0.07),
-    0 0 0 0.5px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06), 0 0 0 0.5px rgba(0,0,0,0.04);
   transition: box-shadow 0.18s, transform 0.18s;
 }
 .l2-kort:hover {
   transform: translateY(-3px);
-  box-shadow:
-    0 10px 28px rgba(0,0,0,0.11),
-    0 0 0 0.5px rgba(0,0,0,0.05);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.10), 0 0 0 0.5px rgba(0,0,0,0.04);
 }
 .l2-ikon-boks {
   width: 42px; height: 42px;
@@ -1281,22 +1563,22 @@ textarea { resize: vertical; }
 .l2-kort-tittel {
   font-size: 14.5px;
   font-weight: 700;
-  color: #1a1a2e;
+  color: #111827;
   margin: 0;
 }
 .l2-kort-tekst {
   font-size: 12.5px;
-  color: #5a6478;
+  color: #4b5563;
   line-height: 1.55;
   margin: 0;
 }
 
 /* ── PRIS ── */
 .l2-pris {
-  background: #f0f4f9;
+  background: linear-gradient(180deg, #edf1fb 0%, #e8edf8 100%);
   padding: 12px 24px 64px;
   text-align: center;
-  border-top: 1px solid rgba(0,0,0,0.06);
+  border-top: 1px solid rgba(99,102,241,0.08);
 }
 .l2-pris-overst {
   font-size: 11.5px;
@@ -1309,7 +1591,7 @@ textarea { resize: vertical; }
 .l2-pris-tittel {
   font-size: clamp(20px, 3vw, 30px);
   font-weight: 800;
-  color: #1a1a2e;
+  color: #111827;
   margin-bottom: 32px;
 }
 .l2-pris-grid {
@@ -1319,16 +1601,12 @@ textarea { resize: vertical; }
   max-width: 760px;
   margin: 0 auto 20px;
 }
-
-/* Pro-solo card */
 .l2-pro-solo {
   max-width: 620px;
   margin: 0 auto;
   background: #0d1224;
   border: 1px solid rgba(99,102,241,0.32);
-  box-shadow:
-    0 0 0 1px rgba(99,102,241,0.10),
-    0 20px 56px rgba(99,102,241,0.18);
+  box-shadow: 0 0 0 1px rgba(99,102,241,0.10), 0 20px 56px rgba(99,102,241,0.18);
   border-radius: 22px;
   padding: 32px 32px 26px;
   text-align: left;
@@ -1445,9 +1723,6 @@ textarea { resize: vertical; }
   font-style: italic;
   text-align: center;
 }
-
-
-/* Garantier-linje */
 .l2-garantier {
   display: flex;
   justify-content: center;
@@ -1464,6 +1739,7 @@ textarea { resize: vertical; }
 /* ── RESPONSIVE ── */
 @media (max-width: 840px) {
   .l2-features { grid-template-columns: 1fr 1fr; padding: 28px 20px 32px; gap: 14px; }
+  .flip-kort { height: 560px; }
 }
 @media (max-width: 520px) {
   .l2-hero { padding: 44px 18px 40px; }
@@ -1472,10 +1748,9 @@ textarea { resize: vertical; }
   .l2-pro-solo { padding: 26px 20px 22px; }
   .l2-pro-kolonner { grid-template-columns: 1fr; }
   .l2-pro-solo-topp { flex-direction: column; }
+  .flip-kort { height: 620px; }
+  .flip-seksjon { padding: 40px 16px 48px; }
 }
-
-
-/* ===========================
    DEMO-ANIMASJON
    =========================== */
 .demo-wrapper { display:flex; justify-content:center; margin-bottom:28px; }

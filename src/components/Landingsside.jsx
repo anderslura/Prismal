@@ -1,4 +1,5 @@
-/* ── Landingsside v3 — kompakt hero, Apple glass-kort ── */
+/* ── Landingsside v4 — lys, moderne, flip-demo ── */
+import { useEffect, useRef, useState } from 'react'
 
 function IkonLyn() {
   return (
@@ -35,7 +36,6 @@ function IkonSky() {
     <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
       <rect width="26" height="26" rx="7" fill="url(#skyBg)"/>
       <path d="M19 15.5a3 3 0 00-2.5-2.95A4.5 4.5 0 008 14a2.5 2.5 0 000 5h10.5A2.5 2.5 0 0019 15.5z" fill="white" opacity="0.95"/>
-      <path d="M13 17v-4M11 15l2-2 2 2" stroke="url(#skyBg)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
       <defs>
         <linearGradient id="skyBg" x1="0" y1="0" x2="26" y2="26" gradientUnits="userSpaceOnUse">
           <stop offset="0%" stopColor="#10b981"/>
@@ -64,36 +64,155 @@ function IkonDokument() {
 }
 
 const FEATURES = [
-  {
-    ikon: <IkonLyn />,
-    tittel: 'Raskt',
-    tekst: 'Fyll inn jobb og priser — ferdig PDF på under 2 minutter.',
-  },
-  {
-    ikon: <IkonSparkle />,
-    tittel: 'AI-tekst',
-    tekst: 'Skriv hva jobben gjelder — AI formulerer profesjonell tilbudstekst.',
-  },
-  {
-    ikon: <IkonSky />,
-    tittel: 'Synkronisert',
-    tekst: 'Kunder, materialer og firma lagres i skyen. Samme oversikt på alle enheter — bare logg inn.',
-  },
-  {
-    ikon: <IkonDokument />,
-    tittel: 'Klar PDF',
-    tekst: 'Med din logo, prisoversikt og akseptklausul. Klar til å sende på sekunder.',
-  },
+  { ikon: <IkonLyn />, tittel: 'Raskt', tekst: 'Fyll inn jobb og priser — ferdig PDF på under 2 minutter.' },
+  { ikon: <IkonSparkle />, tittel: 'AI-tekst', tekst: 'Skriv hva jobben gjelder — AI formulerer profesjonell tilbudstekst.' },
+  { ikon: <IkonSky />, tittel: 'Synkronisert', tekst: 'Kunder, materialer og firma lagres i skyen. Samme oversikt på alle enheter — bare logg inn.' },
+  { ikon: <IkonDokument />, tittel: 'Klar PDF', tekst: 'Med din logo, prisoversikt og akseptklausul. Klar til å sende på sekunder.' },
 ]
+
+/* ── FLIP-DEMO ── */
+function SkjemaMock() {
+  return (
+    <div className="mock-skjema">
+      <div className="mock-seksjon-header">Din bedrift</div>
+      <div className="mock-felt-rad">
+        <div className="mock-felt"><span className="mock-label">Firmanavn</span><div className="mock-input">Hjelpeportalen AS</div></div>
+      </div>
+      <div className="mock-felt-rad to-kol">
+        <div className="mock-felt"><span className="mock-label">Telefon</span><div className="mock-input">900 00 000</div></div>
+        <div className="mock-felt"><span className="mock-label">E-post</span><div className="mock-input">post@firma.no</div></div>
+      </div>
+
+      <div className="mock-seksjon-header" style={{marginTop:12}}>Arbeid</div>
+      <div className="mock-felt-rad to-kol">
+        <div className="mock-felt"><span className="mock-label">Timer</span><div className="mock-input">12</div></div>
+        <div className="mock-felt"><span className="mock-label">Kr/time</span><div className="mock-input">650</div></div>
+      </div>
+
+      <div className="mock-seksjon-header" style={{marginTop:12}}>Materialer &amp; utgifter</div>
+      <div className="mock-mat-header"><span>Beskrivelse</span><span>Ant.</span><span>Kr</span><span>Sum</span></div>
+      <div className="mock-mat-rad"><span>impregnert trevirke</span><span>8</span><span>99</span><span className="mock-sum">792 kr</span></div>
+      <div className="mock-mat-rad"><span>skrue pakke</span><span>2</span><span>100</span><span className="mock-sum">200 kr</span></div>
+
+      <div className="mock-seksjon-header" style={{marginTop:12}}>Påslag materialer</div>
+      <div className="mock-paslag-rad">
+        <div className="mock-paslag-felt">20 %</div>
+        <div className="mock-paslag-chip">10%</div>
+        <div className="mock-paslag-chip aktiv">20%</div>
+        <div className="mock-paslag-chip">30%</div>
+        <span className="mock-paslag-res">= +158 kr</span>
+      </div>
+
+      <div className="mock-total-bar">
+        <span>Estimert total</span>
+        <span>9 556 kr</span>
+      </div>
+    </div>
+  )
+}
+
+function PdfMock() {
+  return (
+    <div className="mock-pdf">
+      <div className="mock-pdf-header">
+        <div className="mock-pdf-venstre">
+          <div className="mock-pdf-logo-sirkel">H</div>
+          <div>
+            <div className="mock-pdf-firma">Hjelpeportalen AS</div>
+            <div className="mock-pdf-info">Os · 900 00 000</div>
+            <div className="mock-pdf-info">post@firma.no · Org.nr: 937 141 319</div>
+          </div>
+        </div>
+        <div className="mock-pdf-hoyre">
+          <div className="mock-pdf-tilbud-label">TILBUD</div>
+          <div className="mock-pdf-meta">Nr: T2606-908</div>
+          <div className="mock-pdf-meta">Dato: 13.6.2026</div>
+          <div className="mock-pdf-meta">Gyldig til: 13.7.2026</div>
+        </div>
+      </div>
+
+      <div className="mock-pdf-til">
+        <div className="mock-pdf-til-label">TILBUD TIL</div>
+        <div className="mock-pdf-til-navn">Kari Nordmann</div>
+        <div className="mock-pdf-til-info">Hjemveien 5, 0002 Oslo</div>
+        <div className="mock-pdf-til-info">kari@post.no</div>
+      </div>
+
+      <div className="mock-pdf-innledning">
+        Vi er glade for forespørselen din om terrasse på Hjemveien 5. Vi skal bygge en solid og vakker terrasse på 20 kvadratmeter med impregnert trevirke av god kvalitet.
+      </div>
+
+      <table className="mock-pdf-tabell">
+        <thead>
+          <tr><th>Beskrivelse</th><th>Antall</th><th>Enhetspris</th><th>Sum</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Arbeid</td><td>12 t</td><td>650 kr</td><td>7 800 kr</td></tr>
+          <tr><td>impregnert trevirke</td><td>8</td><td>119 kr</td><td>950 kr</td></tr>
+          <tr><td>Kjøring</td><td>20 km</td><td>7 kr/km</td><td>140 kr</td></tr>
+          <tr><td>Bom</td><td>2</td><td>12 kr</td><td>24 kr</td></tr>
+        </tbody>
+      </table>
+
+      <div className="mock-pdf-summer">
+        <div><span>Sum eks. mva</span><span>8 914 kr</span></div>
+        <div><span>MVA 25%</span><span>2 229 kr</span></div>
+        <div className="mock-pdf-total"><span>Totalt inkl. mva</span><span>11 143 kr</span></div>
+      </div>
+
+      <div className="mock-pdf-aksept">
+        <strong>Aksept av tilbud:</strong> For å godta dette tilbudet må skriftlig aksept sendes til post@firma.no innen tilbudets gyldighetsperiode.
+      </div>
+    </div>
+  )
+}
+
+function FlipDemo() {
+  const [flipped, setFlipped] = useState(false)
+  const ref = useRef(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setTimeout(() => setFlipped(true), 600) },
+      { threshold: 0.35 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <section className="flip-seksjon" ref={ref}>
+      <div className="flip-intro">
+        <p className="flip-overst">Slik fungerer det</p>
+        <h2 className="flip-tittel">Fra skjema til profesjonelt tilbud — på sekunder</h2>
+      </div>
+
+      <div className="flip-scene">
+        <div className={`flip-kort ${flipped ? 'er-flipped' : ''}`}>
+          <div className="flip-side flip-front"><SkjemaMock /></div>
+          <div className="flip-side flip-back"><PdfMock /></div>
+        </div>
+      </div>
+
+      <div className="flip-toggle">
+        <button className={!flipped ? 'aktiv' : ''} onClick={() => setFlipped(false)}>📋 Skjema</button>
+        <button className={flipped ? 'aktiv' : ''} onClick={() => setFlipped(true)}>📄 Ferdig tilbud</button>
+      </div>
+    </section>
+  )
+}
 
 export default function Landingsside({ onStart, onRegistrer }) {
   return (
     <div className="l2-wrapper">
 
-      {/* ── HERO — kompakt ── */}
+      {/* ── HERO — lys ── */}
       <section className="l2-hero">
         <div className="l2-hero-glow l2-glow-1" />
         <div className="l2-hero-glow l2-glow-2" />
+        <div className="l2-hero-glow l2-glow-3" />
         <div className="l2-hero-inner">
           <div className="l2-badge">For fagfolk som sender tilbud</div>
           <h1 className="l2-tittel">
@@ -116,9 +235,7 @@ export default function Landingsside({ onStart, onRegistrer }) {
                 <span>Ingen kredittkort · Ingen bindingstid</span>
               </p>
             </div>
-
             <div className="l2-cta-eller">eller</div>
-
             <div className="l2-cta-alternativ">
               <button className="l2-cta-sekundaer" onClick={onStart}>
                 Prøv uten registrering
@@ -131,7 +248,10 @@ export default function Landingsside({ onStart, onRegistrer }) {
         </div>
       </section>
 
-      {/* ── FEATURES — lyst, glass-kort ── */}
+      {/* ── FLIP DEMO ── */}
+      <FlipDemo />
+
+      {/* ── FEATURES ── */}
       <section className="l2-features">
         {FEATURES.map(f => (
           <div key={f.tittel} className="l2-kort">
@@ -146,7 +266,6 @@ export default function Landingsside({ onStart, onRegistrer }) {
       <section className="l2-pris">
         <p className="l2-pris-overst">Enkel prising</p>
         <h2 className="l2-pris-tittel">Prøv gratis. Fortsett når du er klar.</h2>
-
         <div className="l2-pro-solo">
           <div className="l2-pro-solo-topp">
             <div>
@@ -158,13 +277,11 @@ export default function Landingsside({ onStart, onRegistrer }) {
               <div className="l2-trial-tekst">gratis tilbud<br/>ved registrering</div>
             </div>
           </div>
-
           <p className="l2-plan-sub">
             Registrer deg gratis — ingen kredittkort. Du får 3 fulle tilbud med alle funksjoner: 
             firmalogo, kundedatabase og materialbibliotek. Deretter 99 kr/mnd eks. mva (124 kr inkl. mva). 
             Ingen bindingstid — avslutt når du vil.
           </p>
-
           <div className="l2-pro-kolonner">
             <ul className="l2-plan-liste">
               <li className="ok">Ubegrenset antall tilbud</li>
@@ -181,7 +298,6 @@ export default function Landingsside({ onStart, onRegistrer }) {
               <li className="ok">Synkronisert på alle enheter</li>
             </ul>
           </div>
-
           <button className="l2-btn-pro" onClick={onRegistrer}>
             Registrer deg og start gratis
           </button>
