@@ -32,8 +32,8 @@ exports.handler = async (event) => {
     const { data, error } = await resend.emails.send({
       from: fraAdr,
       to: [tilEpost],
-      reply_to: brukerEpost || undefined,
-      cc: brukerEpost ? [brukerEpost] : undefined,
+      reply_to: skjema.firmaEpost || brukerEpost || undefined,
+      cc: skjema.firmaEpost ? [skjema.firmaEpost] : (brukerEpost ? [brukerEpost] : undefined),
       subject: `Tilbud nr. ${skjema.tilbudsnummer} fra ${skjema.firmanavn || 'Prismal'}`,
       html: byggHtml(skjema, isPro),
       attachments: [{
@@ -82,17 +82,7 @@ exports.handler = async (event) => {
 
 function byggHtml(skjema, isPro) {
   const firma = isPro ? (skjema.firmanavn || 'Prismal') : 'Prismal'
-  // Samme beregning som TilbudPreview.jsx — alltid i sync
-  const totalArbeid        = (skjema.arbeidere || []).reduce((s, a) => s + (parseFloat(a.timer)||0)*(parseFloat(a.timepris)||0), 0)
-  const totalMat           = (skjema.materialer || []).reduce((s, m) => s + (parseFloat(m.sum) || (parseFloat(m.antall)||1)*(parseFloat(m.pris)||0)), 0)
-  const matMedPaaslag      = (skjema.materialer || []).reduce((s, m) => s + (m.hasPaaslag ? (parseFloat(m.sum) || (parseFloat(m.antall)||1)*(parseFloat(m.pris)||0)) : 0), 0)
-  const paaslag            = matMedPaaslag * (parseFloat(skjema.paaslagProsent)||0) / 100
-  const kjoringSum         = (parseFloat(skjema.kjoringKm)||0) * (parseFloat(skjema.kjoringSats)||0)
-  const bomSum             = (skjema.bom       || []).reduce((s, b) => s + (parseFloat(b.antall)||0)*(parseFloat(b.pris)||0), 0)
-  const parkeringSum       = (skjema.parkering  || []).reduce((s, p) => s + (parseFloat(p.antall)||0)*(parseFloat(p.pris)||0), 0)
-  const fergeSum           = (skjema.ferge      || []).reduce((s, f) => s + (parseFloat(f.antall)||0)*(parseFloat(f.pris)||0), 0)
-  const eksMva = totalArbeid + totalMat + paaslag + kjoringSum + bomSum + parkeringSum + fergeSum
-
+  // Kun kort intro — alle detaljer og priser er i PDF-vedlegget
   return `<!DOCTYPE html>
 <html lang="no"><head><meta charset="UTF-8"></head>
 <body style="margin:0;padding:0;background:#f4f4f7;font-family:Arial,sans-serif;">
@@ -103,33 +93,17 @@ function byggHtml(skjema, isPro) {
         <p style="margin:0;font-size:12px;opacity:.7">TILBUD</p>
         <h1 style="margin:4px 0 0;font-size:22px">${firma}</h1>
       </td></tr>
-      <tr><td style="padding:28px 32px">
-        <p style="margin:0;color:#374151">Hei ${skjema.kundenavn || ''},</p>
-        <p style="margin:12px 0 0;color:#374151">
+      <tr><td style="padding:28px 32px 32px">
+        <p style="margin:0;color:#374151;font-size:15px">Hei ${skjema.kundenavn || ''},</p>
+        <p style="margin:12px 0 0;color:#374151;font-size:15px;line-height:1.5">
           Vedlagt finner du tilbud nr. <strong>${skjema.tilbudsnummer}</strong> datert ${skjema.dato}.
           Tilbudet er gyldig i 30 dager.
         </p>
+        <p style="margin:16px 0 0;color:#374151;font-size:14px">
+          Svar på denne e-posten for å godta tilbudet, eller ta kontakt ved spørsmål.
+        </p>
       </td></tr>
-      <tr><td style="padding:0 32px 24px">
-        <table width="100%" cellpadding="8" cellspacing="0" style="border:1px solid #e5e7eb;border-radius:6px">
-          <tr style="background:#f9fafb">
-            <td style="font-size:13px;color:#6b7280">Sum eks. mva</td>
-            <td align="right" style="font-size:13px;color:#374151">${kr(eksMva)}</td>
-          </tr>
-          <tr>
-            <td style="font-size:13px;color:#6b7280">MVA 25%</td>
-            <td align="right" style="font-size:13px;color:#374151">${kr(eksMva * 0.25)}</td>
-          </tr>
-          <tr style="background:#eef2ff">
-            <td style="font-weight:bold;color:#1e3aaa">Totalt inkl. mva</td>
-            <td align="right" style="font-weight:bold;color:#1e3aaa">${kr(eksMva * 1.25)}</td>
-          </tr>
-        </table>
-      </td></tr>
-      <tr><td style="padding:0 32px 28px">
-        <p style="font-size:13px;color:#6b7280;margin:0">Svar på denne e-posten for å godta tilbudet.</p>
-      </td></tr>
-      <tr><td style="background:#f9fafb;padding:16px 32px;border-top:1px solid #e5e7eb">
+      <tr><td style="background:#f9fafb;padding:16px 32px;border-top:1px solid #e5e7eb;border-radius:0 0 8px 8px">
         <p style="margin:0;font-size:12px;color:#9ca3af;text-align:center">
           ${isPro ? `${firma} · ${skjema.firmaEpost || ''} · ${skjema.firmaTelefon || ''}` : 'Sendt med Prismal — prismal.no'}
         </p>
@@ -138,8 +112,4 @@ function byggHtml(skjema, isPro) {
   </td></tr>
 </table>
 </body></html>`
-}
-
-function kr(tall) {
-  return new Intl.NumberFormat('no-NO', { style: 'currency', currency: 'NOK', maximumFractionDigits: 0 }).format(tall || 0)
 }
