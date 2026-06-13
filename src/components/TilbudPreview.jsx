@@ -1,13 +1,28 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { hentTemaFarger } from './PdfTemavelger.jsx'
 import PrismalLogo from './PrismalLogo.jsx'
 import { genererPdfBase64 } from '../api/pdf.js'
+import { supabase } from '../lib/supabase.js'
 
 export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilbake, onNyttTilbud, isPro = true, bruker }) {
-  const [visSendModal, setVisSendModal]   = useState(false)
-  const [mottakerEpost, setMottakerEpost] = useState(skjema.kundeEpost || '')
-  const [senderStatus, setSenderStatus]   = useState('idle') // idle | sending | sendt | feil
-  const [feilmelding, setFeilmelding]     = useState('')
+  const [visSendModal, setVisSendModal]     = useState(false)
+  const [mottakerEpost, setMottakerEpost]   = useState(skjema.kundeEpost || '')
+  const [senderStatus, setSenderStatus]     = useState('idle') // idle | sending | sendt | feil
+  const [feilmelding, setFeilmelding]       = useState('')
+  const [tidligereAntall, setTidligereAntall] = useState(null) // null = ikke hentet ennå
+
+  // Hent antall tidligere tilbud til samme kunde
+  useEffect(() => {
+    if (!visSendModal || !mottakerEpost || !bruker) return
+    setTidligereAntall(null)
+    supabase
+      .from('sendte_tilbud')
+      .select('id', { count: 'exact', head: true })
+      .eq('kunde_epost', mottakerEpost.toLowerCase().trim())
+      .eq('bruker_id', bruker.id)
+      .then(({ count }) => setTidligereAntall(count || 0))
+      .catch(() => setTidligereAntall(0))
+  }, [visSendModal, mottakerEpost])
 
   const totalArbeid = (skjema.arbeidere || []).reduce((s, a) => s + (parseFloat(a.timer)||0)*(parseFloat(a.timepris)||0), 0)
   const totalMaterialer = skjema.materialer.reduce((s, m) => s + (parseFloat(m.sum) || (parseFloat(m.antall)||1) * (parseFloat(m.pris)||0)), 0)
@@ -116,6 +131,11 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
                   <p>↩️ Kunden svarer direkte til <strong>{skjema.firmaEpost || 'din e-post'}</strong>.</p>
                   <p>📬 Du får kopi i din innboks.</p>
                   <p>📋 Tilbudet lagres i din Prismal-historikk.</p>
+                  {bruker && tidligereAntall !== null && tidligereAntall > 0 && (
+                    <p style={{ color: '#6366f1', fontWeight: 500 }}>
+                      📊 Du har sendt {tidligereAntall} tidligere tilbud til denne kunden.
+                    </p>
+                  )}
                 </div>
 
                 {senderStatus === 'feil' && (
