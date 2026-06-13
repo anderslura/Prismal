@@ -26,7 +26,6 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
     setFeilmelding('')
     try {
       const pdfBase64 = await genererPdfBase64(skjema, isPro)
-      console.log('[pdf] base64 size KB:', Math.round(pdfBase64.length / 1024))
       // Stripp logoUrl (base64-bilde) — PDF er allerede generert, ikke send logo på nytt
       const { logoUrl: _logo, ...skjemaUtenLogo } = skjema
       const res = await fetch('/.netlify/functions/send-email', {

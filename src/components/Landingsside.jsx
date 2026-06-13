@@ -141,11 +141,11 @@ export default function Landingsside({ onStart, onRegistrer }) {
           </h1>
           <ul className="l2-punkter">
             <li>Fyll inn jobben — AI skriver profesjonell tekst</li>
-            <li>PDF med din logo klar på under 2 minutter</li>
+            <li>Send tilbud med PDF direkte fra mobil i bilen</li>
+            <li>Kunden får e-post med vedlegg — du får kopi</li>
             <li>Kunder, materialer og priser huskes automatisk</li>
-            <li>Webbasert — ingen programmer å installere</li>
-            <li>Fungerer på mobil, nettbrett og PC</li>
-            <li>Org.nr og firmainformasjon lagres én gang for alltid</li>
+            <li>Fungerer på mobil, nettbrett og PC — ingen installasjon</li>
+            <li>Firmainformasjon og logo lagres én gang for alltid</li>
           </ul>
           <div className="l2-cta-rad">
             <div className="l2-cta-alternativ">
