@@ -1806,7 +1806,6 @@ textarea { resize: vertical; }
 /* ── RESPONSIVE ── */
 @media (max-width: 840px) {
   .l2-features { grid-template-columns: 1fr 1fr; padding: 28px 20px 32px; gap: 14px; }
-  .flip-kort { height: 680px; }
 }
 @media (max-width: 520px) {
   .l2-hero { padding: 44px 18px 40px; }
@@ -1815,8 +1814,7 @@ textarea { resize: vertical; }
   .l2-pro-solo { padding: 26px 20px 22px; }
   .l2-pro-kolonner { grid-template-columns: 1fr; }
   .l2-pro-solo-topp { flex-direction: column; }
-  .flip-kort { height: 760px; }
-  .flip-seksjon { padding: 40px 16px 48px; }
+  .flip-seksjon { padding: 28px 12px 32px; }
 }
    DEMO-ANIMASJON
    =========================== */
