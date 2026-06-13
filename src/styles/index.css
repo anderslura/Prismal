@@ -1166,7 +1166,8 @@ textarea { resize: vertical; }
 }
 .l2-punkter li {
   font-size: clamp(15px, 1.4vw, 17px);
-  color: #374151;
+  color: #111827;
+  font-weight: 500;
   display: flex;
   align-items: flex-start;
   gap: 9px;
@@ -1311,7 +1312,7 @@ textarea { resize: vertical; }
 .flip-kort {
   position: relative;
   width: 100%;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 76 / 100;
   transform-style: preserve-3d;
   transition: transform 0.85s cubic-bezier(0.4, 0.2, 0.2, 1);
 }
@@ -1326,8 +1327,7 @@ textarea { resize: vertical; }
 .mock-bilde {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: top center;
+  object-fit: contain;
   display: block;
 }
 .flip-side {
