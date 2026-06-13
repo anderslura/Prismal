@@ -117,8 +117,8 @@ function FlipDemo() {
       </div>
 
       <div className="flip-toggle">
-        <button className={!flipped ? 'aktiv' : ''} onClick={() => setFlipped(false)}>📋 Skjema</button>
-        <button className={flipped ? 'aktiv' : ''} onClick={() => setFlipped(true)}>📄 Ferdig tilbud</button>
+        <button className={!flipped ? 'aktiv' : ''} onClick={() => setFlipped(false)}>Skjema</button>
+        <button className={flipped ? 'aktiv' : ''} onClick={() => setFlipped(true)}>Ferdig tilbud</button>
       </div>
     </section>
   )
