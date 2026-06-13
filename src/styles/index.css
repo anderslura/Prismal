@@ -1157,28 +1157,33 @@ textarea { resize: vertical; }
   list-style: none;
   padding: 0;
   margin: 0 auto 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 11px;
-  align-items: center;
-  max-width: 480px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 32px;
+  max-width: 640px;
+  text-align: left;
 }
 .l2-punkter li {
-  font-size: clamp(14px, 1.4vw, 16px);
+  font-size: clamp(13px, 1.3vw, 15px);
   color: #374151;
   display: flex;
   align-items: flex-start;
-  gap: 10px;
-  text-align: left;
+  gap: 9px;
   line-height: 1.4;
 }
 .l2-punkter li::before {
   content: '✓';
   color: #6366f1;
   font-weight: 800;
-  font-size: 15px;
+  font-size: 14px;
   flex-shrink: 0;
   margin-top: 1px;
+}
+@media (max-width: 560px) {
+  .l2-punkter {
+    grid-template-columns: 1fr;
+    max-width: 340px;
+  }
 }
 .l2-cta {
   display: inline-flex;
@@ -1305,7 +1310,7 @@ textarea { resize: vertical; }
 .flip-kort {
   position: relative;
   width: 100%;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 71 / 100;
   transform-style: preserve-3d;
   transition: transform 0.85s cubic-bezier(0.4, 0.2, 0.2, 1);
 }
@@ -1591,11 +1596,11 @@ textarea { resize: vertical; }
 /* ── FEATURES — lys ── */
 .l2-features {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 260px));
+  justify-content: center;
   gap: 16px;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 32px 32px 40px;
+  width: 100%;
+  padding: 40px 24px 48px;
   background: #edf1fb;
 }
 .l2-kort {

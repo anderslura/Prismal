@@ -143,6 +143,9 @@ export default function Landingsside({ onStart, onRegistrer }) {
             <li>Fyll inn jobben — AI skriver profesjonell tekst</li>
             <li>PDF med din logo klar på under 2 minutter</li>
             <li>Kunder, materialer og priser huskes automatisk</li>
+            <li>Webbasert — ingen programmer å installere</li>
+            <li>Fungerer på mobil, nettbrett og PC</li>
+            <li>Org.nr og firmainformasjon lagres én gang for alltid</li>
           </ul>
           <div className="l2-cta-rad">
             <div className="l2-cta-alternativ">
