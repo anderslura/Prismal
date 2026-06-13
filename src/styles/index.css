@@ -1126,11 +1126,11 @@ textarea { resize: vertical; }
   background: rgba(99,102,241,0.10);
   border: 1px solid rgba(99,102,241,0.22);
   color: #6366f1;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
-  padding: 5px 16px;
+  padding: 6px 18px;
   border-radius: 20px;
-  margin-bottom: 22px;
+  margin-bottom: 24px;
   letter-spacing: 0.02em;
 }
 .l2-tittel {
@@ -1164,7 +1164,7 @@ textarea { resize: vertical; }
   text-align: left;
 }
 .l2-punkter li {
-  font-size: clamp(13px, 1.3vw, 15px);
+  font-size: clamp(15px, 1.4vw, 17px);
   color: #374151;
   display: flex;
   align-items: flex-start;
