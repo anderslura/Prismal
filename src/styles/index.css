@@ -1089,7 +1089,7 @@ textarea { resize: vertical; }
   position: relative;
   background: linear-gradient(160deg, #f8faff 0%, #eef2ff 55%, #f3f8ff 100%);
   text-align: center;
-  padding: 72px 32px 80px;
+  padding: 60px 32px 68px;
   overflow: hidden;
 }
 .l2-hero-glow {
@@ -1118,7 +1118,7 @@ textarea { resize: vertical; }
 .l2-hero-inner {
   position: relative;
   z-index: 1;
-  max-width: 1200px;
+  max-width: 920px;
   margin: 0 auto;
 }
 .l2-badge {
@@ -1134,7 +1134,7 @@ textarea { resize: vertical; }
   letter-spacing: 0.02em;
 }
 .l2-tittel {
-  font-size: clamp(44px, 6.5vw, 96px);
+  font-size: clamp(36px, 4vw, 58px);
   font-weight: 800;
   line-height: 1.12;
   color: #111827;
@@ -1160,9 +1160,9 @@ textarea { resize: vertical; }
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px 32px;
-  max-width: 860px;
+  max-width: 700px;
   text-align: left;
-  gap: 12px 56px;
+  gap: 10px 40px;
 }
 .l2-punkter li {
   font-size: clamp(15px, 1.4vw, 17px);
@@ -1276,7 +1276,7 @@ textarea { resize: vertical; }
 /* ── FLIP DEMO ── */
 .flip-seksjon {
   background: linear-gradient(180deg, #f3f6ff 0%, #edf1fb 100%);
-  padding: 72px 40px 80px;
+  padding: 56px 32px 64px;
   text-align: center;
   border-top: 1px solid rgba(99,102,241,0.08);
 }
@@ -1305,7 +1305,7 @@ textarea { resize: vertical; }
 }
 .flip-scene {
   perspective: 1400px;
-  max-width: 840px;
+  max-width: 620px;
   width: 100%;
   margin: 0 auto 0;
 }
@@ -1597,7 +1597,7 @@ textarea { resize: vertical; }
 /* ── FEATURES — lys ── */
 .l2-features {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 320px));
+  grid-template-columns: repeat(4, minmax(0, 265px));
   justify-content: center;
   gap: 16px;
   width: 100%;
