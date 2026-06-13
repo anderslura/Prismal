@@ -217,10 +217,10 @@ export default function Landingsside({ onStart, onRegistrer }) {
             </ul>
             <ul className="l2-plan-liste">
               <li className="ok">Påslagskalkulator</li>
-              <li className="ok">Tilbudshistorikk</li>
-              <li className="ok">Send tilbud på e-post</li>
-              <li className="ok">Ingen Prismal-branding</li>
-              <li className="ok">Synkronisert på alle enheter</li>
+              <li className="ok">Last ned eller send PDF — ett klikk</li>
+              <li className="ok">Send tilbud direkte på e-post</li>
+              <li className="ok">Skybasert — logg inn fra mobil, nettbrett og PC</li>
+              <li className="ok">All info på din konto — alltid tilgjengelig</li>
             </ul>
           </div>
           <button className="l2-btn-pro" onClick={onRegistrer}>
