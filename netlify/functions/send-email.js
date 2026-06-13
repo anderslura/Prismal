@@ -82,10 +82,16 @@ exports.handler = async (event) => {
 
 function byggHtml(skjema, isPro) {
   const firma = isPro ? (skjema.firmanavn || 'Prismal') : 'Prismal'
-  const totalArbeid = (skjema.arbeidere || []).reduce((s, a) => s + (parseFloat(a.timer)||0)*(parseFloat(a.timepris)||0), 0)
-  const totalMat = (skjema.materialer || []).reduce((s, m) => s + (parseFloat(m.sum) || (parseFloat(m.antall)||1)*(parseFloat(m.pris)||0)), 0)
-  const paaslag = totalMat * (parseFloat(skjema.paaslagProsent)||0) / 100
-  const eksMva = totalArbeid + totalMat + paaslag
+  // Samme beregning som TilbudPreview.jsx — alltid i sync
+  const totalArbeid        = (skjema.arbeidere || []).reduce((s, a) => s + (parseFloat(a.timer)||0)*(parseFloat(a.timepris)||0), 0)
+  const totalMat           = (skjema.materialer || []).reduce((s, m) => s + (parseFloat(m.sum) || (parseFloat(m.antall)||1)*(parseFloat(m.pris)||0)), 0)
+  const matMedPaaslag      = (skjema.materialer || []).reduce((s, m) => s + (m.hasPaaslag ? (parseFloat(m.sum) || (parseFloat(m.antall)||1)*(parseFloat(m.pris)||0)) : 0), 0)
+  const paaslag            = matMedPaaslag * (parseFloat(skjema.paaslagProsent)||0) / 100
+  const kjoringSum         = (parseFloat(skjema.kjoringKm)||0) * (parseFloat(skjema.kjoringSats)||0)
+  const bomSum             = (skjema.bom       || []).reduce((s, b) => s + (parseFloat(b.antall)||0)*(parseFloat(b.pris)||0), 0)
+  const parkeringSum       = (skjema.parkering  || []).reduce((s, p) => s + (parseFloat(p.antall)||0)*(parseFloat(p.pris)||0), 0)
+  const fergeSum           = (skjema.ferge      || []).reduce((s, f) => s + (parseFloat(f.antall)||0)*(parseFloat(f.pris)||0), 0)
+  const eksMva = totalArbeid + totalMat + paaslag + kjoringSum + bomSum + parkeringSum + fergeSum
 
   return `<!DOCTYPE html>
 <html lang="no"><head><meta charset="UTF-8"></head>
