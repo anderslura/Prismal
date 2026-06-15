@@ -1222,10 +1222,11 @@ textarea { resize: vertical; }
   line-height: 0;
 }
 .l2-hero-bilde {
-  width: 100%;
   display: block;
   border: none;
   outline: none;
+  width: calc(100% + 6px);
+  margin: -3px;
 }
 .l2-hero-cta {
   margin-top: 40px;
