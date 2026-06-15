@@ -80,8 +80,19 @@ export default function DemoSlideshow() {
   return (
     <section className="demo-seksjon">
       <div className="demo-intro">
-        <p className="demo-overst">Slik fungerer det</p>
-        <h2 className="demo-tittel">Fra skjema til profesjonelt tilbud — på sekunder</h2>
+        <div className="demo-logo-rad">
+          <svg width="20" height="28" viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="32,16 54,16 26,144 4,144"   fill="#a8caff"/>
+            <polygon points="64,16 86,16 58,144 36,144"  fill="#6699ff"/>
+            <polygon points="96,16 118,16 90,144 68,144" fill="#3366ee"/>
+          </svg>
+          <h2 className="demo-tittel">
+            <span style={{color:'#a8caff'}}>Slik</span>{' '}
+            <span style={{color:'#6699ff'}}>fungerer</span>{' '}
+            <span style={{color:'#3366ee'}}>det</span>
+          </h2>
+        </div>
+        <p className="demo-overst">Fra skjema til profesjonelt tilbud — på sekunder</p>
       </div>
 
       <div className="demo-grid">
