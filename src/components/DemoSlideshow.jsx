@@ -140,7 +140,8 @@ export default function DemoSlideshow() {
               </div>
               <button className="demo-pil" onClick={neste} aria-label="Neste">&#8594;</button>
             </div>
-            <p className="demo-hint">Bla med pilene for å se hvert steg — fra første ord til ferdig tilbud. Eller hopp direkte til et steg i listen til venstre.</p>
+            <p className="demo-hint demo-hint-desktop">Bla med pilene for å se hvert steg — fra første ord til ferdig tilbud. Eller hopp direkte til et steg i listen til venstre.</p>
+            <p className="demo-hint demo-hint-mobil">Bla med pilene for å se hvert steg — eller trykk direkte på et steg i oversikten over.</p>
           </div>
         </div>
       </div>
