@@ -1,5 +1,6 @@
-/* ── Landingsside v4 — lys, moderne, flip-demo ── */
-import { useEffect, useRef, useState } from 'react'
+/* ── Landingsside v5 — lys, moderne, demo-karusell ── */
+import { useState } from 'react'
+import DemoSlideshow from './DemoSlideshow'
 
 function IkonLyn() {
   return (
@@ -70,59 +71,6 @@ const FEATURES = [
   { ikon: <IkonDokument />, tittel: 'Klar PDF', tekst: 'Med din logo, prisoversikt og akseptklausul. Klar til å sende på sekunder.' },
 ]
 
-/* ── FLIP-DEMO ── */
-function SkjemaMock() {
-  return (
-    <div className="mock-bilde-wrapper">
-      <img src="/skjema.png" alt="Prismal skjema" className="mock-bilde" />
-    </div>
-  )
-}
-
-function PdfMock() {
-  return (
-    <div className="mock-bilde-wrapper">
-      <img src="/pdf.png" alt="Ferdig tilbud PDF" className="mock-bilde" />
-    </div>
-  )
-}
-
-function FlipDemo() {
-  const [flipped, setFlipped] = useState(false)
-  const ref = useRef(null)
-
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setTimeout(() => setFlipped(true), 600) },
-      { threshold: 0.15 }
-    )
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [])
-
-  return (
-    <section className="flip-seksjon" ref={ref}>
-      <div className="flip-intro">
-        <p className="flip-overst">Slik fungerer det</p>
-        <h2 className="flip-tittel">Fra skjema til profesjonelt tilbud — på sekunder</h2>
-      </div>
-
-      <div className="flip-toggle">
-        <button className={!flipped ? 'aktiv' : ''} onClick={() => setFlipped(false)}>Skjema</button>
-        <button className={flipped ? 'aktiv' : ''} onClick={() => setFlipped(true)}>Ferdig tilbud</button>
-      </div>
-
-      <div className="flip-scene">
-        <div className={`flip-kort ${flipped ? 'er-flipped' : ''}`} style={{ aspectRatio: flipped ? '746 / 1052' : '744 / 974' }}>
-          <div className="flip-side flip-front"><SkjemaMock /></div>
-          <div className="flip-side flip-back"><PdfMock /></div>
-        </div>
-      </div>
-    </section>
-  )
-}
 
 export default function Landingsside({ onStart, onRegistrer }) {
   return (
@@ -164,8 +112,8 @@ export default function Landingsside({ onStart, onRegistrer }) {
         </div>
       </section>
 
-      {/* ── FLIP DEMO ── */}
-      <FlipDemo />
+      {/* ── DEMO KARUSELL ── */}
+      <DemoSlideshow />
 
       {/* ── FEATURES ── */}
       <section className="l2-features">
