@@ -41,15 +41,20 @@ const STEG = [
   {
     nr: '07', label: 'Totaloversikt',
     tittel: 'Total og PDF-tema',
-    tekst: 'Full oversikt eks. og inkl. mva. Velg tema — sesongbaserte temaer byttes automatisk.',
+    tekst: 'Full oversikt eks. og inkl. mva. Velg tema — Standard, Mørk, Grå eller Hvit. Du kan også velge sesongbaserte temaer som Pride, Rosa sløyfe eller Julestil.',
     img: '/demo/total.jpg',
+  },
+  {
+    nr: '08', label: 'Forhåndsvisning',
+    tittel: 'Forhåndsvis og send tilbudet',
+    tekst: 'Se det ferdige tilbudet før sending. Send direkte til kundens e-post — PDF legges ved automatisk. Kunden svarer til din bedrifts-e-post, og du mottar kopi i innboksen din. Tilbudet lagres i Prismal-historikken din.',
+    img: '/demo/forhandsvisning.jpg',
   },
   {
     nr: '✓', label: 'Ferdig tilbud',
     tittel: 'Profesjonelt tilbud — klart til sending',
-    tekst: 'Med logo, pristabell, betalingsbetingelser og akseptklausul. Sendes direkte til kunden.',
-    img: '/demo/pdf1.png',
-    erPdf: true,
+    tekst: 'Med logo, pristabell, betalingsbetingelser og akseptklausul. Leveres direkte i kundens innboks.',
+    img: '/demo/pdf_combined.png',
   },
 ]
 
