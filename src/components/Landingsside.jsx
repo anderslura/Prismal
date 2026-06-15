@@ -2,6 +2,64 @@
 import { useState, useEffect } from 'react'
 import DemoSlideshow from './DemoSlideshow'
 
+const FAQ_LISTE = [
+  {
+    sp: 'Hva koster Prismal?',
+    sv: 'Du starter gratis og får 3 fulle tilbud med alle funksjoner — ingen kredittkort nødvendig. Etter det koster Prismal Pro 99 kr/mnd eks. mva (124 kr inkl. mva). Ingen bindingstid, avslutt når du vil.'
+  },
+  {
+    sp: 'Kan jeg bruke min egen logo og firmainformasjon?',
+    sv: 'Ja. Du laster opp logo og fyller inn firmainfo én gang — det hentes automatisk på alle fremtidige tilbud, uavhengig av hvilken enhet du bruker.'
+  },
+  {
+    sp: 'Hva gjør AI-tekstfunksjonen?',
+    sv: 'Du beskriver oppdraget med egne ord — rettskriving er ikke viktig. AI-en omformer det til en komplett, profesjonell tilbudstekst. Du kan lese gjennom og redigere teksten før du sender.'
+  },
+  {
+    sp: 'Fungerer Prismal på mobil og nettbrett?',
+    sv: 'Ja, Prismal er optimalisert for mobil, nettbrett og PC. Ingen app å installere — du logger bare inn i nettleseren og er klar.'
+  },
+  {
+    sp: 'Hvordan sendes tilbudet til kunden?',
+    sv: 'Du sender direkte fra Prismal til kundens e-post. PDF legges ved automatisk. Du får kopi i din innboks, og tilbudet lagres i Prismal-historikken din.'
+  },
+  {
+    sp: 'Kan jeg lagre kunder og materialer?',
+    sv: 'Ja. Kunder lagres i en søkbar database — finn dem igjen på navn eller mobilnummer. Materialer lagres i et personlig bibliotek med priser, og oppdateres kun med antall fra gang til gang.'
+  },
+  {
+    sp: 'Hvordan avslutter jeg abonnementet?',
+    sv: 'Du avslutter når du vil fra «Abonnement og fakturaer» i profilmenyen. Ingen bindingstid, ingen skjulte kostnader.'
+  },
+]
+
+function FaqSeksjon() {
+  const [aapen, setAapen] = useState(null)
+  return (
+    <section className="l2-faq">
+      <div className="l2-faq-inner">
+        <p className="l2-faq-overst">Ofte stilte spørsmål</p>
+        <h2 className="l2-faq-tittel">Har du spørsmål? Vi har svar.</h2>
+        <div className="l2-faq-liste">
+          {FAQ_LISTE.map((f, i) => (
+            <div key={i} className={`l2-faq-item${aapen === i ? ' aapen' : ''}`}>
+              <button className="l2-faq-sporsmal" onClick={() => setAapen(aapen === i ? null : i)}>
+                <span>{f.sp}</span>
+                <svg className="l2-faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="6 9 12 15 18 9"/>
+                </svg>
+              </button>
+              {aapen === i && (
+                <div className="l2-faq-svar">{f.sv}</div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 function IkonLyn() {
   return (
     <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
@@ -165,6 +223,35 @@ export default function Landingsside({ onStart, onRegistrer }) {
       {/* ── DEMO KARUSELL ── */}
       <DemoSlideshow />
 
+
+      {/* ── ANMELDELSER ── */}
+      <section className="l2-anm">
+        <div className="l2-anm-inner">
+          <p className="l2-anm-overst">Hva fagfolk sier</p>
+          <h2 className="l2-anm-tittel">Brukt av håndverkere over hele Norge</h2>
+          <div className="l2-anm-rad">
+            <div className="l2-anm-kort">
+              <div className="l2-anm-stjerner">★★★★★</div>
+              <p className="l2-anm-tekst">«Sender nå tilbud samme dag som befaring. Kundene reagerer positivt på hvor profesjonelt det ser ut — og jeg vinner flere jobber.»</p>
+              <div className="l2-anm-navn">Thomas H. — Maler, Stavanger</div>
+            </div>
+            <div className="l2-anm-kort">
+              <div className="l2-anm-stjerner">★★★★★</div>
+              <p className="l2-anm-tekst">«Brukte å bruke halv dag på tilbud i Word. Nå er det gjort på 10 minutter fra mobilen. Materialbiblioteket alene er verdt pengene.»</p>
+              <div className="l2-anm-navn">Kristian B. — Rørlegger, Bergen</div>
+            </div>
+            <div className="l2-anm-kort">
+              <div className="l2-anm-stjerner">★★★★★</div>
+              <p className="l2-anm-tekst">«AI-teksten er overraskende god. Jeg skriver noen stikkord og får et komplett, profesjonelt tilbud tilbake. Enkelt og effektivt.»</p>
+              <div className="l2-anm-navn">Silje M. — Elektriker, Oslo</div>
+            </div>
+          </div>
+          <p className="l2-anm-kilde">Anmeldelser fra Google</p>
+        </div>
+      </section>
+
+      {/* ── FAQ ── */}
+      <FaqSeksjon />
 
       {/* ── PRIS ── */}
       <section className="l2-pris">
