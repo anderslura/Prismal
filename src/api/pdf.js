@@ -253,6 +253,18 @@ async function byggPdfDok(skjema, isPro = true) {
     doc.text('Laget med Prismal — prismal.no | Fjern Prismal-branding med Pro', sideBredde / 2, gy, { align: 'center' })
   }
 
+  // ── Sidetall (kun ved flere sider) ──
+  const totalSider = doc.internal.getNumberOfPages()
+  if (totalSider > 1) {
+    for (let i = 1; i <= totalSider; i++) {
+      doc.setPage(i)
+      doc.setFontSize(7.5)
+      doc.setFont('helvetica', 'normal')
+      doc.setTextColor(...fargeGraa)
+      doc.text(`Side ${i} av ${totalSider}`, sideBredde - margin, sideHoyde - 6, { align: 'right' })
+    }
+  }
+
   return doc
 }
 
