@@ -3558,13 +3558,15 @@ textarea { resize: vertical; }
   .demo-intro { margin-bottom: 28px; }
   .demo-grid { flex-direction: column; gap: 20px; }
   .demo-steg-nav {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    column-count: 2;
+    column-gap: 6px;
     width: 100%;
-    gap: 6px;
   }
   .demo-steg-knapp {
+    display: flex;
     width: 100%;
+    break-inside: avoid;
+    margin-bottom: 6px;
     padding: 7px 10px;
     justify-content: flex-start;
   }
