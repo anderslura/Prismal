@@ -253,7 +253,7 @@ function AppInnhold() {
 
   // ── Stripe: åpne Customer Portal ─────────────────────────────────────
   async function aapnePortal() {
-    if (!stripeKundeId) return
+    if (!stripeKundeId) { alert('Ingen Stripe-konto funnet. Kontakt support på kontakt@prismal.no.'); return }
     setPortalLaster(true)
     try {
       const res = await fetch('/.netlify/functions/create-portal', {
@@ -327,7 +327,7 @@ function AppInnhold() {
                     <div className="profil-dropdown">
                       <div className="profil-dropdown-epost">{bruker.email}</div>
                       <div className="profil-dropdown-divider" />
-                      {isPro && stripeKundeId && (
+                      {isPro && (
                         <button
                           className="profil-dropdown-item"
                           onClick={() => { setVisProfilMeny(false); aapnePortal() }}
