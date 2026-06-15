@@ -143,19 +143,20 @@ export default function Landingsside({ onStart, onRegistrer }) {
           <h2 className="l2-pitch-tittel">Tilbud som vinner jobber — ikke mister dem</h2>
           <div className="l2-pitch-kort-rad">
             <div className="l2-pitch-kort">
-              <div className="l2-pitch-ikon">⚡</div>
               <h3>Ikke mist kunden på veien</h3>
               <p>Kunder som venter lenge på tilbud velger noen andre. Med Prismal sender du profesjonelt tilbud samme dag — gjerne fra bilen etter befaringen.</p>
             </div>
             <div className="l2-pitch-kort">
-              <div className="l2-pitch-ikon">🏆</div>
               <h3>Imponer — og vinn mot konkurrentene</h3>
-              <p>Et gjennomarbeidet tilbud med logo, pristabell og klar akseptklausul signaliserer seriøsitet. Kunden velger den som ser mest profesjonell ut.</p>
+              <p>Et gjennomarbeidet tilbud med logo, pristabell og akseptklausul signaliserer seriøsitet. Kunden velger den som ser mest profesjonell ut.</p>
             </div>
             <div className="l2-pitch-kort">
-              <div className="l2-pitch-ikon">📈</div>
               <h3>Spar tid — send flere — få flere jobber</h3>
               <p>Når et tilbud tar minutter i stedet for timer, sender du mer. Mer tilbud gir mer jobb. Prismal er investering i din egen kapasitet.</p>
+            </div>
+            <div className="l2-pitch-kort l2-pitch-kort-norsk">
+              <h3>Laget i Norge — for norske fagfolk</h3>
+              <p>Prismal er utviklet av en norsk fagmann, for fagmenn og -damer i Norge. Norsk kundeservice, og alle oppdateringer og forbedringer er alltid inkludert i abonnementet — uten ekstra kostnad. Kom med innspill, følg oss på Facebook, og bli med på å forme Norges beste verktøy for tilbud.</p>
             </div>
           </div>
         </div>

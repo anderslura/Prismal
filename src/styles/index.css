@@ -1988,19 +1988,19 @@ textarea { resize: vertical; }
 }
 .l2-pitch-kort-rad {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
 }
 .l2-pitch-kort {
   background: #f8faff;
   border: 1px solid rgba(99,102,241,0.10);
   border-radius: 16px;
-  padding: 32px 28px;
+  padding: 28px 28px;
   text-align: left;
 }
-.l2-pitch-ikon {
-  font-size: 28px;
-  margin-bottom: 14px;
+.l2-pitch-kort-norsk {
+  background: linear-gradient(135deg, #eef2ff 0%, #f0f9ff 100%);
+  border-color: rgba(99,102,241,0.18);
 }
 .l2-pitch-kort h3 {
   font-size: 16px;
@@ -3321,19 +3321,19 @@ textarea { resize: vertical; }
 }
 .l2-pitch-kort-rad {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
 }
 .l2-pitch-kort {
   background: #f8faff;
   border: 1px solid rgba(99,102,241,0.10);
   border-radius: 16px;
-  padding: 32px 28px;
+  padding: 28px 28px;
   text-align: left;
 }
-.l2-pitch-ikon {
-  font-size: 28px;
-  margin-bottom: 14px;
+.l2-pitch-kort-norsk {
+  background: linear-gradient(135deg, #eef2ff 0%, #f0f9ff 100%);
+  border-color: rgba(99,102,241,0.18);
 }
 .l2-pitch-kort h3 {
   font-size: 16px;
@@ -3581,19 +3581,19 @@ textarea { resize: vertical; }
 }
 .l2-pitch-kort-rad {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
 }
 .l2-pitch-kort {
   background: #f8faff;
   border: 1px solid rgba(99,102,241,0.10);
   border-radius: 16px;
-  padding: 32px 28px;
+  padding: 28px 28px;
   text-align: left;
 }
-.l2-pitch-ikon {
-  font-size: 28px;
-  margin-bottom: 14px;
+.l2-pitch-kort-norsk {
+  background: linear-gradient(135deg, #eef2ff 0%, #f0f9ff 100%);
+  border-color: rgba(99,102,241,0.18);
 }
 .l2-pitch-kort h3 {
   font-size: 16px;
