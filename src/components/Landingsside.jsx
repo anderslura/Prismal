@@ -25,7 +25,7 @@ const FAQ_LISTE = [
   },
   {
     sp: 'Kan jeg lagre kunder og materialer?',
-    sv: 'Ja. Kunder lagres i en søkbar database — finn dem igjen på navn eller mobilnummer. Materialer lagres i et personlig bibliotek med priser, og oppdateres kun med antall fra gang til gang.'
+    sv: 'Ja. Kunder lagres ved å trykke «Lagre kunde» — deretter søkes de opp på navn eller mobilnummer i fremtidige tilbud. Materialer lagres automatisk i et personlig bibliotek med priser, og du oppdaterer kun antall fra gang til gang. Alt synkroniseres i skyen og er tilgjengelig på alle enheter.'
   },
   {
     sp: 'Hvordan avslutter jeg abonnementet?',
