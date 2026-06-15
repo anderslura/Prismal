@@ -3227,9 +3227,16 @@ textarea { resize: vertical; }
   background: #fff;
   animation: demoFadeIn 0.32s ease;
   line-height: 0;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .demo-bilde {
-  width: 100%;
+  max-width: 100%;
+  max-height: 400px;
+  width: auto;
+  height: auto;
   display: block;
   object-fit: contain;
 }
@@ -3307,4 +3314,6 @@ textarea { resize: vertical; }
   .demo-steg-knapp { width: auto; padding: 6px 10px; }
   .demo-steg-tekst { font-size: 12px; }
   .demo-steg-sirkel { width: 22px; height: 22px; font-size: 9px; }
+  .demo-bilde-ramme { height: 260px; }
+  .demo-bilde { max-height: 260px; }
 }

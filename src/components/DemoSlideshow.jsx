@@ -48,7 +48,7 @@ const STEG = [
     nr: '✓', label: 'Ferdig tilbud',
     tittel: 'Profesjonelt tilbud — klart til sending',
     tekst: 'Med logo, pristabell, betalingsbetingelser og akseptklausul. Sendes direkte til kunden.',
-    img: '/demo/pdf1.jpg',
+    img: '/demo/pdf1.png',
     erPdf: true,
   },
 ]
