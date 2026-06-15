@@ -1209,7 +1209,6 @@ textarea { resize: vertical; }
   display: flex;
   align-items: center;
   justify-content: center;
-  filter: drop-shadow(0 16px 40px rgba(59,130,246,0.18));
 }
 .l2-hero-bilde {
   width: 100%;
@@ -1218,6 +1217,7 @@ textarea { resize: vertical; }
   display: block;
   border: none;
   outline: none;
+  box-shadow: 0 16px 40px rgba(59,130,246,0.18);
 }
 .l2-hero-cta {
   margin-top: 40px;
