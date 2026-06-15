@@ -5,6 +5,7 @@ import { genererTilbudstekst } from './api/claude.js'
 import { lastNedPDF } from './api/pdf.js'
 import Landingsside from './components/Landingsside.jsx'
 import SendteHistorikk from './components/SendteHistorikk.jsx'
+import PersonvernModal from './components/PersonvernModal.jsx'
 import PrismalLogo from './components/PrismalLogo.jsx'
 import LoginModal from './components/LoginModal.jsx'
 import { AuthProvider, useAuth } from './contexts/AuthContext.jsx'
@@ -74,6 +75,7 @@ function AppInnhold() {
   const [steg, setSteg]                 = useState('landing')
   const [visLogin, setVisLogin]         = useState(false)
   const [visOppgrader, setVisOppgrader] = useState(false)
+  const [visPersonvern, setVisPersonvern] = useState(null) // 'personvern' | 'vilkaar' | null
   const [checkoutLaster, setCheckoutLaster] = useState(false)
   const [portalLaster, setPortalLaster]     = useState(false)
   const [proMelding, setProMelding]         = useState(null)
@@ -346,10 +348,7 @@ function AppInnhold() {
             <span>Du har brukt alle {MAKS_GRATIS_FORSOK} gratis tilbud — oppgrader til Pro for å fortsette</span>
           ) : (
             <span>
-              {bruker
-                ? <><strong>{forsokGjenstaende} av {MAKS_GRATIS_FORSOK} gratis tilbud</strong> gjenstår · Firmainfo og logo krever Pro</>
-                : <><strong>1 gratis prøvetilbud</strong> — registrer deg for {MAKS_GRATIS_FORSOK} totalt</>
-              }
+              <><strong>{forsokGjenstaende} av {MAKS_GRATIS_FORSOK} gratis tilbud</strong> gjenstår · Firmainfo og logo krever Pro</>
             </span>
           )}
           <button className="btn-pro-oppgrader" onClick={() => setVisOppgrader(true)}>
@@ -360,7 +359,7 @@ function AppInnhold() {
 
       <main className={`app-main${steg === 'landing' ? ' app-main--landing' : ''}`}>
         {steg === 'landing' ? (
-          <Landingsside onStart={() => setSteg('skjema')} onRegistrer={() => bruker ? setSteg('skjema') : setVisLogin(true)} />
+          <Landingsside onStart={() => bruker ? setSteg('skjema') : setVisLogin(true)} onRegistrer={() => bruker ? setSteg('skjema') : setVisLogin(true)} />
         ) : steg === 'skjema' ? (
           <TilbudSkjema
             skjema={skjema}
@@ -389,9 +388,20 @@ function AppInnhold() {
 
       <footer className="app-footer">
         <p>© {new Date().getFullYear()} Hjelpeportalen AS · prismal.no</p>
+        <p style={{ marginTop: '4px', fontSize: '0.78rem', opacity: 0.6 }}>
+          <button className="footer-lenke" onClick={() => setVisPersonvern('personvern')}>Personvernerklæring</button>
+          {' · '}
+          <button className="footer-lenke" onClick={() => setVisPersonvern('vilkaar')}>Vilkår for bruk</button>
+          {' · '}
+          <a href="mailto:post@prismal.no" style={{ color: 'inherit' }}>post@prismal.no</a>
+        </p>
       </footer>
 
       {visLogin && <LoginModal onLukk={() => setVisLogin(false)} />}
+
+      {visPersonvern && (
+        <PersonvernModal side={visPersonvern} onLukk={() => setVisPersonvern(null)} />
+      )}
 
       {/* Oppgrader til Pro — modal */}
       {visOppgrader && (

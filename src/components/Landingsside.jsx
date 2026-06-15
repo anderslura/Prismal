@@ -160,15 +160,6 @@ export default function Landingsside({ onStart, onRegistrer }) {
                 <span>Ingen kredittkort · Ingen bindingstid</span>
               </p>
             </div>
-            <div className="l2-cta-eller">eller</div>
-            <div className="l2-cta-alternativ">
-              <button className="l2-cta-sekundaer" onClick={onStart}>
-                Prøv uten registrering
-              </button>
-              <p className="l2-cta-hint l2-cta-hint-sek">
-                1 tilbud · Uten firma og logo
-              </p>
-            </div>
           </div>
         </div>
       </section>

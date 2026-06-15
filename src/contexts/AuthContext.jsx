@@ -3,18 +3,13 @@ import { supabase } from '../lib/supabase.js'
 
 const AuthContext = createContext(null)
 
-// Anonyme: 1 gratis smaksprøve (localStorage) → registreringskrav
-// Registrerte: 3 gratis generasjoner telt i Supabase → betalingsmur
-const MAKS_ANONYM = 1
-const MAKS_GRATIS = 3          // registrert, ikke Pro
-const ANONYM_KEY  = 'prismal_anonym_forsok'
+// Registrerte brukere: 3 gratis generasjoner telt i Supabase → betalingsmur
+// Anonym tilgang er fjernet — innlogging kreves for å bruke appen
+const MAKS_GRATIS = 3
 
 export function AuthProvider({ children }) {
   const [bruker,         setBruker]         = useState(null)
   const [laster,         setLaster]         = useState(true)
-  const [anonymForsok,   setAnonymForsok]   = useState(() => {
-    try { return parseInt(localStorage.getItem(ANONYM_KEY) || '0') } catch { return 0 }
-  })
   const [dbGenerasjoner, setDbGenerasjoner] = useState(0)
   const [dbPro,          setDbPro]          = useState(false)
   const [stripeKundeId,  setStripeKundeId]  = useState(null)
@@ -70,39 +65,29 @@ export function AuthProvider({ children }) {
   }
 
   // ── Registrer ett forsøk ─────────────────────────────────────────────
-  // Kalles etter vellykket PDF-generering
   async function registrerForsok() {
-    if (dbPro) return                          // Pro: ingen tellelogikk
+    if (dbPro || !bruker) return
 
-    if (bruker) {
-      const ny = dbGenerasjoner + 1
-      setDbGenerasjoner(ny)
-      await supabase
-        .from('profiles')
-        .update({ generasjoner_brukt: ny })
-        .eq('bruker_id', bruker.id)
-    } else {
-      const ny = anonymForsok + 1
-      try { localStorage.setItem(ANONYM_KEY, String(ny)) } catch {}
-      setAnonymForsok(ny)
-    }
+    const ny = dbGenerasjoner + 1
+    setDbGenerasjoner(ny)
+    await supabase
+      .from('profiles')
+      .update({ generasjoner_brukt: ny })
+      .eq('bruker_id', bruker.id)
   }
 
   // ── Avledede verdier ─────────────────────────────────────────────────
-  // isPro leses nå fra databasen, ikke user_metadata
   const isPro = dbPro
 
-  const kanBrukeForsok = isPro
-    || (bruker  && dbGenerasjoner < MAKS_GRATIS)
-    || (!bruker && anonymForsok   < MAKS_ANONYM)
+  const kanBrukeForsok = isPro || (bruker && dbGenerasjoner < MAKS_GRATIS)
 
   const forsokGjenstaende = isPro
     ? Infinity
     : bruker
       ? Math.max(0, MAKS_GRATIS - dbGenerasjoner)
-      : Math.max(0, MAKS_ANONYM - anonymForsok)
+      : 0
 
-  const trengerRegistrering = !bruker && anonymForsok >= MAKS_ANONYM
+  const trengerRegistrering = !bruker
   const trengerOppgradering = bruker && !isPro && dbGenerasjoner >= MAKS_GRATIS
 
   return (
@@ -118,7 +103,7 @@ export function AuthProvider({ children }) {
       registrerForsok,
       MAKS_GRATIS_FORSOK: MAKS_GRATIS,
       // legacy alias
-      forsok: bruker ? dbGenerasjoner : anonymForsok,
+      forsok: bruker ? dbGenerasjoner : 0,
     }}>
       {children}
     </AuthContext.Provider>
