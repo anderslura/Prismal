@@ -1215,7 +1215,7 @@ textarea { resize: vertical; }
   max-width: 360px;
   border-radius: 12px;
   display: block;
-  border: none;
+  border: 1.5px solid rgba(99,102,241,0.18);
   outline: none;
   box-shadow: 0 16px 40px rgba(59,130,246,0.18);
 }
