@@ -5,7 +5,14 @@ export default function PersonvernModal({ side, onLukk }) {
       <div
         className="modal-boks"
         onClick={e => e.stopPropagation()}
-        style={{ maxWidth: 640, maxHeight: '85vh', overflowY: 'auto', padding: '2rem' }}
+        style={{
+          maxWidth: 640,
+          maxHeight: '85vh',
+          overflowY: 'auto',
+          padding: '2rem',
+          background: '#ffffff',
+          color: '#1a1a1a',
+        }}
       >
         <button className="modal-lukk" onClick={onLukk}>✕</button>
 
@@ -18,7 +25,7 @@ export default function PersonvernModal({ side, onLukk }) {
 function Personvern() {
   return (
     <>
-      <h2 style={{ marginTop: 0 }}>Personvernerklæring</h2>
+      <h2 style={{ marginTop: 0, color: '#1a1a1a' }}>Personvernerklæring</h2>
       <p style={{ color: '#888', fontSize: '0.85rem' }}>Sist oppdatert: juni 2025</p>
 
       <h3>Behandlingsansvarlig</h3>
@@ -82,7 +89,7 @@ function Personvern() {
 function Vilkaar() {
   return (
     <>
-      <h2 style={{ marginTop: 0 }}>Vilkår for bruk</h2>
+      <h2 style={{ marginTop: 0, color: '#1a1a1a' }}>Vilkår for bruk</h2>
       <p style={{ color: '#888', fontSize: '0.85rem' }}>Sist oppdatert: juni 2025</p>
 
       <h3>Leverandør</h3>
