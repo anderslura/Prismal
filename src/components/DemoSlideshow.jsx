@@ -120,7 +120,7 @@ export default function DemoSlideshow() {
           </div>
 
           <div className="demo-bilde-ramme" key={`b-${animKey}`}>
-            <img src={s.img} alt={s.label} className="demo-bilde" />
+            <img src={s.img} alt={s.label} className="demo-bilde" loading="lazy" />
           </div>
 
           <div className="demo-kontroller-wrapper">

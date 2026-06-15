@@ -2060,6 +2060,14 @@ textarea { resize: vertical; }
 .profil-dropdown-item--loggut:hover {
   background: #fef2f2;
 }
+.profil-dropdown-item--lukk {
+  color: #6b7280;
+  font-size: 13px;
+}
+.profil-dropdown-item--lukk:hover {
+  background: #f9fafb;
+  color: #111827;
+}
 
 /* ── PITCH-SEKSJON ── */
 .l2-pitch {
@@ -3492,6 +3500,14 @@ textarea { resize: vertical; }
 }
 .profil-dropdown-item--loggut:hover {
   background: #fef2f2;
+}
+.profil-dropdown-item--lukk {
+  color: #6b7280;
+  font-size: 13px;
+}
+.profil-dropdown-item--lukk:hover {
+  background: #f9fafb;
+  color: #111827;
 }
 
 /* ── PITCH-SEKSJON ── */
