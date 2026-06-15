@@ -81,7 +81,7 @@ export default function DemoSlideshow() {
     <section className="demo-seksjon">
       <div className="demo-intro">
         <div className="demo-logo-rad">
-          <svg width="20" height="28" viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
+          <svg width="40" height="56" viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
             <polygon points="32,16 54,16 26,144 4,144"   fill="#a8caff"/>
             <polygon points="64,16 86,16 58,144 36,144"  fill="#6699ff"/>
             <polygon points="96,16 118,16 90,144 68,144" fill="#3366ee"/>
