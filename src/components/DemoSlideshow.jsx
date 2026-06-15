@@ -1,5 +1,5 @@
 /* ── DemoSlideshow — erstatning for FlipDemo på landingssiden ── */
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 
 const STEG = [
   {
@@ -29,13 +29,13 @@ const STEG = [
   {
     nr: '05', label: 'Materialer',
     tittel: 'Komplett materialliste',
-    tekst: 'Din personlige mal husker hele listen — neste oppdrag oppdaterer du kun antall.',
+    tekst: 'Materiallisten lagres i ditt personlige bibliotek — neste oppdrag oppdaterer du kun antall. Kun linjer med antall utfylt vises på PDF-en som sendes kunden. Huk av en linje for å inkludere den i påslagskalkylen. Vil du fjerne en linje permanent? Trykk papirkurvikonet — linjen slettes fra biblioteket ditt i skyen.',
     img: '/demo/materialer.jpg',
   },
   {
     nr: '06', label: 'Påslag',
     tittel: 'Påslag og transport',
-    tekst: 'Velg påslagsprosent på materialer. Legg til kjøring, bom og ferge separat.',
+    tekst: 'Velg raskt mellom forhåndsinnstilte påslagsprosenter (10%, 20%, 30%), eller skriv inn et egendefinert tall. Legg til kjøring (kr/km), bom, parkering og ferge som egne linjer — transport spesifiseres separat og legges ikke inn i materialkalkylen.',
     img: '/demo/paaslag.jpg',
   },
   {
@@ -48,7 +48,7 @@ const STEG = [
     nr: '08', label: 'Forhåndsvisning',
     tittel: 'Forhåndsvis og send tilbudet',
     tekst: 'Se det ferdige tilbudet før sending. Send direkte til kundens e-post — PDF legges ved automatisk. Kunden svarer til din bedrifts-e-post, og du mottar kopi i innboksen din. Tilbudet lagres i Prismal-historikken din.',
-    img: '/demo/forhandsvisning.jpg',
+    img: '/demo/forhandsvisning.png',
   },
   {
     nr: '✓', label: 'Ferdig tilbud',
@@ -60,45 +60,25 @@ const STEG = [
 
 export default function DemoSlideshow() {
   const [aktivt, setAktivt] = useState(0)
-  const [pauset, setPauset] = useState(false)
   const [animKey, setAnimKey] = useState(0)
-  const timerRef = useRef(null)
 
   const gåTil = useCallback((idx) => {
     setAktivt(idx)
     setAnimKey(k => k + 1)
   }, [])
 
-  const neste = useCallback(() => {
-    setAktivt(a => {
-      const n = (a + 1) % STEG.length
-      setAnimKey(k => k + 1)
-      return n
-    })
-  }, [])
-
-  const forrige = () => {
-    setAktivt(a => {
-      const p = (a - 1 + STEG.length) % STEG.length
-      setAnimKey(k => k + 1)
-      return p
-    })
+  const neste = () => {
+    setAktivt(a => { const n = (a + 1) % STEG.length; setAnimKey(k => k + 1); return n })
   }
 
-  useEffect(() => {
-    if (pauset) return
-    timerRef.current = setInterval(neste, 4500)
-    return () => clearInterval(timerRef.current)
-  }, [pauset, neste])
+  const forrige = () => {
+    setAktivt(a => { const p = (a - 1 + STEG.length) % STEG.length; setAnimKey(k => k + 1); return p })
+  }
 
   const s = STEG[aktivt]
 
   return (
-    <section
-      className="demo-seksjon"
-      onMouseEnter={() => setPauset(true)}
-      onMouseLeave={() => setPauset(false)}
-    >
+    <section className="demo-seksjon">
       <div className="demo-intro">
         <p className="demo-overst">Slik fungerer det</p>
         <h2 className="demo-tittel">Fra skjema til profesjonelt tilbud — på sekunder</h2>
