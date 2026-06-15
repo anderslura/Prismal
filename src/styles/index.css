@@ -1134,19 +1134,26 @@ textarea { resize: vertical; }
 }
 
 /* ── HERO split layout ── */
+.l2-hero-inner {
+  text-align: center;
+}
+.l2-hero-topp {
+  margin-bottom: 28px;
+}
 .l2-hero-split {
   display: flex;
   align-items: center;
   gap: 48px;
   text-align: left;
   max-width: 1160px;
+  margin: 0 auto;
 }
 .l2-hero-tekst {
   flex: 1 1 0;
   min-width: 0;
 }
 .l2-hero-bilde-wrapper {
-  flex: 0 0 340px;
+  flex: 0 0 360px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1154,9 +1161,15 @@ textarea { resize: vertical; }
 }
 .l2-hero-bilde {
   width: 100%;
-  max-width: 340px;
+  max-width: 360px;
   border-radius: 12px;
   display: block;
+}
+.l2-hero-cta {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .l2-badge {
   display: inline-block;
@@ -1842,10 +1855,10 @@ textarea { resize: vertical; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 840px) {
-  .l2-hero-split { flex-direction: column; text-align: center; gap: 32px; }
-  .l2-hero-bilde-wrapper { flex: 0 0 auto; width: 100%; max-width: 320px; }
+  .l2-hero-split { flex-direction: column; gap: 28px; }
   .l2-hero-tekst { text-align: center; }
   .l2-punkter { text-align: left; }
+  .l2-hero-bilde-wrapper { flex: 0 0 auto; width: 100%; max-width: 300px; margin: 0 auto; }
   .l2-features { grid-template-columns: 1fr 1fr; padding: 28px 20px 32px; gap: 14px; }
 }
 @media (max-width: 520px) {
