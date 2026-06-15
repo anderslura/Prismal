@@ -78,6 +78,7 @@ function AppInnhold() {
   const [visPersonvern, setVisPersonvern] = useState(null) // 'personvern' | 'vilkaar' | null
   const [checkoutLaster, setCheckoutLaster] = useState(false)
   const [portalLaster, setPortalLaster]     = useState(false)
+  const [visProfilMeny, setVisProfilMeny]   = useState(false)
   const [proMelding, setProMelding]         = useState(null)
 
   // ── Håndter Stripe redirect-parametere ──────────────────────────────
@@ -306,22 +307,57 @@ function AppInnhold() {
                 {bruker ? 'Lag tilbud →' : 'Kom i gang →'}
               </button>
             )}
-            {/* Pro-bruker: administrer abonnement */}
-            {bruker && isPro && stripeKundeId && (
-              <button
-                className="btn btn-secondary"
-                style={{ fontSize: '0.8rem', opacity: 0.8 }}
-                onClick={aapnePortal}
-                disabled={portalLaster}
-                title="Administrer abonnement"
-              >
-                {portalLaster ? 'Laster...' : '⚡ Pro'}
-              </button>
-            )}
+            {/* Profilmeny */}
             {bruker && (
-              <button className="btn btn-secondary" style={{ fontSize: '0.8rem', opacity: 0.7 }} onClick={loggUt} title={bruker.email}>
-                Logg ut
-              </button>
+              <div className="profil-meny-wrapper">
+                <button
+                  className="profil-meny-knapp"
+                  onClick={() => setVisProfilMeny(v => !v)}
+                  aria-expanded={visProfilMeny}
+                >
+                  <span className="profil-avatar">{(bruker.email?.[0] || '?').toUpperCase()}</span>
+                  {isPro && <span className="profil-pro-badge">Pro</span>}
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{marginLeft:2}}>
+                    <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+                {visProfilMeny && (
+                  <>
+                    <div className="profil-backdrop" onClick={() => setVisProfilMeny(false)} />
+                    <div className="profil-dropdown">
+                      <div className="profil-dropdown-epost">{bruker.email}</div>
+                      <div className="profil-dropdown-divider" />
+                      {isPro && stripeKundeId && (
+                        <button
+                          className="profil-dropdown-item"
+                          onClick={() => { setVisProfilMeny(false); aapnePortal() }}
+                          disabled={portalLaster}
+                        >
+                          <span>💳</span>
+                          {portalLaster ? 'Laster...' : 'Abonnement og fakturaer'}
+                        </button>
+                      )}
+                      {isPro && (
+                        <button
+                          className="profil-dropdown-item"
+                          onClick={() => { setVisProfilMeny(false); setSteg('historikk') }}
+                        >
+                          <span>📋</span>
+                          Sendte tilbud
+                        </button>
+                      )}
+                      <div className="profil-dropdown-divider" />
+                      <button
+                        className="profil-dropdown-item profil-dropdown-item--loggut"
+                        onClick={() => { setVisProfilMeny(false); loggUt() }}
+                      >
+                        <span>→</span>
+                        Logg ut
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
             )}
           </div>
         </div>
