@@ -47,7 +47,7 @@ const STEG = [
   {
     nr: '08', label: 'Forhåndsvisning',
     tittel: 'Forhåndsvis og send tilbudet',
-    tekst: 'Se det ferdige tilbudet før sending. Send direkte til kundens e-post — PDF legges ved automatisk. Kunden svarer til din bedrifts-e-post, og du mottar kopi i innboksen din. Tilbudet lagres i Prismal-historikken din.',
+    tekst: 'Se det ferdige tilbudet før sending — og rediger tilbudsteksten direkte om du ønsker det. Du er aldri låst til det AI-genererte forslaget. Når du er fornøyd: send direkte til kundens e-post med PDF vedlagt. Du får kopi i innboksen din, og tilbudet lagres i Prismal-historikken.',
     img: '/demo/forhandsvisning.png',
   },
   {
