@@ -24,7 +24,7 @@ function Personvern() {
       <h3>Behandlingsansvarlig</h3>
       <p>
         Hjelpeportalen AS<br />
-        Org.nr: [ORG.NR]<br />
+        Org.nr: 937141319<br />
         E-post: post@prismal.no
       </p>
 
@@ -87,7 +87,7 @@ function Vilkaar() {
 
       <h3>Leverandør</h3>
       <p>
-        Prismal er en tjeneste levert av Hjelpeportalen AS, org.nr [ORG.NR].
+        Prismal er en tjeneste levert av Hjelpeportalen AS, org.nr 937141319.
         Kontakt: post@prismal.no
       </p>
 
