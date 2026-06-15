@@ -41,7 +41,7 @@ const STEG = [
   {
     nr: '07', label: 'Totaloversikt',
     tittel: 'Total og PDF-tema',
-    tekst: 'Full oversikt eks. og inkl. mva. Velg tema — Standard, Mørk, Grå eller Hvit. Du kan også velge sesongbaserte temaer som Pride, Rosa sløyfe eller Julestil.',
+    tekst: 'Full oversikt eks. og inkl. mva. Velg tema — Standard, Mørk, Grå eller Hvit. Du kan også velge sesongbaserte temaer som Påske, Pride, Rosa sløyfe eller Julestil.',
     img: '/demo/total.jpg',
   },
   {

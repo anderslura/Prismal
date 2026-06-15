@@ -64,12 +64,6 @@ function IkonDokument() {
   )
 }
 
-const FEATURES = [
-  { ikon: <IkonLyn />, tittel: 'Raskt', tekst: 'Fyll inn jobb og priser — ferdig PDF på under 2 minutter.' },
-  { ikon: <IkonSparkle />, tittel: 'AI-tekst', tekst: 'Skriv hva jobben gjelder — AI formulerer profesjonell tilbudstekst.' },
-  { ikon: <IkonSky />, tittel: 'Synkronisert', tekst: 'Kunder, materialer og firma lagres i skyen. Samme oversikt på alle enheter — bare logg inn.' },
-  { ikon: <IkonDokument />, tittel: 'Klar PDF', tekst: 'Med din logo, prisoversikt og akseptklausul. Klar til å sende på sekunder.' },
-]
 
 
 export default function Landingsside({ onStart, onRegistrer }) {
@@ -145,16 +139,6 @@ export default function Landingsside({ onStart, onRegistrer }) {
       {/* ── DEMO KARUSELL ── */}
       <DemoSlideshow />
 
-      {/* ── FEATURES ── */}
-      <section className="l2-features">
-        {FEATURES.map(f => (
-          <div key={f.tittel} className="l2-kort">
-            <div className="l2-ikon-boks">{f.ikon}</div>
-            <h3 className="l2-kort-tittel">{f.tittel}</h3>
-            <p className="l2-kort-tekst">{f.tekst}</p>
-          </div>
-        ))}
-      </section>
 
       {/* ── PRIS ── */}
       <section className="l2-pris">

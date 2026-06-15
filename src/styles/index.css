@@ -1181,6 +1181,8 @@ textarea { resize: vertical; }
   border-radius: 10px;
   box-shadow: 0 32px 80px rgba(0,0,0,0.5);
   cursor: default;
+  border: none;
+  outline: none;
 }
 
 /* ── HERO split layout ── */
@@ -1214,6 +1216,8 @@ textarea { resize: vertical; }
   max-width: 360px;
   border-radius: 12px;
   display: block;
+  border: none;
+  outline: none;
 }
 .l2-hero-cta {
   margin-top: 40px;
@@ -3332,6 +3336,8 @@ textarea { resize: vertical; }
   height: auto;
   display: block;
   object-fit: contain;
+  border: none;
+  outline: none;
 }
 @keyframes demoFadeIn {
   from { opacity: 0; transform: translateY(10px); }
