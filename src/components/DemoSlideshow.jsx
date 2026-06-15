@@ -123,21 +123,24 @@ export default function DemoSlideshow() {
             <img src={s.img} alt={s.label} className="demo-bilde" />
           </div>
 
-          <div className="demo-kontroller">
-            <button className="demo-pil" onClick={forrige} aria-label="Forrige">&#8592;</button>
-            <div className="demo-dots" role="tablist">
-              {STEG.map((_, i) => (
-                <button
-                  key={i}
-                  role="tab"
-                  aria-selected={i === aktivt}
-                  className={`demo-dot${i === aktivt ? ' aktiv' : ''}`}
-                  onClick={() => gåTil(i)}
-                  aria-label={`Steg ${i + 1}`}
-                />
-              ))}
+          <div className="demo-kontroller-wrapper">
+            <div className="demo-kontroller">
+              <button className="demo-pil" onClick={forrige} aria-label="Forrige">&#8592;</button>
+              <div className="demo-dots" role="tablist">
+                {STEG.map((_, i) => (
+                  <button
+                    key={i}
+                    role="tab"
+                    aria-selected={i === aktivt}
+                    className={`demo-dot${i === aktivt ? ' aktiv' : ''}`}
+                    onClick={() => gåTil(i)}
+                    aria-label={`Steg ${i + 1}`}
+                  />
+                ))}
+              </div>
+              <button className="demo-pil" onClick={neste} aria-label="Neste">&#8594;</button>
             </div>
-            <button className="demo-pil" onClick={neste} aria-label="Neste">&#8594;</button>
+            <p className="demo-hint">Bla med pilene for å se hvert steg — fra første ord til ferdig tilbud. Eller hopp direkte til et steg i listen til venstre.</p>
           </div>
         </div>
       </div>
