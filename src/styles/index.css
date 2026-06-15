@@ -1136,11 +1136,13 @@ textarea { resize: vertical; }
 /* ── LIGHTBOX ── */
 .l2-hero-bilde-klikkbar {
   cursor: zoom-in;
+}
+.l2-hero-bilde-clip {
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-.l2-hero-bilde-klikkbar:hover {
+.l2-hero-bilde-clip:hover {
   transform: scale(1.02);
-  box-shadow: 0 20px 48px rgba(59,130,246,0.22);
+  box-shadow: 0 20px 48px rgba(59,130,246,0.28);
 }
 .l2-lightbox {
   position: fixed;
@@ -1210,14 +1212,20 @@ textarea { resize: vertical; }
   align-items: center;
   justify-content: center;
 }
+.l2-hero-bilde-clip {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1.5px solid rgba(99,102,241,0.18);
+  box-shadow: 0 16px 40px rgba(59,130,246,0.18);
+  cursor: zoom-in;
+  max-width: 360px;
+  line-height: 0;
+}
 .l2-hero-bilde {
   width: 100%;
-  max-width: 360px;
-  border-radius: 12px;
   display: block;
-  border: 1.5px solid rgba(99,102,241,0.18);
+  border: none;
   outline: none;
-  box-shadow: 0 16px 40px rgba(59,130,246,0.18);
 }
 .l2-hero-cta {
   margin-top: 40px;

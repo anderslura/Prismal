@@ -100,22 +100,22 @@ export default function Landingsside({ onStart, onRegistrer }) {
               </h1>
               <ul className="l2-punkter">
                 <li>Beskriv jobben med få ord — AI genererer komplett, korrekt tilbudstekst</li>
+                <li>Lagrede kunder — finn og gjenbruk med ett søk</li>
                 <li>Befar jobben — send profesjonelt tilbud fra bilen</li>
                 <li>PDF leveres direkte i kundens innboks — ingen nedlasting</li>
-                <li>Kopi av hvert tilbud lagres automatisk i din innboks</li>
+                <li>Full historikk i din Prismal-profil</li>
                 <li>Fungerer på mobil, nettbrett og PC — ingen installasjon</li>
-                <li>Logo, firmainformasjon og prisliste huskes for alltid</li>
               </ul>
             </div>
 
             <div className="l2-hero-bilde-wrapper">
-              <img
-                src="/demo/pdf_forside.png"
-                alt="Eksempel på Prismal-tilbud"
-                className="l2-hero-bilde l2-hero-bilde-klikkbar"
-                onClick={() => setLightbox(true)}
-                title="Trykk for å forstørre"
-              />
+              <div className="l2-hero-bilde-clip" onClick={() => setLightbox(true)} title="Trykk for å forstørre">
+                <img
+                  src="/demo/pdf_forside.png"
+                  alt="Eksempel på Prismal-tilbud"
+                  className="l2-hero-bilde l2-hero-bilde-klikkbar"
+                />
+              </div>
             </div>
           </div>
 
