@@ -1133,6 +1133,56 @@ textarea { resize: vertical; }
   margin: 0 auto;
 }
 
+/* ── LIGHTBOX ── */
+.l2-hero-bilde-klikkbar {
+  cursor: zoom-in;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.l2-hero-bilde-klikkbar:hover {
+  transform: scale(1.02);
+  box-shadow: 0 20px 48px rgba(59,130,246,0.22);
+}
+.l2-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(10, 12, 24, 0.88);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  cursor: zoom-out;
+}
+.l2-lightbox-lukk {
+  position: fixed;
+  top: 18px;
+  right: 20px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.22);
+  color: #fff;
+  font-size: 20px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  z-index: 10000;
+}
+.l2-lightbox-lukk:hover {
+  background: rgba(255,255,255,0.22);
+}
+.l2-lightbox-bilde {
+  max-width: 100%;
+  max-height: 90vh;
+  border-radius: 10px;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+  cursor: default;
+}
+
 /* ── HERO split layout ── */
 .l2-hero-inner {
   text-align: center;

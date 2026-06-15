@@ -1,5 +1,5 @@
 /* ── Landingsside v5 — lys, moderne, demo-karusell ── */
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import DemoSlideshow from './DemoSlideshow'
 
 function IkonLyn() {
@@ -73,6 +73,15 @@ const FEATURES = [
 
 
 export default function Landingsside({ onStart, onRegistrer }) {
+  const [lightbox, setLightbox] = useState(false)
+
+  useEffect(() => {
+    if (!lightbox) return
+    const onKey = (e) => { if (e.key === 'Escape') setLightbox(false) }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [lightbox])
+
   return (
     <div className="l2-wrapper">
 
@@ -109,7 +118,9 @@ export default function Landingsside({ onStart, onRegistrer }) {
               <img
                 src="/demo/pdf_forside.png"
                 alt="Eksempel på Prismal-tilbud"
-                className="l2-hero-bilde"
+                className="l2-hero-bilde l2-hero-bilde-klikkbar"
+                onClick={() => setLightbox(true)}
+                title="Trykk for å forstørre"
               />
             </div>
           </div>
@@ -194,6 +205,19 @@ export default function Landingsside({ onStart, onRegistrer }) {
           </p>
         </div>
       </section>
+
+      {/* ── LIGHTBOX ── */}
+      {lightbox && (
+        <div className="l2-lightbox" onClick={() => setLightbox(false)}>
+          <button className="l2-lightbox-lukk" onClick={() => setLightbox(false)} aria-label="Lukk">✕</button>
+          <img
+            src="/demo/pdf_forside.png"
+            alt="Prismal tilbud forhåndsvisning"
+            className="l2-lightbox-bilde"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
 
     </div>
   )
