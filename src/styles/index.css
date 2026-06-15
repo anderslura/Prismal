@@ -1132,6 +1132,32 @@ textarea { resize: vertical; }
   max-width: 920px;
   margin: 0 auto;
 }
+
+/* ── HERO split layout ── */
+.l2-hero-split {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  text-align: left;
+  max-width: 1160px;
+}
+.l2-hero-tekst {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.l2-hero-bilde-wrapper {
+  flex: 0 0 340px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 16px 40px rgba(59,130,246,0.18));
+}
+.l2-hero-bilde {
+  width: 100%;
+  max-width: 340px;
+  border-radius: 12px;
+  display: block;
+}
 .l2-badge {
   display: inline-block;
   background: rgba(99,102,241,0.10);
@@ -1816,6 +1842,10 @@ textarea { resize: vertical; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 840px) {
+  .l2-hero-split { flex-direction: column; text-align: center; gap: 32px; }
+  .l2-hero-bilde-wrapper { flex: 0 0 auto; width: 100%; max-width: 320px; }
+  .l2-hero-tekst { text-align: center; }
+  .l2-punkter { text-align: left; }
   .l2-features { grid-template-columns: 1fr 1fr; padding: 28px 20px 32px; gap: 14px; }
 }
 @media (max-width: 520px) {

@@ -81,34 +81,48 @@ export default function Landingsside({ onStart, onRegistrer }) {
         <div className="l2-hero-glow l2-glow-1" />
         <div className="l2-hero-glow l2-glow-2" />
         <div className="l2-hero-glow l2-glow-3" />
-        <div className="l2-hero-inner">
-          <div className="l2-badge">For fagfolk som sender tilbud</div>
-          <h1 className="l2-tittel">
-            Profesjonelle tilbud.<br />
-            <span className="l2-tittel-grad">På minutter.</span>
-          </h1>
-          <ul className="l2-punkter">
-            <li>Befar jobben — send profesjonelt tilbud fra bilen</li>
-            <li>PDF leveres direkte i kundens innboks — ingen nedlasting</li>
-            <li>Kopi av hvert tilbud lagres automatisk i din innboks</li>
-            <li>Full historikk over sendte tilbud i din Prismal-profil</li>
-            <li>Fungerer på mobil, nettbrett og PC — ingen installasjon</li>
-            <li>Logo, firmainformasjon og prisliste huskes for alltid</li>
-          </ul>
-          <div className="l2-cta-rad">
-            <div className="l2-cta-alternativ">
-              <button className="l2-cta" onClick={onRegistrer}>
-                Registrer deg gratis
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{marginLeft:6}}>
-                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </button>
-              <p className="l2-cta-hint l2-cta-hint-prim">
-                3 fulle tilbud med alle funksjoner<br/>
-                <span>Ingen kredittkort · Ingen bindingstid</span>
-              </p>
+        <div className="l2-hero-inner l2-hero-split">
+
+          {/* Venstre: tekst */}
+          <div className="l2-hero-tekst">
+            <div className="l2-badge">For fagfolk som sender tilbud</div>
+            <h1 className="l2-tittel">
+              Profesjonelle tilbud.<br />
+              <span className="l2-tittel-grad">På minutter.</span>
+            </h1>
+            <ul className="l2-punkter">
+              <li>Befar jobben — send profesjonelt tilbud fra bilen</li>
+              <li>PDF leveres direkte i kundens innboks — ingen nedlasting</li>
+              <li>Kopi av hvert tilbud lagres automatisk i din innboks</li>
+              <li>Full historikk over sendte tilbud i din Prismal-profil</li>
+              <li>Fungerer på mobil, nettbrett og PC — ingen installasjon</li>
+              <li>Logo, firmainformasjon og prisliste huskes for alltid</li>
+            </ul>
+            <div className="l2-cta-rad">
+              <div className="l2-cta-alternativ">
+                <button className="l2-cta" onClick={onRegistrer}>
+                  Registrer deg gratis
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{marginLeft:6}}>
+                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+                <p className="l2-cta-hint l2-cta-hint-prim">
+                  3 fulle tilbud med alle funksjoner<br/>
+                  <span>Ingen kredittkort · Ingen bindingstid</span>
+                </p>
+              </div>
             </div>
           </div>
+
+          {/* Høyre: PDF-forhåndsvisning */}
+          <div className="l2-hero-bilde-wrapper">
+            <img
+              src="/demo/pdf_forside.png"
+              alt="Eksempel på Prismal-tilbud"
+              className="l2-hero-bilde"
+            />
+          </div>
+
         </div>
       </section>
 
