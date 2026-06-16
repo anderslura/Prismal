@@ -125,6 +125,13 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
             </div>
           </div>
           <div className="felt-gruppe">
+            <label className="checkbox-label">
+              <input type="checkbox" checked={skjema.firmaMvaPliktig !== false} onChange={e => oppdater('firmaMvaPliktig', e.target.checked)} />
+              Momsregistrert (MVA-pliktig)
+            </label>
+            <span className="felt-hint">Du blir mva-pliktig når omsetningen passerer 50 000 kr i en 12-måneders periode. Før det — la denne stå uhuket, da vises tilbud uten mva-tillegg.</span>
+          </div>
+          <div className="felt-gruppe">
             <label>Logo på PDF {!isPro && <span className="pro-badge">PRO</span>}</label>
             {isPro ? (
               <div className="logo-opplasting">
@@ -169,7 +176,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                         firmanavn: skjema.firmanavn, telefon: skjema.firmaTelefon,
                         epost: skjema.firmaEpost, adresse: skjema.firmaAdresse,
                         orgnr: skjema.firmaOrgnr, nettside: skjema.firmaNettside,
-                        logoUrl: skjema.logoUrl,
+                        logoUrl: skjema.logoUrl, mvaPliktig: skjema.firmaMvaPliktig,
                       })
                       setFirmaStatus('ok')
                       setTimeout(() => setFirmaStatus(''), 2500)
@@ -195,6 +202,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                       if (f.orgnr)      oppdater('firmaOrgnr',   f.orgnr)
                       if (f.nettside)   oppdater('firmaNettside',f.nettside)
                       if (f.logo_url)   oppdater('logoUrl',      f.logo_url)
+                      if (typeof f.mva_pliktig === 'boolean') oppdater('firmaMvaPliktig', f.mva_pliktig)
                     } catch (e) { console.error('Hent firma feilet:', e) }
                   }}
                 >↩ Hent lagret profil</button>
@@ -487,8 +495,14 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
               {bomSum       > 0 && <div className="sum-linje"><span>Bom</span><span>{formaterKr(bomSum)}</span></div>}
               {parkeringSum > 0 && <div className="sum-linje"><span>Parkering</span><span>{formaterKr(parkeringSum)}</span></div>}
               {fergeSum     > 0 && <div className="sum-linje"><span>Ferge</span><span>{formaterKr(fergeSum)}</span></div>}
-              <div className="sum-linje sum-total"><span>Total eks. mva</span><span>{formaterKr(totalSum)}</span></div>
-              <div className="sum-linje sum-mva"><span>Inkl. 25% mva</span><span>{formaterKr(totalSum * 1.25)}</span></div>
+              {skjema.firmaMvaPliktig !== false ? (
+                <>
+                  <div className="sum-linje sum-total"><span>Total eks. mva</span><span>{formaterKr(totalSum)}</span></div>
+                  <div className="sum-linje sum-mva"><span>Inkl. 25% mva</span><span>{formaterKr(totalSum * 1.25)}</span></div>
+                </>
+              ) : (
+                <div className="sum-linje sum-total"><span>Totalt</span><span>{formaterKr(totalSum)}</span></div>
+              )}
             </div>
           </section>
         )}

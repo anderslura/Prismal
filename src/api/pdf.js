@@ -184,15 +184,22 @@ async function byggPdfDok(skjema, isPro = true) {
   ;(skjema.parkering||[]).forEach(p => { const a=parseFloat(p.antall)||0,pr=parseFloat(p.pris)||0; if(a>0&&pr>0) rader.push(['Parkering',String(a),kr(pr),kr(a*pr)]) })
   ;(skjema.ferge||[]).forEach(f => { const a=parseFloat(f.antall)||0,p=parseFloat(f.pris)||0; if(a>0&&p>0) rader.push(['Ferge',String(a),kr(p),kr(a*p)]) })
 
+  const mvaPliktig = skjema.firmaMvaPliktig !== false
+  const footRader = mvaPliktig
+    ? [
+        [{ content: 'Sum eks. mva', colSpan: 3, styles: { halign: 'right' } }, kr(totalEksMva)],
+        [{ content: 'MVA 25%', colSpan: 3, styles: { halign: 'right' } }, kr(mva)],
+        [{ content: 'Totalt inkl. mva', colSpan: 3, styles: { halign: 'right', fontStyle: 'bold' } }, { content: kr(totalInklMva), styles: { fontStyle: 'bold' } }],
+      ]
+    : [
+        [{ content: 'Totalt', colSpan: 3, styles: { halign: 'right', fontStyle: 'bold' } }, { content: kr(totalEksMva), styles: { fontStyle: 'bold' } }],
+      ]
+
   doc.autoTable({
     startY: cy,
     head: [['Beskrivelse', 'Antall', 'Enhetspris', 'Sum']],
     body: rader,
-    foot: [
-      [{ content: 'Sum eks. mva', colSpan: 3, styles: { halign: 'right' } }, kr(totalEksMva)],
-      [{ content: 'MVA 25%', colSpan: 3, styles: { halign: 'right' } }, kr(mva)],
-      [{ content: 'Totalt inkl. mva', colSpan: 3, styles: { halign: 'right', fontStyle: 'bold' } }, { content: kr(totalInklMva), styles: { fontStyle: 'bold' } }],
-    ],
+    foot: footRader,
     theme: 'grid',
     headStyles: { fillColor: fargeHoved, textColor: 255, fontSize: 9 },
     footStyles: { fillColor: fargeLysGraa, textColor: fargeMork, fontSize: 9 },

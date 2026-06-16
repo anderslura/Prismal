@@ -11,7 +11,7 @@ export async function hentFirma() {
 }
 
 // Lagre/oppdater firmaprofil (upsert på bruker_id)
-export async function lagreFirma({ firmanavn, telefon, epost, adresse, orgnr, nettside, logoUrl }) {
+export async function lagreFirma({ firmanavn, telefon, epost, adresse, orgnr, nettside, logoUrl, mvaPliktig }) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Ikke innlogget')
   const { error } = await supabase
@@ -25,6 +25,7 @@ export async function lagreFirma({ firmanavn, telefon, epost, adresse, orgnr, ne
       orgnr:     orgnr     || null,
       nettside:  nettside  || null,
       logo_url:  logoUrl   || null,
+      mva_pliktig: typeof mvaPliktig === 'boolean' ? mvaPliktig : true,
     }, { onConflict: 'bruker_id' })
   if (error) throw error
 }

@@ -294,18 +294,27 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
                 ))}
               </tbody>
               <tfoot>
-                <tr className="tfoot-eks-mva">
-                  <td colSpan={3}>Sum eks. mva</td>
-                  <td className="td-sum">{formaterKr(totalEksMva)}</td>
-                </tr>
-                <tr className="tfoot-mva">
-                  <td colSpan={3}>MVA 25%</td>
-                  <td className="td-sum">{formaterKr(totalEksMva * 0.25)}</td>
-                </tr>
-                <tr className="tfoot-total">
-                  <td colSpan={3}><strong>Totalt inkl. mva</strong></td>
-                  <td className="td-sum"><strong>{formaterKr(totalInklMva)}</strong></td>
-                </tr>
+                {skjema.firmaMvaPliktig !== false ? (
+                  <>
+                    <tr className="tfoot-eks-mva">
+                      <td colSpan={3}>Sum eks. mva</td>
+                      <td className="td-sum">{formaterKr(totalEksMva)}</td>
+                    </tr>
+                    <tr className="tfoot-mva">
+                      <td colSpan={3}>MVA 25%</td>
+                      <td className="td-sum">{formaterKr(totalEksMva * 0.25)}</td>
+                    </tr>
+                    <tr className="tfoot-total">
+                      <td colSpan={3}><strong>Totalt inkl. mva</strong></td>
+                      <td className="td-sum"><strong>{formaterKr(totalInklMva)}</strong></td>
+                    </tr>
+                  </>
+                ) : (
+                  <tr className="tfoot-total">
+                    <td colSpan={3}><strong>Totalt</strong></td>
+                    <td className="td-sum"><strong>{formaterKr(totalEksMva)}</strong></td>
+                  </tr>
+                )}
               </tfoot>
             </table>
           </div>

@@ -14,7 +14,7 @@ import { hentMaterialer } from './api/materialService.js'
 
 const TOM_SKJEMA = {
   firmanavn: '', firmaTelefon: '', firmaEpost: '', firmaAdresse: '',
-  firmaOrgnr: '', firmaNettside: '', kundenavn: '', kundeAdresse: '',
+  firmaOrgnr: '', firmaNettside: '', firmaMvaPliktig: true, kundenavn: '', kundeAdresse: '',
   kundeEpost: '', kundeMobil: '', beskrivelse: '', arbeidere: [], materialer: [],
   logoUrl: '', tilbudstekst: '', pdfTema: 'standard',
   kjoringKm: '', kjoringSats: '', bom: [], parkering: [], ferge: [],
@@ -116,6 +116,7 @@ function AppInnhold() {
       if (f.orgnr)      oppdater('firmaOrgnr',   f.orgnr)
       if (f.nettside)   oppdater('firmaNettside',f.nettside)
       if (f.logo_url)   oppdater('logoUrl',      f.logo_url)
+      if (typeof f.mva_pliktig === 'boolean') oppdater('firmaMvaPliktig', f.mva_pliktig)
     }).catch(e => console.error('Kunne ikke hente firma:', e))
   }, [bruker])
 
@@ -147,9 +148,10 @@ function AppInnhold() {
       firmanavn: skjema.firmanavn, firmaTelefon: skjema.firmaTelefon,
       firmaEpost: skjema.firmaEpost, firmaAdresse: skjema.firmaAdresse,
       firmaOrgnr: skjema.firmaOrgnr, firmaNettside: skjema.firmaNettside,
+      firmaMvaPliktig: skjema.firmaMvaPliktig,
     }
     localStorage.setItem('firma', JSON.stringify(firma))
-  }, [skjema.firmanavn, skjema.firmaTelefon, skjema.firmaEpost, skjema.firmaAdresse, skjema.firmaOrgnr, skjema.firmaNettside, isPro])
+  }, [skjema.firmanavn, skjema.firmaTelefon, skjema.firmaEpost, skjema.firmaAdresse, skjema.firmaOrgnr, skjema.firmaNettside, skjema.firmaMvaPliktig, isPro])
 
   useEffect(() => {
     if (isPro) localStorage.setItem('logoUrl', skjema.logoUrl || '')
@@ -280,7 +282,7 @@ function AppInnhold() {
   return (
     <div className="app">
       <header className="app-header">
-        <div className="header-inner">
+        <div className="header-inner" data-steg={steg}>
           <div className="logo" onClick={() => { setSteg('landing'); window.scrollTo({ top: 0, behavior: 'smooth' }) }} style={{cursor:'pointer'}} title="Til forsiden"><PrismalLogo /></div>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
             {steg === 'preview' && (

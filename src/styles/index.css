@@ -677,7 +677,7 @@ textarea { resize: vertical; }
   font-weight: 600;
 }
 
-.paaslag-checkbox-label {
+.checkbox-label {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -2690,6 +2690,21 @@ textarea { resize: vertical; }
   .header-inner > div:last-child {
     gap: 6px;
   }
+
+  /* Sentrer logo på landingssiden (enkleste header) for å holde
+     merkevaren unna kamera-/Dynamic Island-sonen på notch-telefoner.
+     Skjer KUN på 'landing' — andre steg har flere knapper i høyre
+     hjørne, og sentrert logo ville da kollidert med dem. */
+  .header-inner[data-steg="landing"] {
+    position: relative;
+    justify-content: flex-end;
+  }
+  .header-inner[data-steg="landing"] .logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
   .btn {
     padding: 7px 12px;
     font-size: 13px;
