@@ -438,6 +438,8 @@ function AppInnhold() {
           <button className="footer-lenke" onClick={() => setVisPersonvern('vilkaar')}>Vilkår for bruk</button>
           {' · '}
           <a href="mailto:post@prismal.no" style={{ color: 'inherit' }}>post@prismal.no</a>
+          {' · '}
+          <a href="https://www.facebook.com/profile.php?id=61591085692523" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit' }}>Facebook</a>
         </p>
       </footer>
 
