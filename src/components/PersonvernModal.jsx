@@ -32,7 +32,7 @@ function Personvern() {
       <p>
         Hjelpeportalen AS<br />
         Org.nr: 937141319<br />
-        E-post: post@prismal.no
+        E-post: kontakt@prismal.no
       </p>
 
       <h3>Hvilke data samler vi inn?</h3>
@@ -72,7 +72,7 @@ function Personvern() {
       <h3>Dine rettigheter</h3>
       <p>
         Du har rett til innsyn i, retting av og sletting av dine personopplysninger.
-        Ta kontakt på post@prismal.no for å utøve disse rettighetene.
+        Ta kontakt på kontakt@prismal.no for å utøve disse rettighetene.
         Du kan også klage til <strong>Datatilsynet</strong> (datatilsynet.no) dersom du mener
         vi behandler dine data i strid med personvernlovgivningen.
       </p>
@@ -95,7 +95,7 @@ function Vilkaar() {
       <h3>Leverandør</h3>
       <p>
         Prismal er en tjeneste levert av Hjelpeportalen AS, org.nr 937141319.
-        Kontakt: post@prismal.no
+        Kontakt: kontakt@prismal.no
       </p>
 
       <h3>Tjenesten</h3>
