@@ -439,7 +439,17 @@ function AppInnhold() {
           {' · '}
           <a href="mailto:kontakt@prismal.no" style={{ color: 'inherit' }}>kontakt@prismal.no</a>
           {' · '}
-          <a href="https://www.facebook.com/profile.php?id=61591085692523" target="_blank" rel="noopener noreferrer" style={{ color: 'inherit' }}>Facebook</a>
+          <a
+            href="https://www.facebook.com/profile.php?id=61591085692523"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: 'inherit', display: 'inline-flex', alignItems: 'center', gap: '4px', verticalAlign: 'middle' }}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.84c0-2.51 1.49-3.89 3.77-3.89 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.78-1.63 1.57v1.89h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94z" />
+            </svg>
+            Facebook
+          </a>
         </p>
       </footer>
 
