@@ -25,8 +25,13 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
   }, [visSendModal, mottakerEpost])
 
   const totalArbeid = (skjema.arbeidere || []).reduce((s, a) => s + (parseFloat(a.timer)||0)*(parseFloat(a.timepris)||0), 0)
-  const totalMaterialer = skjema.materialer.reduce((s, m) => s + (parseFloat(m.sum) || (parseFloat(m.antall)||1) * (parseFloat(m.pris)||0)), 0)
-  const materialerMedPaaslag = skjema.materialer.reduce((s, m) => s + (m.hasPaaslag ? (parseFloat(m.sum) || (parseFloat(m.antall)||1) * (parseFloat(m.pris)||0)) : 0), 0)
+  // Kun materialer med antall > 0 skal telle med — uten dette filteret blir
+  // bibliotek-maler (antall: 0, lastet inn automatisk fra materialbiblioteket)
+  // feilaktig regnet som "antall 1" og lagt til i summen. PDF-en (pdf.js)
+  // filtrerer allerede riktig — denne forhåndsvisningen må matche.
+  const materialerIBruk = skjema.materialer.filter(m => (parseFloat(m.antall)||0) > 0)
+  const totalMaterialer = materialerIBruk.reduce((s, m) => s + (parseFloat(m.sum) || (parseFloat(m.antall)||1) * (parseFloat(m.pris)||0)), 0)
+  const materialerMedPaaslag = materialerIBruk.reduce((s, m) => s + (m.hasPaaslag ? (parseFloat(m.sum) || (parseFloat(m.antall)||1) * (parseFloat(m.pris)||0)) : 0), 0)
   const paaslag = materialerMedPaaslag * (parseFloat(skjema.paaslagProsent) || 0) / 100
   const kjoringSum = (parseFloat(skjema.kjoringKm)||0) * (parseFloat(skjema.kjoringSats)||0)
   const bomSum       = (skjema.bom       || []).reduce((s, b) => s + (parseFloat(b.antall)||0)*(parseFloat(b.pris)||0), 0)
@@ -247,7 +252,7 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
                     <td className="td-sum">{formaterKr((parseFloat(a.timer)||0)*(parseFloat(a.timepris)||0))}</td>
                   </tr>
                 ))}
-                {skjema.materialer.map(m => (
+                {materialerIBruk.map(m => (
                   <tr key={m.id}>
                     <td>{m.navn}</td>
                     <td className="td-antall">{parseFloat(m.antall) || 1}</td>
