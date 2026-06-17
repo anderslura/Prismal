@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 import { hentTemaFarger } from './PdfTemavelger.jsx'
 import PrismalLogo from './PrismalLogo.jsx'
 import { genererPdfBase64 } from '../api/pdf.js'
@@ -33,6 +33,23 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
   const totalMaterialer = materialerIBruk.reduce((s, m) => s + (parseFloat(m.sum) || (parseFloat(m.antall)||1) * (parseFloat(m.pris)||0)), 0)
   const materialerMedPaaslag = materialerIBruk.reduce((s, m) => s + (m.hasPaaslag ? (parseFloat(m.sum) || (parseFloat(m.antall)||1) * (parseFloat(m.pris)||0)) : 0), 0)
   const paaslag = materialerMedPaaslag * (parseFloat(skjema.paaslagProsent) || 0) / 100
+  // Materialer kan grupperes under egendefinerte kategori-overskrifter (valgfritt felt per linje).
+  // Uten kategori i bruk: vis flat liste akkurat som før (ingen visuell endring).
+  const materialerHarKategori = materialerIBruk.some(m => m.kategori)
+  const materialGrupper = (() => {
+    if (!materialerHarKategori) return [{ kategori: null, rader: materialerIBruk }]
+    const nokler = []
+    const map = {}
+    materialerIBruk.forEach(m => {
+      const key = m.kategori || ''
+      if (!(key in map)) { map[key] = []; nokler.push(key) }
+      map[key].push(m)
+    })
+    const grupper = []
+    if (map['']) grupper.push({ kategori: null, rader: map[''] })
+    nokler.filter(Boolean).forEach(k => grupper.push({ kategori: k, rader: map[k] }))
+    return grupper
+  })()
   const kjoringSum       = (parseFloat(skjema.kjoringKm)||0) * (parseFloat(skjema.kjoringSats)||0)
   const kjoringHengerSum = (parseFloat(skjema.kjoringHengerKm)||0) * (parseFloat(skjema.kjoringHengerSats)||0)
   const hengerleieSum    = (parseFloat(skjema.hengerleieDager)||0) * (parseFloat(skjema.hengerleieSats)||0)
@@ -43,6 +60,13 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
   // Samme filter-prinsipp som materialer: kun rader med faktisk antall og pris regnes med
   const miljoAvgifterIBruk = (skjema.miljoavgifter || []).filter(m => (parseFloat(m.antall)||0) > 0 && (parseFloat(m.pris)||0) > 0)
   const miljoAvgifterSum = miljoAvgifterIBruk.reduce((s, m) => s + (parseFloat(m.antall)||0)*(parseFloat(m.pris)||0), 0)
+
+  // Forhåndsberegnede lister/flagg for seksjonsoverskrifter i pristabellen (speiler pdf.js)
+  const arbeidRaderListe = (skjema.arbeidere || []).filter(a => a.timer && a.timepris)
+  const bomRaderListe = (skjema.bom || []).filter(b => (parseFloat(b.antall)||0)*(parseFloat(b.pris)||0) > 0)
+  const parkeringRaderListe = (skjema.parkering || []).filter(p => (parseFloat(p.antall)||0)*(parseFloat(p.pris)||0) > 0)
+  const fergeRaderListe = (skjema.ferge || []).filter(f => (parseFloat(f.antall)||0)*(parseFloat(f.pris)||0) > 0)
+  const transportVis = kjoringSum > 0 || kjoringHengerSum > 0 || hengerleieSum > 0 || maskinleieSum > 0 || bomRaderListe.length > 0 || parkeringRaderListe.length > 0 || fergeRaderListe.length > 0
   const miljoPaaslag = miljoAvgifterSum * (parseFloat(skjema.miljoPaaslagProsent)||0) / 100
   const totalEksMva = totalArbeid + totalMaterialer + paaslag + miljoAvgifterSum + miljoPaaslag + kjoringSum + kjoringHengerSum + hengerleieSum + maskinleieSum + bomSum + parkeringSum + fergeSum
   const totalInklMva = totalEksMva * 1.25
@@ -196,11 +220,24 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
             {skjema.firmaAdresse && <p>{skjema.firmaAdresse}</p>}
             {skjema.firmaTelefon && <p>Tlf: {skjema.firmaTelefon}</p>}
             {skjema.firmaEpost && <p>{skjema.firmaEpost}</p>}
-            {skjema.firmaFacebookUrl && (
+            {skjema.firmaOrgnr && <p>Org.nr: {skjema.firmaOrgnr}</p>}
+            {skjema.firmaNettside && (
+              <p>
+                <a
+                  href={/^https?:\/\//i.test(skjema.firmaNettside) ? skjema.firmaNettside : `https://${skjema.firmaNettside}`}
+                  target="_blank" rel="noopener noreferrer" className="dok-nettside-link"
+                >
+                  {skjema.firmaNettside}
+                </a>
+              </p>
+            )}
+            {skjema.firmaFacebookUrl ? (
               <a href={skjema.firmaFacebookUrl} target="_blank" rel="noopener noreferrer" className="dok-fb-knapp">
                 Besøk {skjema.firmaFacebookNavn || skjema.firmanavn || 'vår'}s Facebook-side
               </a>
-            )}
+            ) : skjema.firmaFacebookNavn ? (
+              <p>Facebook: {skjema.firmaFacebookNavn}</p>
+            ) : null}
           </div>
           <div className="dok-meta">
             <div className="dok-meta-rad">
@@ -256,99 +293,126 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
                 </tr>
               </thead>
               <tbody>
-                {(skjema.arbeidere || []).filter(a => a.timer && a.timepris).map(a => (
-                  <tr key={a.id}>
-                    <td>Arbeid</td>
-                    <td className="td-antall">{a.timer} t</td>
-                    <td className="td-pris">{formaterKr(parseFloat(a.timepris))}</td>
-                    <td className="td-sum">{formaterKr((parseFloat(a.timer)||0)*(parseFloat(a.timepris)||0))}</td>
-                  </tr>
-                ))}
-                {materialerIBruk.map(m => (
-                  <tr key={m.id}>
-                    <td>{m.navn}</td>
-                    <td className="td-antall">{parseFloat(m.antall) || 1}</td>
-                    <td className="td-pris">{formaterKr(m.pris)}</td>
-                    <td className="td-sum">{formaterKr(parseFloat(m.sum) || (parseFloat(m.antall)||1) * (parseFloat(m.pris)||0))}</td>
-                  </tr>
-                ))}
-                {paaslag > 0 && (
-                  <tr>
-                    <td>Påslag materialer ({skjema.paaslagProsent}%)</td>
-                    <td className="td-antall"></td>
-                    <td className="td-pris"></td>
-                    <td className="td-sum">{formaterKr(paaslag)}</td>
-                  </tr>
+                {arbeidRaderListe.length > 0 && (
+                  <Fragment>
+                    <tr className="pris-tabell-seksjon"><td colSpan={4}>Arbeid</td></tr>
+                    {arbeidRaderListe.map(a => (
+                      <tr key={a.id}>
+                        <td>Arbeid</td>
+                        <td className="td-antall">{a.timer} t</td>
+                        <td className="td-pris">{formaterKr(parseFloat(a.timepris))}</td>
+                        <td className="td-sum">{formaterKr((parseFloat(a.timer)||0)*(parseFloat(a.timepris)||0))}</td>
+                      </tr>
+                    ))}
+                  </Fragment>
                 )}
-                {miljoAvgifterIBruk.map((m, i) => (
-                  <tr key={m.id || i}>
-                    <td>{m.navn || 'Miljøavgift'}</td>
-                    <td className="td-antall">{m.antall}</td>
-                    <td className="td-pris">{formaterKr(m.pris)}</td>
-                    <td className="td-sum">{formaterKr((parseFloat(m.antall)||0)*(parseFloat(m.pris)||0))}</td>
-                  </tr>
-                ))}
-                {miljoPaaslag > 0 && (
-                  <tr>
-                    <td>Påslag miljøavgifter ({skjema.miljoPaaslagProsent}%)</td>
-                    <td className="td-antall"></td>
-                    <td className="td-pris"></td>
-                    <td className="td-sum">{formaterKr(miljoPaaslag)}</td>
-                  </tr>
+                {(materialerIBruk.length > 0 || paaslag > 0) && (
+                  <Fragment>
+                    <tr className="pris-tabell-seksjon"><td colSpan={4}>Materialer</td></tr>
+                    {materialGrupper.map((gruppe, gi) => (
+                      <Fragment key={gruppe.kategori || `_ukat_${gi}`}>
+                        {gruppe.kategori && (
+                          <tr className="pris-tabell-kategori"><td colSpan={4}>{gruppe.kategori}</td></tr>
+                        )}
+                        {gruppe.rader.map(m => (
+                          <tr key={m.id}>
+                            <td>{m.navn}</td>
+                            <td className="td-antall">{parseFloat(m.antall) || 1}</td>
+                            <td className="td-pris">{formaterKr(m.pris)}</td>
+                            <td className="td-sum">{formaterKr(parseFloat(m.sum) || (parseFloat(m.antall)||1) * (parseFloat(m.pris)||0))}</td>
+                          </tr>
+                        ))}
+                      </Fragment>
+                    ))}
+                    {paaslag > 0 && (
+                      <tr>
+                        <td>Påslag materialer ({skjema.paaslagProsent}%)</td>
+                        <td className="td-antall"></td>
+                        <td className="td-pris"></td>
+                        <td className="td-sum">{formaterKr(paaslag)}</td>
+                      </tr>
+                    )}
+                  </Fragment>
                 )}
-                {kjoringSum > 0 && (
-                  <tr>
-                    <td>Kjøring</td>
-                    <td className="td-antall">{skjema.kjoringKm} km</td>
-                    <td className="td-pris">{formaterKr(skjema.kjoringSats)}/km</td>
-                    <td className="td-sum">{formaterKr(kjoringSum)}</td>
-                  </tr>
+                {(miljoAvgifterIBruk.length > 0 || miljoPaaslag > 0) && (
+                  <Fragment>
+                    <tr className="pris-tabell-seksjon"><td colSpan={4}>Miljøavgifter</td></tr>
+                    {miljoAvgifterIBruk.map((m, i) => (
+                      <tr key={m.id || i}>
+                        <td>{m.navn || 'Miljøavgift'}</td>
+                        <td className="td-antall">{m.antall}</td>
+                        <td className="td-pris">{formaterKr(m.pris)}</td>
+                        <td className="td-sum">{formaterKr((parseFloat(m.antall)||0)*(parseFloat(m.pris)||0))}</td>
+                      </tr>
+                    ))}
+                    {miljoPaaslag > 0 && (
+                      <tr>
+                        <td>Påslag miljøavgifter ({skjema.miljoPaaslagProsent}%)</td>
+                        <td className="td-antall"></td>
+                        <td className="td-pris"></td>
+                        <td className="td-sum">{formaterKr(miljoPaaslag)}</td>
+                      </tr>
+                    )}
+                  </Fragment>
                 )}
-                {kjoringHengerSum > 0 && (
-                  <tr>
-                    <td>Kjøring (bil + henger)</td>
-                    <td className="td-antall">{skjema.kjoringHengerKm} km</td>
-                    <td className="td-pris">{formaterKr(skjema.kjoringHengerSats)}/km</td>
-                    <td className="td-sum">{formaterKr(kjoringHengerSum)}</td>
-                  </tr>
+                {transportVis && (
+                  <Fragment>
+                    <tr className="pris-tabell-seksjon"><td colSpan={4}>Transport</td></tr>
+                    {kjoringSum > 0 && (
+                      <tr>
+                        <td>Kjøring</td>
+                        <td className="td-antall">{skjema.kjoringKm} km</td>
+                        <td className="td-pris">{formaterKr(skjema.kjoringSats)}/km</td>
+                        <td className="td-sum">{formaterKr(kjoringSum)}</td>
+                      </tr>
+                    )}
+                    {kjoringHengerSum > 0 && (
+                      <tr>
+                        <td>Kjøring (bil + henger)</td>
+                        <td className="td-antall">{skjema.kjoringHengerKm} km</td>
+                        <td className="td-pris">{formaterKr(skjema.kjoringHengerSats)}/km</td>
+                        <td className="td-sum">{formaterKr(kjoringHengerSum)}</td>
+                      </tr>
+                    )}
+                    {hengerleieSum > 0 && (
+                      <tr>
+                        <td>Leie av henger</td>
+                        <td className="td-antall">{skjema.hengerleieDager} dag(er)</td>
+                        <td className="td-pris">{formaterKr(skjema.hengerleieSats)}/dag</td>
+                        <td className="td-sum">{formaterKr(hengerleieSum)}</td>
+                      </tr>
+                    )}
+                    {maskinleieSum > 0 && (
+                      <tr>
+                        <td>Maskinleie</td>
+                        <td className="td-antall">{skjema.maskinleieDager} dag(er)</td>
+                        <td className="td-pris">{formaterKr(skjema.maskinleieSats)}/dag</td>
+                        <td className="td-sum">{formaterKr(maskinleieSum)}</td>
+                      </tr>
+                    )}
+                    {bomRaderListe.map((b, i) => (
+                      <tr key={b.id || i}>
+                        <td>Bom</td><td className="td-antall">{b.antall}</td>
+                        <td className="td-pris">{formaterKr(b.pris)}</td>
+                        <td className="td-sum">{formaterKr((parseFloat(b.antall)||0)*(parseFloat(b.pris)||0))}</td>
+                      </tr>
+                    ))}
+                    {parkeringRaderListe.map((p, i) => (
+                      <tr key={p.id || i}>
+                        <td>Parkering</td><td className="td-antall">{p.antall}</td>
+                        <td className="td-pris">{formaterKr(p.pris)}</td>
+                        <td className="td-sum">{formaterKr((parseFloat(p.antall)||0)*(parseFloat(p.pris)||0))}</td>
+                      </tr>
+                    ))}
+                    {fergeRaderListe.map((f, i) => (
+                      <tr key={f.id || i}>
+                        <td>Ferge</td><td className="td-antall">{f.antall}</td>
+                        <td className="td-pris">{formaterKr(f.pris)}</td>
+                        <td className="td-sum">{formaterKr((parseFloat(f.antall)||0)*(parseFloat(f.pris)||0))}</td>
+                      </tr>
+                    ))}
+                  </Fragment>
                 )}
-                {hengerleieSum > 0 && (
-                  <tr>
-                    <td>Leie av henger</td>
-                    <td className="td-antall">{skjema.hengerleieDager} dag(er)</td>
-                    <td className="td-pris">{formaterKr(skjema.hengerleieSats)}/dag</td>
-                    <td className="td-sum">{formaterKr(hengerleieSum)}</td>
-                  </tr>
-                )}
-                {maskinleieSum > 0 && (
-                  <tr>
-                    <td>Maskinleie</td>
-                    <td className="td-antall">{skjema.maskinleieDager} dag(er)</td>
-                    <td className="td-pris">{formaterKr(skjema.maskinleieSats)}/dag</td>
-                    <td className="td-sum">{formaterKr(maskinleieSum)}</td>
-                  </tr>
-                )}
-                {(skjema.bom || []).filter(b => (parseFloat(b.antall)||0)*(parseFloat(b.pris)||0) > 0).map((b, i) => (
-                  <tr key={b.id || i}>
-                    <td>Bom</td><td className="td-antall">{b.antall}</td>
-                    <td className="td-pris">{formaterKr(b.pris)}</td>
-                    <td className="td-sum">{formaterKr((parseFloat(b.antall)||0)*(parseFloat(b.pris)||0))}</td>
-                  </tr>
-                ))}
-                {(skjema.parkering || []).filter(p => (parseFloat(p.antall)||0)*(parseFloat(p.pris)||0) > 0).map((p, i) => (
-                  <tr key={p.id || i}>
-                    <td>Parkering</td><td className="td-antall">{p.antall}</td>
-                    <td className="td-pris">{formaterKr(p.pris)}</td>
-                    <td className="td-sum">{formaterKr((parseFloat(p.antall)||0)*(parseFloat(p.pris)||0))}</td>
-                  </tr>
-                ))}
-                {(skjema.ferge || []).filter(f => (parseFloat(f.antall)||0)*(parseFloat(f.pris)||0) > 0).map((f, i) => (
-                  <tr key={f.id || i}>
-                    <td>Ferge</td><td className="td-antall">{f.antall}</td>
-                    <td className="td-pris">{formaterKr(f.pris)}</td>
-                    <td className="td-sum">{formaterKr((parseFloat(f.antall)||0)*(parseFloat(f.pris)||0))}</td>
-                  </tr>
-                ))}
               </tbody>
               <tfoot>
                 {skjema.firmaMvaPliktig !== false ? (

@@ -51,6 +51,7 @@ async function byggPdfDok(skjema, isPro = true) {
     skjema.firmaEpost,
     skjema.firmaOrgnr ? `Org.nr: ${skjema.firmaOrgnr}` : null,
     skjema.firmaNettside,
+    (!skjema.firmaFacebookUrl && skjema.firmaFacebookNavn) ? `Facebook: ${skjema.firmaFacebookNavn}` : null,
   ].filter(Boolean)
   const visFacebookKnapp = !!skjema.firmaFacebookUrl
   const headerHoyde = Math.max(40, 18 + firmaLinjer.length * 5 + 4 + (visFacebookKnapp ? 9 : 0))
@@ -104,7 +105,15 @@ async function byggPdfDok(skjema, isPro = true) {
   doc.setFontSize(8)
   doc.setFont('helvetica', 'normal')
   let y = 21
-  firmaLinjer.forEach(linje => { doc.text(linje, tekstStartX, y); y += 5 })
+  firmaLinjer.forEach(linje => {
+    if (skjema.firmaNettside && linje === skjema.firmaNettside) {
+      const url = /^https?:\/\//i.test(skjema.firmaNettside) ? skjema.firmaNettside : `https://${skjema.firmaNettside}`
+      doc.textWithLink(linje, tekstStartX, y, { url })
+    } else {
+      doc.text(linje, tekstStartX, y)
+    }
+    y += 5
+  })
 
   if (visFacebookKnapp) {
     const fbNavn = skjema.firmaFacebookNavn || skjema.firmanavn || ''
@@ -185,44 +194,93 @@ async function byggPdfDok(skjema, isPro = true) {
   const mva = totalEksMva * 0.25
   const totalInklMva = totalEksMva + mva
 
+  // Seksjonsoverskrift: fet, full bredde (colSpan 4), litt ekstra luft over til neste seksjon
+  function seksjonsrad(navn) {
+    rader.push([{ content: navn.toUpperCase(), colSpan: 4, styles: {
+      fontStyle: 'bold', fontSize: 8, textColor: fargeMork, fillColor: fargeLysGraa,
+      cellPadding: { top: 3.5, right: 2, bottom: 1.5, left: 2 },
+    } }])
+  }
+  // Kategoriunderoverskrift for materialer (lysere/mindre enn seksjonsoverskrift)
+  function kategorirad(navn) {
+    rader.push([{ content: navn, colSpan: 4, styles: {
+      fontStyle: 'bold', fontSize: 7.5, textColor: fargeGraa, fillColor: [255, 255, 255],
+      cellPadding: { top: 2, right: 2, bottom: 1, left: 4 },
+    } }])
+  }
+
   const rader = []
-  ;(skjema.arbeidere || []).filter(a => a.timer && a.timepris).forEach(a => {
+
+  // ARBEID
+  const arbeidRader = (skjema.arbeidere || []).filter(a => a.timer && a.timepris).map(a => {
     const sum = (parseFloat(a.timer)||0)*(parseFloat(a.timepris)||0)
-    rader.push(['Arbeid', `${a.timer} t`, kr(parseFloat(a.timepris)), kr(sum)])
+    return ['Arbeid', `${a.timer} t`, kr(parseFloat(a.timepris)), kr(sum)]
   })
+  if (arbeidRader.length) { seksjonsrad('Arbeid'); rader.push(...arbeidRader) }
+
+  // MATERIALER — med valgfri kategorigruppering (kun om minst én linje har kategori satt)
   const paaslagFaktor = 1 + (parseFloat(skjema.paaslagProsent) || 0) / 100
-  skjema.materialer.filter(m => (parseFloat(m.antall)||0) > 0).forEach(m => {
+  const materialerIBrukListe = skjema.materialer.filter(m => (parseFloat(m.antall)||0) > 0)
+  function materialRad(m) {
     const ant = parseFloat(m.antall) || 1
     const prisUten = parseFloat(m.pris) || 0
     const prisMedPaaslag = m.hasPaaslag ? prisUten * paaslagFaktor : prisUten
-    rader.push([m.navn, String(ant), kr(prisMedPaaslag), kr(prisMedPaaslag * ant)])
-  })
+    return [m.navn, String(ant), kr(prisMedPaaslag), kr(prisMedPaaslag * ant)]
+  }
+  if (materialerIBrukListe.length) {
+    seksjonsrad('Materialer')
+    const harKategori = materialerIBrukListe.some(m => m.kategori)
+    if (!harKategori) {
+      materialerIBrukListe.forEach(m => rader.push(materialRad(m)))
+    } else {
+      const kategoriNokler = []
+      const kategoriMap = {}
+      materialerIBrukListe.forEach(m => {
+        const key = m.kategori || ''
+        if (!(key in kategoriMap)) { kategoriMap[key] = []; kategoriNokler.push(key) }
+        kategoriMap[key].push(m)
+      })
+      // Ukategoriserte linjer vises direkte, uten egen overskrift
+      ;(kategoriMap[''] || []).forEach(m => rader.push(materialRad(m)))
+      kategoriNokler.filter(Boolean).forEach(kat => {
+        kategorirad(kat)
+        kategoriMap[kat].forEach(m => rader.push(materialRad(m)))
+      })
+    }
+  }
 
-  miljoAvgifterListe.forEach(m => {
-    const ant = parseFloat(m.antall) || 0
-    const prisMedPaaslag = (parseFloat(m.pris) || 0) * miljoPaaslagFaktor
-    rader.push([m.navn || 'Miljøavgift', String(ant), kr(prisMedPaaslag), kr(prisMedPaaslag * ant)])
-  })
+  // MILJØAVGIFTER
+  if (miljoAvgifterListe.length) {
+    seksjonsrad('Miljøavgifter')
+    miljoAvgifterListe.forEach(m => {
+      const ant = parseFloat(m.antall) || 0
+      const prisMedPaaslag = (parseFloat(m.pris) || 0) * miljoPaaslagFaktor
+      rader.push([m.navn || 'Miljøavgift', String(ant), kr(prisMedPaaslag), kr(prisMedPaaslag * ant)])
+    })
+  }
 
+  // TRANSPORT
+  const transportRader = []
   const kjoringKm = parseFloat(skjema.kjoringKm) || 0
   const kjoringSats = parseFloat(skjema.kjoringSats) || 0
   if (kjoringKm > 0 && kjoringSats > 0)
-    rader.push(['Kjøring', `${kjoringKm} km`, kr(kjoringSats) + '/km', kr(kjoringKm * kjoringSats)])
+    transportRader.push(['Kjøring', `${kjoringKm} km`, kr(kjoringSats) + '/km', kr(kjoringKm * kjoringSats)])
   const kjoringHengerKm = parseFloat(skjema.kjoringHengerKm) || 0
   const kjoringHengerSats = parseFloat(skjema.kjoringHengerSats) || 0
   if (kjoringHengerKm > 0 && kjoringHengerSats > 0)
-    rader.push(['Kjøring (bil + henger)', `${kjoringHengerKm} km`, kr(kjoringHengerSats) + '/km', kr(kjoringHengerKm * kjoringHengerSats)])
+    transportRader.push(['Kjøring (bil + henger)', `${kjoringHengerKm} km`, kr(kjoringHengerSats) + '/km', kr(kjoringHengerKm * kjoringHengerSats)])
   const hengerleieDager = parseFloat(skjema.hengerleieDager) || 0
   const hengerleieSats = parseFloat(skjema.hengerleieSats) || 0
   if (hengerleieDager > 0 && hengerleieSats > 0)
-    rader.push(['Leie av henger', `${hengerleieDager} dag(er)`, kr(hengerleieSats) + '/dag', kr(hengerleieDager * hengerleieSats)])
+    transportRader.push(['Leie av henger', `${hengerleieDager} dag(er)`, kr(hengerleieSats) + '/dag', kr(hengerleieDager * hengerleieSats)])
   const maskinleieDager = parseFloat(skjema.maskinleieDager) || 0
   const maskinleieSats = parseFloat(skjema.maskinleieSats) || 0
   if (maskinleieDager > 0 && maskinleieSats > 0)
-    rader.push(['Maskinleie', `${maskinleieDager} dag(er)`, kr(maskinleieSats) + '/dag', kr(maskinleieDager * maskinleieSats)])
-  ;(skjema.bom||[]).forEach(b => { const a=parseFloat(b.antall)||0,p=parseFloat(b.pris)||0; if(a>0&&p>0) rader.push(['Bom',String(a),kr(p),kr(a*p)]) })
-  ;(skjema.parkering||[]).forEach(p => { const a=parseFloat(p.antall)||0,pr=parseFloat(p.pris)||0; if(a>0&&pr>0) rader.push(['Parkering',String(a),kr(pr),kr(a*pr)]) })
-  ;(skjema.ferge||[]).forEach(f => { const a=parseFloat(f.antall)||0,p=parseFloat(f.pris)||0; if(a>0&&p>0) rader.push(['Ferge',String(a),kr(p),kr(a*p)]) })
+    transportRader.push(['Maskinleie', `${maskinleieDager} dag(er)`, kr(maskinleieSats) + '/dag', kr(maskinleieDager * maskinleieSats)])
+  ;(skjema.bom||[]).forEach(b => { const a=parseFloat(b.antall)||0,p=parseFloat(b.pris)||0; if(a>0&&p>0) transportRader.push(['Bom',String(a),kr(p),kr(a*p)]) })
+  ;(skjema.parkering||[]).forEach(p => { const a=parseFloat(p.antall)||0,pr=parseFloat(p.pris)||0; if(a>0&&pr>0) transportRader.push(['Parkering',String(a),kr(pr),kr(a*pr)]) })
+  ;(skjema.ferge||[]).forEach(f => { const a=parseFloat(f.antall)||0,p=parseFloat(f.pris)||0; if(a>0&&p>0) transportRader.push(['Ferge',String(a),kr(p),kr(a*p)]) })
+  if (transportRader.length) { seksjonsrad('Transport'); rader.push(...transportRader) }
 
   const mvaPliktig = skjema.firmaMvaPliktig !== false
   const footRader = mvaPliktig

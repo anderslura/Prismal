@@ -10,6 +10,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
   const [nyAnt, setNyAnt] = useState('')
   const [nyPris, setNyPris] = useState('')
   const [nyHasPaaslag, setNyHasPaaslag] = useState(true)
+  const [nyKategori, setNyKategori] = useState('')
   const [matForslag, setMatForslag] = useState([])
   const matTimer = useRef(null)
   const [firmaStatus, setFirmaStatus] = useState('') // '' | 'laster' | 'ok' | 'feil'
@@ -32,7 +33,8 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
     if (!nyNavn) return
     const ant = parseFloat(nyAnt) || 1
     const pris = parseFloat(nyPris) || 0
-    oppdater('materialer', [...skjema.materialer, { id: Date.now(), navn: nyNavn, antall: ant, pris: pris, sum: pris * ant, hasPaaslag: nyHasPaaslag }])
+    // Kategori er kun en per-tilbud organiseringsetikett — lagres IKKE til det delte materialbiblioteket
+    oppdater('materialer', [...skjema.materialer, { id: Date.now(), navn: nyNavn, antall: ant, pris: pris, sum: pris * ant, hasPaaslag: nyHasPaaslag, kategori: nyKategori || '' }])
     // Lagre til Supabase-bibliotek (og localStorage som fallback)
     lagreMaterial({ navn: nyNavn, pris, hasPaaslag: nyHasPaaslag }).catch(() => {})
     try {
@@ -40,7 +42,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
       const finnes = eksisterende.some(l => l.navn.toLowerCase() === nyNavn.toLowerCase())
       if (!finnes) localStorage.setItem('materialLinjer', JSON.stringify([...eksisterende, { navn: nyNavn, pris, hasPaaslag: nyHasPaaslag }]))
     } catch {}
-    setNyNavn(''); setNyPris(''); setNyAnt(''); setMatForslag([])
+    setNyNavn(''); setNyPris(''); setNyAnt(''); setMatForslag([]); setNyKategori('')
   }
 
 
@@ -91,6 +93,30 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
   const miljoPaaslag = miljoAvgifterSum * (parseFloat(skjema.miljoPaaslagProsent)||0) / 100
   const totalTransport = kjoringSum + kjoringHengerSum + hengerleieSum + maskinleieSum + bomSum + parkeringSum + fergeSum
   const totalSum = totalArbeid + totalMaterialer + paaslag + miljoAvgifterSum + miljoPaaslag + totalTransport
+  const kategoriListe = [...new Set((skjema.materialer || []).map(m => m.kategori).filter(Boolean))]
+
+  // Materialer gruppert etter kategori for redigeringsvisningen (drag-and-drop mellom grupper).
+  // Uten kategori i bruk: én gruppe uten overskrift — visuelt identisk med den gamle flate listen.
+  const materialKategoriGrupper = (() => {
+    const nokler = []
+    const map = {}
+    skjema.materialer.forEach(m => {
+      const key = m.kategori || ''
+      if (!(key in map)) { map[key] = []; nokler.push(key) }
+      map[key].push(m)
+    })
+    const grupper = []
+    if (map['']) grupper.push({ kategori: null, rader: map[''] })
+    nokler.filter(Boolean).forEach(k => grupper.push({ kategori: k, rader: map[k] }))
+    return grupper
+  })()
+  const visKategoriOverskrift = materialKategoriGrupper.some(g => g.kategori)
+
+  function flyttMaterialTilKategori(e, kategoriNavn) {
+    e.preventDefault()
+    const id = e.dataTransfer.getData('text/plain')
+    if (id) oppdaterMaterial(Number(id), 'kategori', kategoriNavn)
+  }
 
   return (
     <div className="skjema-layout">
@@ -136,11 +162,12 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
             <div className="felt-gruppe">
               <label>Facebook – navn</label>
               <input type="text" placeholder="Firmanavn AS" value={skjema.firmaFacebookNavn||''} onChange={e => oppdater('firmaFacebookNavn', e.target.value)} />
-              <span className="felt-hint">Vises som tekst på Facebook-knappen</span>
+              <span className="felt-hint">Uten lenke vises dette bare som vanlig tekst i tilbudet.</span>
             </div>
             <div className="felt-gruppe">
               <label>Facebook – lenke</label>
               <input type="text" placeholder="https://facebook.com/firmanavn" value={skjema.firmaFacebookUrl||''} onChange={e => oppdater('firmaFacebookUrl', e.target.value)} />
+              <span className="felt-hint">Med lenke blir det en klikkbar knapp som leder rett til Facebook-siden din.</span>
             </div>
           </div>
           <div className="felt-gruppe">
@@ -328,25 +355,46 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
           </div>
           <p className="mat-info-tekst mat-info-antall">Kun linjer med antall kommer med i tilbudet.</p>
 
-          {/* EKSISTERENDE LINJER */}
+          {/* EKSISTERENDE LINJER — gruppert etter kategori (overskrift vises kun når kategori er i bruk) */}
 
-          {skjema.materialer.map(m => (
-            <div key={m.id} className={`mat-rad${(!m.antall || m.antall == 0) ? ' mat-rad-mal' : ''}`}>
-              <span className="mat-fast-navn">{m.navn}</span>
-              <input type="number" min="0" step="1"
-                className={`mat-ant${(!m.antall || m.antall == 0) ? ' mat-ant-tom' : ''}`}
-                value={(!m.antall || m.antall == 0) ? '' : m.antall}
-                placeholder="1"
-                onFocus={e => e.target.select()}
-                onChange={e => oppdaterMaterial(m.id, 'antall', e.target.value)} />
-              <input type="number" min="0" className="mat-pris" value={m.pris}
-                onChange={e => oppdaterMaterial(m.id, 'pris', e.target.value)} />
-              <span className="mat-sum">{formaterKr(m.sum||m.pris||0)}</span>
-              <input type="checkbox" className="mat-paaslag-cb" checked={m.hasPaaslag}
-                onChange={e => oppdater('materialer', skjema.materialer.map(x => x.id===m.id ? {...x, hasPaaslag:e.target.checked} : x))} />
-              <button className="btn-slett-lib" title="Slett fra bibliotek" onClick={() => slettFraLibraryOgTilbud(m.id)}>🗑</button>
+          {materialKategoriGrupper.map((gruppe, gi) => (
+            <div key={gruppe.kategori || `_ukat_${gi}`} className="mat-kategori-gruppe"
+              onDragOver={e => e.preventDefault()}
+              onDrop={e => flyttMaterialTilKategori(e, gruppe.kategori || '')}
+            >
+              {gruppe.kategori && <div className="mat-kategori-header">{gruppe.kategori}</div>}
+              {!gruppe.kategori && visKategoriOverskrift && (
+                <div className="mat-kategori-header mat-kategori-header-ukat">Ikke kategorisert</div>
+              )}
+              {gruppe.rader.map(m => (
+                <div key={m.id} className={`mat-rad${(!m.antall || m.antall == 0) ? ' mat-rad-mal' : ''}`}>
+                  <span className="mat-fast-navn" draggable
+                    onDragStart={e => e.dataTransfer.setData('text/plain', String(m.id))}
+                    title="Dra for å flytte til en annen kategori">{m.navn}</span>
+                  <input type="number" min="0" step="1"
+                    className={`mat-ant${(!m.antall || m.antall == 0) ? ' mat-ant-tom' : ''}`}
+                    value={(!m.antall || m.antall == 0) ? '' : m.antall}
+                    placeholder="1"
+                    onFocus={e => e.target.select()}
+                    onChange={e => oppdaterMaterial(m.id, 'antall', e.target.value)} />
+                  <input type="number" min="0" className="mat-pris" value={m.pris}
+                    onChange={e => oppdaterMaterial(m.id, 'pris', e.target.value)} />
+                  <span className="mat-sum">{formaterKr(m.sum||m.pris||0)}</span>
+                  <input type="checkbox" className="mat-paaslag-cb" checked={m.hasPaaslag}
+                    onChange={e => oppdater('materialer', skjema.materialer.map(x => x.id===m.id ? {...x, hasPaaslag:e.target.checked} : x))} />
+                  <button className="btn-slett-lib" title="Slett fra bibliotek" onClick={() => slettFraLibraryOgTilbud(m.id)}>🗑</button>
+                  <div className="mat-kategori-felt">
+                    <input type="text" list="mat-kategori-forslag" value={m.kategori || ''}
+                      placeholder="Kategori (valgfritt) – f.eks. Kjøkken, Bad …"
+                      onChange={e => oppdaterMaterial(m.id, 'kategori', e.target.value)} />
+                  </div>
+                </div>
+              ))}
             </div>
           ))}
+          <datalist id="mat-kategori-forslag">
+            {kategoriListe.map(k => <option key={k} value={k} />)}
+          </datalist>
 
           {/* NY LINJE */}
           <div className="mat-ny-wrapper">
@@ -387,6 +435,11 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
               <span className="mat-sum">{nyPris && nyAnt ? formaterKr((parseFloat(nyPris)||0)*(parseFloat(nyAnt)||1)) : ''}</span>
               <input type="checkbox" className="mat-paaslag-cb" checked={nyHasPaaslag} onChange={e => setNyHasPaaslag(e.target.checked)} />
               <button onClick={leggTilMaterial} className="btn-legg-til-mat">Legg til</button>
+              <div className="mat-kategori-felt">
+                <input type="text" list="mat-kategori-forslag" value={nyKategori} placeholder="Kategori (valgfritt) – f.eks. Kjøkken, Bad …"
+                  onChange={e => setNyKategori(e.target.value)}
+                  onKeyDown={e => e.key==='Enter' && leggTilMaterial()} />
+              </div>
             </div>
           </div>
         </section>
@@ -426,9 +479,8 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
             <span></span>
           </div>
 
-          {(skjema.miljoavgifter || []).map((m, idx) => {
+          {(skjema.miljoavgifter || []).map((m) => {
             const sum = (parseFloat(m.antall)||0)*(parseFloat(m.pris)||0)
-            const erSiste = idx === skjema.miljoavgifter.length - 1
             return (
               <div key={m.id} className="trans-rad">
                 <input type="text" placeholder="Beskrivelse" maxLength={40}
@@ -441,9 +493,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                   className="trans-input" value={m.pris}
                   onChange={e => oppdaterMiljoRad(m.id, 'pris', e.target.value)} />
                 <span className="trans-sum">{sum > 0 ? formaterKr(sum) : ''}</span>
-                {erSiste
-                  ? <button className="trans-legg-til-inline" onClick={() => leggTilMiljoRad(m.navn)}>+</button>
-                  : <button className="btn-fjern" onClick={() => fjernMiljoRad(m.id)}>×</button>}
+                <button className="btn-fjern" onClick={() => fjernMiljoRad(m.id)}>×</button>
               </div>
             )
           })}
@@ -452,6 +502,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
             <button className="paaslag-hurtig" onClick={() => leggTilMiljoRad('Kildesortering (kubikk / henger)')}>+ Kildesortering</button>
             <button className="paaslag-hurtig" onClick={() => leggTilMiljoRad('Spesialavfall')}>+ Spesialavfall</button>
             <button className="paaslag-hurtig" onClick={() => leggTilMiljoRad('Miljøgebyr')}>+ Miljøgebyr</button>
+            <button className="trans-legg-til" onClick={() => leggTilMiljoRad()}>+ Legg til egendefinert</button>
           </div>
 
           <div className="paaslag-rad">
@@ -538,9 +589,8 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
           </div>
 
           {/* Bom */}
-          {(skjema.bom || []).map((b, idx) => {
+          {(skjema.bom || []).map((b) => {
             const s = (parseFloat(b.antall)||0)*(parseFloat(b.pris)||0)
-            const erSiste = idx === skjema.bom.length - 1
             return (
               <div key={b.id} className="trans-rad">
                 <span className="trans-navn">Bom</span>
@@ -551,17 +601,15 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                   className="trans-input" value={b.pris}
                   onChange={e => oppdaterBomRad(b.id, 'pris', e.target.value)} />
                 <span className="trans-sum">{s > 0 ? formaterKr(s) : ''}</span>
-                {erSiste
-                  ? <button className="trans-legg-til-inline" onClick={() => oppdater('bom', [...skjema.bom, { id: Date.now(), antall: '', pris: '' }])}>+</button>
-                  : <button className="btn-fjern" onClick={() => oppdater('bom', skjema.bom.filter(x => x.id !== b.id))}>×</button>}
+                <button className="btn-fjern" onClick={() => oppdater('bom', skjema.bom.filter(x => x.id !== b.id))}>×</button>
               </div>
             )
           })}
+          <button className="trans-legg-til" onClick={() => oppdater('bom', [...skjema.bom, { id: Date.now(), antall: '', pris: '' }])}>+ Legg til bom</button>
 
           {/* Parkering */}
-          {(skjema.parkering || []).map((p, idx) => {
+          {(skjema.parkering || []).map((p) => {
             const s = (parseFloat(p.antall)||0)*(parseFloat(p.pris)||0)
-            const erSiste = idx === skjema.parkering.length - 1
             return (
               <div key={p.id} className="trans-rad">
                 <span className="trans-navn">Parkering</span>
@@ -572,17 +620,15 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                   className="trans-input" value={p.pris}
                   onChange={e => oppdaterParkeringRad(p.id, 'pris', e.target.value)} />
                 <span className="trans-sum">{s > 0 ? formaterKr(s) : ''}</span>
-                {erSiste
-                  ? <button className="trans-legg-til-inline" onClick={() => oppdater('parkering', [...skjema.parkering, { id: Date.now(), antall: '', pris: '' }])}>+</button>
-                  : <button className="btn-fjern" onClick={() => oppdater('parkering', skjema.parkering.filter(x => x.id !== p.id))}>×</button>}
+                <button className="btn-fjern" onClick={() => oppdater('parkering', skjema.parkering.filter(x => x.id !== p.id))}>×</button>
               </div>
             )
           })}
+          <button className="trans-legg-til" onClick={() => oppdater('parkering', [...skjema.parkering, { id: Date.now(), antall: '', pris: '' }])}>+ Legg til parkering</button>
 
           {/* Ferge */}
-          {(skjema.ferge || []).map((f, idx) => {
+          {(skjema.ferge || []).map((f) => {
             const s = (parseFloat(f.antall)||0)*(parseFloat(f.pris)||0)
-            const erSiste = idx === skjema.ferge.length - 1
             return (
               <div key={f.id} className="trans-rad">
                 <span className="trans-navn">Ferge</span>
@@ -593,12 +639,11 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                   className="trans-input" value={f.pris}
                   onChange={e => oppdaterFergeRad(f.id, 'pris', e.target.value)} />
                 <span className="trans-sum">{s > 0 ? formaterKr(s) : ''}</span>
-                {erSiste
-                  ? <button className="trans-legg-til-inline" onClick={() => oppdater('ferge', [...skjema.ferge, { id: Date.now(), antall: '', pris: '' }])}>+</button>
-                  : <button className="btn-fjern" onClick={() => oppdater('ferge', skjema.ferge.filter(x => x.id !== f.id))}>×</button>}
+                <button className="btn-fjern" onClick={() => oppdater('ferge', skjema.ferge.filter(x => x.id !== f.id))}>×</button>
               </div>
             )
           })}
+          <button className="trans-legg-til" onClick={() => oppdater('ferge', [...skjema.ferge, { id: Date.now(), antall: '', pris: '' }])}>+ Legg til ferge</button>
 
         </section>
 
