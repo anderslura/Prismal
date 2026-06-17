@@ -609,8 +609,9 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
           </div>
 
           {/* Bom */}
-          {(skjema.bom || []).map((b) => {
+          {(skjema.bom || []).map((b, i, arr) => {
             const s = (parseFloat(b.antall)||0)*(parseFloat(b.pris)||0)
+            const erSiste = i === arr.length - 1
             return (
               <div key={b.id} className="trans-rad">
                 <span className="trans-navn">Bom</span>
@@ -621,15 +622,24 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                   className="trans-input" value={b.pris}
                   onChange={e => oppdaterBomRad(b.id, 'pris', e.target.value)} />
                 <span className="trans-sum">{s > 0 ? formaterKr(s) : ''}</span>
-                <button className="btn-fjern" onClick={() => oppdater('bom', skjema.bom.filter(x => x.id !== b.id))}>×</button>
+                <div className="trans-rad-knapper">
+                  <button className="btn-fjern" onClick={() => oppdater('bom', skjema.bom.filter(x => x.id !== b.id))}>×</button>
+                  {erSiste && (
+                    <button type="button" className="trans-legg-til-inline" title="Legg til bom"
+                      onClick={() => oppdater('bom', [...skjema.bom, { id: Date.now(), antall: '', pris: '' }])}>+</button>
+                  )}
+                </div>
               </div>
             )
           })}
-          <button className="trans-legg-til" onClick={() => oppdater('bom', [...skjema.bom, { id: Date.now(), antall: '', pris: '' }])}>+ Legg til bom</button>
+          {(skjema.bom || []).length === 0 && (
+            <button className="trans-legg-til" onClick={() => oppdater('bom', [...(skjema.bom||[]), { id: Date.now(), antall: '', pris: '' }])}>+ Legg til bom</button>
+          )}
 
           {/* Parkering */}
-          {(skjema.parkering || []).map((p) => {
+          {(skjema.parkering || []).map((p, i, arr) => {
             const s = (parseFloat(p.antall)||0)*(parseFloat(p.pris)||0)
+            const erSiste = i === arr.length - 1
             return (
               <div key={p.id} className="trans-rad">
                 <span className="trans-navn">Parkering</span>
@@ -640,15 +650,24 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                   className="trans-input" value={p.pris}
                   onChange={e => oppdaterParkeringRad(p.id, 'pris', e.target.value)} />
                 <span className="trans-sum">{s > 0 ? formaterKr(s) : ''}</span>
-                <button className="btn-fjern" onClick={() => oppdater('parkering', skjema.parkering.filter(x => x.id !== p.id))}>×</button>
+                <div className="trans-rad-knapper">
+                  <button className="btn-fjern" onClick={() => oppdater('parkering', skjema.parkering.filter(x => x.id !== p.id))}>×</button>
+                  {erSiste && (
+                    <button type="button" className="trans-legg-til-inline" title="Legg til parkering"
+                      onClick={() => oppdater('parkering', [...skjema.parkering, { id: Date.now(), antall: '', pris: '' }])}>+</button>
+                  )}
+                </div>
               </div>
             )
           })}
-          <button className="trans-legg-til" onClick={() => oppdater('parkering', [...skjema.parkering, { id: Date.now(), antall: '', pris: '' }])}>+ Legg til parkering</button>
+          {(skjema.parkering || []).length === 0 && (
+            <button className="trans-legg-til" onClick={() => oppdater('parkering', [...(skjema.parkering||[]), { id: Date.now(), antall: '', pris: '' }])}>+ Legg til parkering</button>
+          )}
 
           {/* Ferge */}
-          {(skjema.ferge || []).map((f) => {
+          {(skjema.ferge || []).map((f, i, arr) => {
             const s = (parseFloat(f.antall)||0)*(parseFloat(f.pris)||0)
+            const erSiste = i === arr.length - 1
             return (
               <div key={f.id} className="trans-rad">
                 <span className="trans-navn">Ferge</span>
@@ -659,11 +678,19 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                   className="trans-input" value={f.pris}
                   onChange={e => oppdaterFergeRad(f.id, 'pris', e.target.value)} />
                 <span className="trans-sum">{s > 0 ? formaterKr(s) : ''}</span>
-                <button className="btn-fjern" onClick={() => oppdater('ferge', skjema.ferge.filter(x => x.id !== f.id))}>×</button>
+                <div className="trans-rad-knapper">
+                  <button className="btn-fjern" onClick={() => oppdater('ferge', skjema.ferge.filter(x => x.id !== f.id))}>×</button>
+                  {erSiste && (
+                    <button type="button" className="trans-legg-til-inline" title="Legg til ferge"
+                      onClick={() => oppdater('ferge', [...skjema.ferge, { id: Date.now(), antall: '', pris: '' }])}>+</button>
+                  )}
+                </div>
               </div>
             )
           })}
-          <button className="trans-legg-til" onClick={() => oppdater('ferge', [...skjema.ferge, { id: Date.now(), antall: '', pris: '' }])}>+ Legg til ferge</button>
+          {(skjema.ferge || []).length === 0 && (
+            <button className="trans-legg-til" onClick={() => oppdater('ferge', [...(skjema.ferge||[]), { id: Date.now(), antall: '', pris: '' }])}>+ Legg til ferge</button>
+          )}
 
         </section>
 

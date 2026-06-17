@@ -2525,9 +2525,11 @@ textarea { resize: vertical; }
   /* Transport-tabell: tettere */
   .trans-header,
   .trans-rad {
-    grid-template-columns: 1fr 54px 60px 52px 22px;
+    grid-template-columns: 1fr 54px 60px 52px 46px;
     gap: 4px;
   }
+  .trans-rad-knapper { gap: 3px; }
+  .trans-legg-til-inline { width: 20px; height: 20px; font-size: 14px; }
 
   /* Skjema: ingen side-padding som presser innholdet */
   .skjema-seksjon { padding: 10px; }
@@ -3331,7 +3333,7 @@ textarea { resize: vertical; }
 .trans-header,
 .trans-rad {
   display: grid;
-  grid-template-columns: 1fr 62px 70px 60px 26px;
+  grid-template-columns: 1fr 62px 70px 60px 56px;
   gap: 6px;
   align-items: center;
   padding: 5px 2px;
@@ -3403,6 +3405,12 @@ textarea { resize: vertical; }
   flex-shrink: 0;
 }
 .trans-legg-til-inline:hover { background: var(--blaa-mork); }
+
+.trans-rad-knapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
 
 .btn-legg-til-mat {
   padding: 0 14px;
