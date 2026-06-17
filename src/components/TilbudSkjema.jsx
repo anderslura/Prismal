@@ -1,8 +1,30 @@
 import KundeInfo from './KundeInfo.jsx'
 import PdfTemavelger from './PdfTemavelger.jsx'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { hentFirma, lagreFirma, slettFirma, uploadLogo, slettLogo } from '../api/firmaService.js'
 import { sokMaterialer, lagreMaterial, slettMaterial } from '../api/materialService.js'
+
+function MaterialKategoriInput({ value, onCommit }) {
+  const [tekst, setTekst] = useState(value || '')
+  const harFokus = useRef(false)
+
+  useEffect(() => {
+    if (!harFokus.current) setTekst(value || '')
+  }, [value])
+
+  function commit() {
+    if (tekst !== (value || '')) onCommit(tekst)
+  }
+
+  return (
+    <input type="text" list="mat-kategori-forslag" value={tekst}
+      placeholder="Kategori (valgfritt) – f.eks. Kjøkken, Bad …"
+      onFocus={() => { harFokus.current = true }}
+      onChange={e => setTekst(e.target.value)}
+      onBlur={() => { harFokus.current = false; commit() }}
+      onKeyDown={e => { if (e.key === 'Enter') e.currentTarget.blur() }} />
+  )
+}
 
 export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil, prisliste, setPrisliste, isPro }) {
 
@@ -384,9 +406,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                     onChange={e => oppdater('materialer', skjema.materialer.map(x => x.id===m.id ? {...x, hasPaaslag:e.target.checked} : x))} />
                   <button className="btn-slett-lib" title="Slett fra bibliotek" onClick={() => slettFraLibraryOgTilbud(m.id)}>🗑</button>
                   <div className="mat-kategori-felt">
-                    <input type="text" list="mat-kategori-forslag" value={m.kategori || ''}
-                      placeholder="Kategori (valgfritt) – f.eks. Kjøkken, Bad …"
-                      onChange={e => oppdaterMaterial(m.id, 'kategori', e.target.value)} />
+                    <MaterialKategoriInput value={m.kategori} onCommit={v => oppdaterMaterial(m.id, 'kategori', v)} />
                   </div>
                 </div>
               ))}
