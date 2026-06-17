@@ -47,6 +47,9 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
   function oppdaterBomRad(id, felt, val) { oppdater('bom', skjema.bom.map(b => b.id === id ? {...b, [felt]: val} : b)) }
   function oppdaterParkeringRad(id, felt, val) { oppdater('parkering', skjema.parkering.map(p => p.id === id ? {...p, [felt]: val} : p)) }
   function oppdaterFergeRad(id, felt, val) { oppdater('ferge', skjema.ferge.map(f => f.id === id ? {...f, [felt]: val} : f)) }
+  function oppdaterMiljoRad(id, felt, val) { oppdater('miljoavgifter', skjema.miljoavgifter.map(m => m.id === id ? {...m, [felt]: val} : m)) }
+  function leggTilMiljoRad(navn = '', antall = '') { oppdater('miljoavgifter', [...(skjema.miljoavgifter||[]), { id: Date.now(), navn, antall, pris: '' }]) }
+  function fjernMiljoRad(id) { oppdater('miljoavgifter', skjema.miljoavgifter.filter(m => m.id !== id)) }
   function oppdaterMaterial(id, felt, verdi) {
     oppdater('materialer', skjema.materialer.map(m => {
       if (m.id !== id) return m
@@ -77,12 +80,17 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
   const totalMaterialer = skjema.materialer.reduce((s, m) => s + (parseFloat(m.sum)||0), 0)
   const materialerMedPaaslag = skjema.materialer.reduce((s, m) => s + (m.hasPaaslag ? (parseFloat(m.sum)||0) : 0), 0)
   const paaslag = materialerMedPaaslag * (parseFloat(skjema.paaslagProsent)||0) / 100
-  const kjoringSum    = (parseFloat(skjema.kjoringKm)||0) * (parseFloat(skjema.kjoringSats)||0)
+  const kjoringSum        = (parseFloat(skjema.kjoringKm)||0) * (parseFloat(skjema.kjoringSats)||0)
+  const kjoringHengerSum  = (parseFloat(skjema.kjoringHengerKm)||0) * (parseFloat(skjema.kjoringHengerSats)||0)
+  const hengerleieSum     = (parseFloat(skjema.hengerleieDager)||0) * (parseFloat(skjema.hengerleieSats)||0)
+  const maskinleieSum     = (parseFloat(skjema.maskinleieDager)||0) * (parseFloat(skjema.maskinleieSats)||0)
   const bomSum        = (skjema.bom       || []).reduce((s, b) => s + (parseFloat(b.antall)||0)*(parseFloat(b.pris)||0), 0)
   const parkeringSum  = (skjema.parkering  || []).reduce((s, p) => s + (parseFloat(p.antall)||0)*(parseFloat(p.pris)||0), 0)
   const fergeSum      = (skjema.ferge      || []).reduce((s, f) => s + (parseFloat(f.antall)||0)*(parseFloat(f.pris)||0), 0)
-  const totalTransport = kjoringSum + bomSum + parkeringSum + fergeSum
-  const totalSum = totalArbeid + totalMaterialer + paaslag + totalTransport
+  const miljoAvgifterSum = (skjema.miljoavgifter || []).reduce((s, m) => s + (parseFloat(m.antall)||0)*(parseFloat(m.pris)||0), 0)
+  const miljoPaaslag = miljoAvgifterSum * (parseFloat(skjema.miljoPaaslagProsent)||0) / 100
+  const totalTransport = kjoringSum + kjoringHengerSum + hengerleieSum + maskinleieSum + bomSum + parkeringSum + fergeSum
+  const totalSum = totalArbeid + totalMaterialer + paaslag + miljoAvgifterSum + miljoPaaslag + totalTransport
 
   return (
     <div className="skjema-layout">
@@ -122,6 +130,17 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
             <div className="felt-gruppe">
               <label>Nettside</label>
               <input type="text" placeholder="www.firma.no" value={skjema.firmaNettside||''} onFocus={() => { if(!skjema.firmaNettside) oppdater('firmaNettside', 'www.') }} onChange={e => oppdater('firmaNettside', e.target.value)} />
+            </div>
+          </div>
+          <div className="felt-rad">
+            <div className="felt-gruppe">
+              <label>Facebook – navn</label>
+              <input type="text" placeholder="Firmanavn AS" value={skjema.firmaFacebookNavn||''} onChange={e => oppdater('firmaFacebookNavn', e.target.value)} />
+              <span className="felt-hint">Vises som tekst på Facebook-knappen</span>
+            </div>
+            <div className="felt-gruppe">
+              <label>Facebook – lenke</label>
+              <input type="text" placeholder="https://facebook.com/firmanavn" value={skjema.firmaFacebookUrl||''} onChange={e => oppdater('firmaFacebookUrl', e.target.value)} />
             </div>
           </div>
           <div className="felt-gruppe">
@@ -177,6 +196,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                         epost: skjema.firmaEpost, adresse: skjema.firmaAdresse,
                         orgnr: skjema.firmaOrgnr, nettside: skjema.firmaNettside,
                         logoUrl: skjema.logoUrl, mvaPliktig: skjema.firmaMvaPliktig,
+                        facebookNavn: skjema.firmaFacebookNavn, facebookUrl: skjema.firmaFacebookUrl,
                       })
                       setFirmaStatus('ok')
                       setTimeout(() => setFirmaStatus(''), 2500)
@@ -203,6 +223,8 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                       if (f.nettside)   oppdater('firmaNettside',f.nettside)
                       if (f.logo_url)   oppdater('logoUrl',      f.logo_url)
                       if (typeof f.mva_pliktig === 'boolean') oppdater('firmaMvaPliktig', f.mva_pliktig)
+                      if (f.facebook_navn) oppdater('firmaFacebookNavn', f.facebook_navn)
+                      if (f.facebook_url)  oppdater('firmaFacebookUrl',  f.facebook_url)
                     } catch (e) { console.error('Hent firma feilet:', e) }
                   }}
                 >↩ Hent lagret profil</button>
@@ -211,7 +233,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                 <button
                   className="firma-lenke"
                   onClick={() => {
-                    ;['firmanavn','firmaTelefon','firmaEpost','firmaAdresse','firmaOrgnr','firmaNettside','logoUrl'].forEach(f => oppdater(f, ''))
+                    ;['firmanavn','firmaTelefon','firmaEpost','firmaAdresse','firmaOrgnr','firmaNettside','firmaFacebookNavn','firmaFacebookUrl','logoUrl'].forEach(f => oppdater(f, ''))
                     localStorage.removeItem('firma'); localStorage.removeItem('logoUrl')
                   }}
                 >Nullstill felt</button>
@@ -228,7 +250,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                     setFirmaSlett('laster')
                     try {
                       await slettFirma()
-                      ;['firmanavn','firmaTelefon','firmaEpost','firmaAdresse','firmaOrgnr','firmaNettside','logoUrl'].forEach(f => oppdater(f, ''))
+                      ;['firmanavn','firmaTelefon','firmaEpost','firmaAdresse','firmaOrgnr','firmaNettside','firmaFacebookNavn','firmaFacebookUrl','logoUrl'].forEach(f => oppdater(f, ''))
                       localStorage.removeItem('firma'); localStorage.removeItem('logoUrl')
                     } catch (e) { console.error(e) }
                     setFirmaSlett('')
@@ -392,6 +414,64 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
           </div>
         </section>
 
+        {/* MILJØAVGIFTER */}
+        <section className="skjema-seksjon">
+          <h2 className="seksjon-tittel">Miljøavgifter</h2>
+
+          <div className="trans-header">
+            <span>Beskrivelse</span>
+            <span>Antall</span>
+            <span>Kr</span>
+            <span>Sum</span>
+            <span></span>
+          </div>
+
+          {(skjema.miljoavgifter || []).map((m, idx) => {
+            const sum = (parseFloat(m.antall)||0)*(parseFloat(m.pris)||0)
+            const erSiste = idx === skjema.miljoavgifter.length - 1
+            return (
+              <div key={m.id} className="trans-rad">
+                <input type="text" placeholder="Beskrivelse" maxLength={40}
+                  className="trans-input trans-input-navn" value={m.navn}
+                  onChange={e => oppdaterMiljoRad(m.id, 'navn', e.target.value)} />
+                <input type="number" min="0" placeholder="0"
+                  className="trans-input" value={m.antall}
+                  onChange={e => oppdaterMiljoRad(m.id, 'antall', e.target.value)} />
+                <input type="number" min="0" placeholder="0"
+                  className="trans-input" value={m.pris}
+                  onChange={e => oppdaterMiljoRad(m.id, 'pris', e.target.value)} />
+                <span className="trans-sum">{sum > 0 ? formaterKr(sum) : ''}</span>
+                {erSiste
+                  ? <button className="trans-legg-til-inline" onClick={() => leggTilMiljoRad(m.navn)}>+</button>
+                  : <button className="btn-fjern" onClick={() => fjernMiljoRad(m.id)}>×</button>}
+              </div>
+            )
+          })}
+
+          <div className="tema-rad">
+            <button className="paaslag-hurtig" onClick={() => leggTilMiljoRad('Kildesortering (kubikk / henger)')}>+ Kildesortering</button>
+            <button className="paaslag-hurtig" onClick={() => leggTilMiljoRad('Spesialavfall')}>+ Spesialavfall</button>
+            <button className="paaslag-hurtig" onClick={() => leggTilMiljoRad('Miljøgebyr')}>+ Miljøgebyr</button>
+          </div>
+
+          <div className="paaslag-rad">
+            <span>Påslag miljøavgifter</span>
+            <input type="number" min="0" max="100" placeholder="0"
+              className="paaslag-input" value={skjema.miljoPaaslagProsent}
+              onChange={e => oppdater('miljoPaaslagProsent', e.target.value)} />
+            <span className="paaslag-symbol">%</span>
+            {[10, 20, 30].map(pr => (
+              <button key={pr}
+                className={`paaslag-hurtig${parseFloat(skjema.miljoPaaslagProsent) === pr ? ' aktiv' : ''}`}
+                onClick={() => oppdater('miljoPaaslagProsent', pr)}
+              >{pr}%</button>
+            ))}
+            {parseFloat(skjema.miljoPaaslagProsent) > 0 && miljoAvgifterSum > 0 && (
+              <span className="paaslag-resultat">= +{formaterKr(miljoPaaslag)}</span>
+            )}
+          </div>
+        </section>
+
         {/* TRANSPORT */}
         <section className="skjema-seksjon">
           <h2 className="seksjon-tittel">Transport</h2>
@@ -415,6 +495,45 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
               className="trans-input" value={skjema.kjoringSats}
               onChange={e => oppdater('kjoringSats', e.target.value)} />
             <span className="trans-sum">{kjoringSum > 0 ? formaterKr(kjoringSum) : ''}</span>
+            <span></span>
+          </div>
+
+          {/* Kjøring (bil + henger) */}
+          <div className="trans-rad">
+            <span className="trans-navn">Bil + henger</span>
+            <input type="number" min="0" placeholder="0"
+              className="trans-input" value={skjema.kjoringHengerKm}
+              onChange={e => oppdater('kjoringHengerKm', e.target.value)} />
+            <input type="number" min="0" step="0.1" placeholder="kr/km"
+              className="trans-input" value={skjema.kjoringHengerSats}
+              onChange={e => oppdater('kjoringHengerSats', e.target.value)} />
+            <span className="trans-sum">{kjoringHengerSum > 0 ? formaterKr(kjoringHengerSum) : ''}</span>
+            <span></span>
+          </div>
+
+          {/* Leie av henger */}
+          <div className="trans-rad">
+            <span className="trans-navn">Leie av henger</span>
+            <input type="number" min="0" placeholder="dager"
+              className="trans-input" value={skjema.hengerleieDager}
+              onChange={e => oppdater('hengerleieDager', e.target.value)} />
+            <input type="number" min="0" placeholder="kr/dag"
+              className="trans-input" value={skjema.hengerleieSats}
+              onChange={e => oppdater('hengerleieSats', e.target.value)} />
+            <span className="trans-sum">{hengerleieSum > 0 ? formaterKr(hengerleieSum) : ''}</span>
+            <span></span>
+          </div>
+
+          {/* Maskinleie */}
+          <div className="trans-rad">
+            <span className="trans-navn">Maskinleie</span>
+            <input type="number" min="0" placeholder="dager"
+              className="trans-input" value={skjema.maskinleieDager}
+              onChange={e => oppdater('maskinleieDager', e.target.value)} />
+            <input type="number" min="0" placeholder="kr/dag"
+              className="trans-input" value={skjema.maskinleieSats}
+              onChange={e => oppdater('maskinleieSats', e.target.value)} />
+            <span className="trans-sum">{maskinleieSum > 0 ? formaterKr(maskinleieSum) : ''}</span>
             <span></span>
           </div>
 
@@ -491,7 +610,12 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
               {totalArbeid > 0 && <div className="sum-linje"><span>Arbeid</span><span>{formaterKr(totalArbeid)}</span></div>}
               {totalMaterialer > 0 && <div className="sum-linje"><span>Materialer</span><span>{formaterKr(totalMaterialer)}</span></div>}
               {paaslag > 0 && <div className="sum-linje"><span>Påslag {skjema.paaslagProsent}%</span><span>{formaterKr(paaslag)}</span></div>}
+              {miljoAvgifterSum > 0 && <div className="sum-linje"><span>Miljøavgifter</span><span>{formaterKr(miljoAvgifterSum)}</span></div>}
+              {miljoPaaslag > 0 && <div className="sum-linje"><span>Påslag miljøavgifter {skjema.miljoPaaslagProsent}%</span><span>{formaterKr(miljoPaaslag)}</span></div>}
               {kjoringSum > 0 && <div className="sum-linje"><span>Kjøring</span><span>{formaterKr(kjoringSum)}</span></div>}
+              {kjoringHengerSum > 0 && <div className="sum-linje"><span>Bil + henger</span><span>{formaterKr(kjoringHengerSum)}</span></div>}
+              {hengerleieSum > 0 && <div className="sum-linje"><span>Leie av henger</span><span>{formaterKr(hengerleieSum)}</span></div>}
+              {maskinleieSum > 0 && <div className="sum-linje"><span>Maskinleie</span><span>{formaterKr(maskinleieSum)}</span></div>}
               {bomSum       > 0 && <div className="sum-linje"><span>Bom</span><span>{formaterKr(bomSum)}</span></div>}
               {parkeringSum > 0 && <div className="sum-linje"><span>Parkering</span><span>{formaterKr(parkeringSum)}</span></div>}
               {fergeSum     > 0 && <div className="sum-linje"><span>Ferge</span><span>{formaterKr(fergeSum)}</span></div>}

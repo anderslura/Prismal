@@ -14,10 +14,17 @@ import { hentMaterialer } from './api/materialService.js'
 
 const TOM_SKJEMA = {
   firmanavn: '', firmaTelefon: '', firmaEpost: '', firmaAdresse: '',
-  firmaOrgnr: '', firmaNettside: '', firmaMvaPliktig: true, kundenavn: '', kundeAdresse: '',
+  firmaOrgnr: '', firmaNettside: '', firmaMvaPliktig: true,
+  firmaFacebookNavn: '', firmaFacebookUrl: '',
+  kundenavn: '', kundeAdresse: '',
   kundeEpost: '', kundeMobil: '', beskrivelse: '', arbeidere: [], materialer: [],
   logoUrl: '', tilbudstekst: '', pdfTema: 'standard',
-  kjoringKm: '', kjoringSats: '', bom: [], parkering: [], ferge: [],
+  kjoringKm: '', kjoringSats: '',
+  kjoringHengerKm: '', kjoringHengerSats: '',
+  hengerleieDager: '', hengerleieSats: '',
+  maskinleieDager: '', maskinleieSats: '',
+  bom: [], parkering: [], ferge: [],
+  miljoavgifter: [], miljoPaaslagProsent: '',
   tilbudsnummer: '', dato: new Date().toLocaleDateString('no-NO'),
 }
 
@@ -43,6 +50,15 @@ function hentLagretPrisliste() {
 function hentLagretKjoringSats() {
   try { return localStorage.getItem('transport_kjoring_sats') || '' } catch { return '' }
 }
+function hentLagretKjoringHengerSats() {
+  try { return localStorage.getItem('transport_kjoring_henger_sats') || '' } catch { return '' }
+}
+function hentLagretHengerleieSats() {
+  try { return localStorage.getItem('transport_hengerleie_sats') || '' } catch { return '' }
+}
+function hentLagretMaskinleieSats() {
+  try { return localStorage.getItem('transport_maskinleie_sats') || '' } catch { return '' }
+}
 function hentLagretTransportMal(key) {
   try {
     const priser = JSON.parse(localStorage.getItem(key) || '[""]')
@@ -64,6 +80,9 @@ function AppInnhold() {
     arbeidere: [{ id: 1, navn: 'Fagarbeider', timer: '', timepris: hentLagretTimepris() }],
     materialer: hentLagretMaterialMal(),
     kjoringSats: hentLagretKjoringSats(),
+    kjoringHengerSats: hentLagretKjoringHengerSats(),
+    hengerleieSats: hentLagretHengerleieSats(),
+    maskinleieSats: hentLagretMaskinleieSats(),
     bom: hentLagretTransportMal('transport_bom_priser'),
     parkering: hentLagretTransportMal('transport_parkering_priser'),
     ferge: hentLagretTransportMal('transport_ferge_priser'),
@@ -117,6 +136,8 @@ function AppInnhold() {
       if (f.nettside)   oppdater('firmaNettside',f.nettside)
       if (f.logo_url)   oppdater('logoUrl',      f.logo_url)
       if (typeof f.mva_pliktig === 'boolean') oppdater('firmaMvaPliktig', f.mva_pliktig)
+      if (f.facebook_navn) oppdater('firmaFacebookNavn', f.facebook_navn)
+      if (f.facebook_url)  oppdater('firmaFacebookUrl',  f.facebook_url)
     }).catch(e => console.error('Kunne ikke hente firma:', e))
   }, [bruker])
 
@@ -149,9 +170,10 @@ function AppInnhold() {
       firmaEpost: skjema.firmaEpost, firmaAdresse: skjema.firmaAdresse,
       firmaOrgnr: skjema.firmaOrgnr, firmaNettside: skjema.firmaNettside,
       firmaMvaPliktig: skjema.firmaMvaPliktig,
+      firmaFacebookNavn: skjema.firmaFacebookNavn, firmaFacebookUrl: skjema.firmaFacebookUrl,
     }
     localStorage.setItem('firma', JSON.stringify(firma))
-  }, [skjema.firmanavn, skjema.firmaTelefon, skjema.firmaEpost, skjema.firmaAdresse, skjema.firmaOrgnr, skjema.firmaNettside, skjema.firmaMvaPliktig, isPro])
+  }, [skjema.firmanavn, skjema.firmaTelefon, skjema.firmaEpost, skjema.firmaAdresse, skjema.firmaOrgnr, skjema.firmaNettside, skjema.firmaMvaPliktig, skjema.firmaFacebookNavn, skjema.firmaFacebookUrl, isPro])
 
   useEffect(() => {
     if (isPro) localStorage.setItem('logoUrl', skjema.logoUrl || '')
@@ -173,10 +195,13 @@ function AppInnhold() {
 
   useEffect(() => {
     localStorage.setItem('transport_kjoring_sats', skjema.kjoringSats || '')
+    localStorage.setItem('transport_kjoring_henger_sats', skjema.kjoringHengerSats || '')
+    localStorage.setItem('transport_hengerleie_sats', skjema.hengerleieSats || '')
+    localStorage.setItem('transport_maskinleie_sats', skjema.maskinleieSats || '')
     if (skjema.bom?.length)      localStorage.setItem('transport_bom_priser',      JSON.stringify(skjema.bom.map(b => b.pris)))
     if (skjema.parkering?.length) localStorage.setItem('transport_parkering_priser', JSON.stringify(skjema.parkering.map(p => p.pris)))
     if (skjema.ferge?.length)    localStorage.setItem('transport_ferge_priser',     JSON.stringify(skjema.ferge.map(f => f.pris)))
-  }, [skjema.kjoringSats, skjema.bom, skjema.parkering, skjema.ferge])
+  }, [skjema.kjoringSats, skjema.kjoringHengerSats, skjema.hengerleieSats, skjema.maskinleieSats, skjema.bom, skjema.parkering, skjema.ferge])
 
   function oppdater(felt, verdi) {
     setSkjema(prev => ({ ...prev, [felt]: verdi }))
@@ -216,9 +241,17 @@ function AppInnhold() {
       materialer: forhandslagte,
       kjoringKm: '',
       kjoringSats: hentLagretKjoringSats(),
+      kjoringHengerKm: '',
+      kjoringHengerSats: hentLagretKjoringHengerSats(),
+      hengerleieDager: '',
+      hengerleieSats: hentLagretHengerleieSats(),
+      maskinleieDager: '',
+      maskinleieSats: hentLagretMaskinleieSats(),
       bom: hentLagretTransportMal('transport_bom_priser'),
       parkering: hentLagretTransportMal('transport_parkering_priser'),
       ferge: hentLagretTransportMal('transport_ferge_priser'),
+      miljoavgifter: [],
+      miljoPaaslagProsent: '',
       tilbudsnummer: genererTilbudsnummer(),
     })
     setSteg('skjema')

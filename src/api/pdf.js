@@ -52,7 +52,8 @@ async function byggPdfDok(skjema, isPro = true) {
     skjema.firmaOrgnr ? `Org.nr: ${skjema.firmaOrgnr}` : null,
     skjema.firmaNettside,
   ].filter(Boolean)
-  const headerHoyde = Math.max(40, 18 + firmaLinjer.length * 5 + 4)
+  const visFacebookKnapp = !!skjema.firmaFacebookUrl
+  const headerHoyde = Math.max(40, 18 + firmaLinjer.length * 5 + 4 + (visFacebookKnapp ? 9 : 0))
 
   if (skjema.pdfTema === 'pride') {
     const stops = [[228,3,3],[255,140,0],[255,237,0],[0,128,38],[0,77,255],[117,7,135]]
@@ -105,6 +106,20 @@ async function byggPdfDok(skjema, isPro = true) {
   let y = 21
   firmaLinjer.forEach(linje => { doc.text(linje, tekstStartX, y); y += 5 })
 
+  if (visFacebookKnapp) {
+    const fbNavn = skjema.firmaFacebookNavn || skjema.firmanavn || ''
+    const fbTekst = `Besøk ${fbNavn ? fbNavn + 's' : 'vår'} Facebook-side`
+    doc.setFontSize(7.5)
+    doc.setFont('helvetica', 'bold')
+    const fbBredde = doc.getTextWidth(fbTekst) + 8
+    doc.setFillColor(24, 119, 242)
+    doc.roundedRect(tekstStartX, y - 4.3, fbBredde, 6, 1.5, 1.5, 'F')
+    doc.setTextColor(255, 255, 255)
+    doc.textWithLink(fbTekst, tekstStartX + 4, y, { url: skjema.firmaFacebookUrl })
+    y += 8
+    doc.setTextColor(...(skjema.pdfTema === 'hvit' ? [30,41,59] : [255,255,255]))
+  }
+
   doc.setFontSize(9)
   doc.text('TILBUD', sideBredde - margin, 12, { align: 'right' })
   doc.setFontSize(8)
@@ -156,10 +171,17 @@ async function byggPdfDok(skjema, isPro = true) {
   const materialerMedPaaslag = skjema.materialer.filter(m => (parseFloat(m.antall)||0) > 0).reduce((s, m) => s + (m.hasPaaslag ? (parseFloat(m.sum)||(parseFloat(m.pris)||0)*(parseFloat(m.antall)||1)) : 0), 0)
   const paaslag = materialerMedPaaslag * (parseFloat(skjema.paaslagProsent) || 0) / 100
   const kjoringSum2 = (parseFloat(skjema.kjoringKm)||0) * (parseFloat(skjema.kjoringSats)||0)
+  const kjoringHengerSum2 = (parseFloat(skjema.kjoringHengerKm)||0) * (parseFloat(skjema.kjoringHengerSats)||0)
+  const hengerleieSum2    = (parseFloat(skjema.hengerleieDager)||0) * (parseFloat(skjema.hengerleieSats)||0)
+  const maskinleieSum2    = (parseFloat(skjema.maskinleieDager)||0) * (parseFloat(skjema.maskinleieSats)||0)
   const bomSum2       = (skjema.bom       || []).reduce((s, b) => s + (parseFloat(b.antall)||0)*(parseFloat(b.pris)||0), 0)
   const parkeringSum2 = (skjema.parkering  || []).reduce((s, p) => s + (parseFloat(p.antall)||0)*(parseFloat(p.pris)||0), 0)
   const fergeSum2     = (skjema.ferge      || []).reduce((s, f) => s + (parseFloat(f.antall)||0)*(parseFloat(f.pris)||0), 0)
-  const totalEksMva = totalArbeid + totalMaterialer + paaslag + kjoringSum2 + bomSum2 + parkeringSum2 + fergeSum2
+  const miljoAvgifterListe = (skjema.miljoavgifter || []).filter(m => (parseFloat(m.antall)||0) > 0 && (parseFloat(m.pris)||0) > 0)
+  const miljoPaaslagFaktor = 1 + (parseFloat(skjema.miljoPaaslagProsent) || 0) / 100
+  const miljoAvgifterSum2 = miljoAvgifterListe.reduce((s, m) => s + (parseFloat(m.antall)||0)*(parseFloat(m.pris)||0), 0)
+  const miljoPaaslag2 = miljoAvgifterSum2 * (parseFloat(skjema.miljoPaaslagProsent) || 0) / 100
+  const totalEksMva = totalArbeid + totalMaterialer + paaslag + miljoAvgifterSum2 + miljoPaaslag2 + kjoringSum2 + kjoringHengerSum2 + hengerleieSum2 + maskinleieSum2 + bomSum2 + parkeringSum2 + fergeSum2
   const mva = totalEksMva * 0.25
   const totalInklMva = totalEksMva + mva
 
@@ -176,10 +198,28 @@ async function byggPdfDok(skjema, isPro = true) {
     rader.push([m.navn, String(ant), kr(prisMedPaaslag), kr(prisMedPaaslag * ant)])
   })
 
+  miljoAvgifterListe.forEach(m => {
+    const ant = parseFloat(m.antall) || 0
+    const prisMedPaaslag = (parseFloat(m.pris) || 0) * miljoPaaslagFaktor
+    rader.push([m.navn || 'Miljøavgift', String(ant), kr(prisMedPaaslag), kr(prisMedPaaslag * ant)])
+  })
+
   const kjoringKm = parseFloat(skjema.kjoringKm) || 0
   const kjoringSats = parseFloat(skjema.kjoringSats) || 0
   if (kjoringKm > 0 && kjoringSats > 0)
     rader.push(['Kjøring', `${kjoringKm} km`, kr(kjoringSats) + '/km', kr(kjoringKm * kjoringSats)])
+  const kjoringHengerKm = parseFloat(skjema.kjoringHengerKm) || 0
+  const kjoringHengerSats = parseFloat(skjema.kjoringHengerSats) || 0
+  if (kjoringHengerKm > 0 && kjoringHengerSats > 0)
+    rader.push(['Kjøring (bil + henger)', `${kjoringHengerKm} km`, kr(kjoringHengerSats) + '/km', kr(kjoringHengerKm * kjoringHengerSats)])
+  const hengerleieDager = parseFloat(skjema.hengerleieDager) || 0
+  const hengerleieSats = parseFloat(skjema.hengerleieSats) || 0
+  if (hengerleieDager > 0 && hengerleieSats > 0)
+    rader.push(['Leie av henger', `${hengerleieDager} dag(er)`, kr(hengerleieSats) + '/dag', kr(hengerleieDager * hengerleieSats)])
+  const maskinleieDager = parseFloat(skjema.maskinleieDager) || 0
+  const maskinleieSats = parseFloat(skjema.maskinleieSats) || 0
+  if (maskinleieDager > 0 && maskinleieSats > 0)
+    rader.push(['Maskinleie', `${maskinleieDager} dag(er)`, kr(maskinleieSats) + '/dag', kr(maskinleieDager * maskinleieSats)])
   ;(skjema.bom||[]).forEach(b => { const a=parseFloat(b.antall)||0,p=parseFloat(b.pris)||0; if(a>0&&p>0) rader.push(['Bom',String(a),kr(p),kr(a*p)]) })
   ;(skjema.parkering||[]).forEach(p => { const a=parseFloat(p.antall)||0,pr=parseFloat(p.pris)||0; if(a>0&&pr>0) rader.push(['Parkering',String(a),kr(pr),kr(a*pr)]) })
   ;(skjema.ferge||[]).forEach(f => { const a=parseFloat(f.antall)||0,p=parseFloat(f.pris)||0; if(a>0&&p>0) rader.push(['Ferge',String(a),kr(p),kr(a*p)]) })
