@@ -35,6 +35,8 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
   const paaslag = materialerMedPaaslag * (parseFloat(skjema.paaslagProsent) || 0) / 100
   // Materialer kan grupperes under egendefinerte kategori-overskrifter (valgfritt felt per linje).
   // Uten kategori i bruk: vis flat liste akkurat som før (ingen visuell endring).
+  // Navngitte kategorier vises først (i den rekkefølgen de først dukket opp); linjer uten
+  // kategori vises sist, slik at ingenting "uten kategori" ligger over en kategori-overskrift.
   const materialerHarKategori = materialerIBruk.some(m => m.kategori)
   const materialGrupper = (() => {
     if (!materialerHarKategori) return [{ kategori: null, rader: materialerIBruk }]
@@ -46,8 +48,8 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
       map[key].push(m)
     })
     const grupper = []
-    if (map['']) grupper.push({ kategori: null, rader: map[''] })
     nokler.filter(Boolean).forEach(k => grupper.push({ kategori: k, rader: map[k] }))
+    if (map['']) grupper.push({ kategori: null, rader: map[''] })
     return grupper
   })()
   const kjoringSum       = (parseFloat(skjema.kjoringKm)||0) * (parseFloat(skjema.kjoringSats)||0)
@@ -312,10 +314,12 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
                     {materialGrupper.map((gruppe, gi) => (
                       <Fragment key={gruppe.kategori || `_ukat_${gi}`}>
                         {gruppe.kategori && (
-                          <tr className="pris-tabell-kategori"><td colSpan={4}>{gruppe.kategori}</td></tr>
+                          <tr className={gi > 0 ? "pris-tabell-kategori pris-tabell-kategori-luft" : "pris-tabell-kategori"}>
+                            <td colSpan={4}>{gruppe.kategori}</td>
+                          </tr>
                         )}
-                        {gruppe.rader.map(m => (
-                          <tr key={m.id}>
+                        {gruppe.rader.map((m, mi) => (
+                          <tr key={m.id} className={(!gruppe.kategori && gi > 0 && mi === 0) ? "pris-tabell-rad-luft" : undefined}>
                             <td>{m.navn}</td>
                             <td className="td-antall">{parseFloat(m.antall) || 1}</td>
                             <td className="td-pris">{formaterKr(m.pris)}</td>

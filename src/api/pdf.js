@@ -201,11 +201,13 @@ async function byggPdfDok(skjema, isPro = true) {
       cellPadding: { top: 3.5, right: 2, bottom: 1.5, left: 2 },
     } }])
   }
-  // Kategoriunderoverskrift for materialer (lysere/mindre enn seksjonsoverskrift)
-  function kategorirad(navn) {
+  // Kategoriunderoverskrift for materialer (lysere/mindre enn seksjonsoverskrift, med innrykk).
+  // ekstraLuft=true legger litt mer luft over raden — brukes mellom to kategorier (ikke den første),
+  // slik at flere kategorier ikke flyter i hverandre.
+  function kategorirad(navn, ekstraLuft) {
     rader.push([{ content: navn, colSpan: 4, styles: {
       fontStyle: 'bold', fontSize: 7.5, textColor: fargeGraa, fillColor: [255, 255, 255],
-      cellPadding: { top: 2, right: 2, bottom: 1, left: 4 },
+      cellPadding: { top: ekstraLuft ? 5 : 2, right: 2, bottom: 1, left: 8 },
     } }])
   }
 
@@ -240,12 +242,13 @@ async function byggPdfDok(skjema, isPro = true) {
         if (!(key in kategoriMap)) { kategoriMap[key] = []; kategoriNokler.push(key) }
         kategoriMap[key].push(m)
       })
-      // Ukategoriserte linjer vises direkte, uten egen overskrift
-      ;(kategoriMap[''] || []).forEach(m => rader.push(materialRad(m)))
-      kategoriNokler.filter(Boolean).forEach(kat => {
-        kategorirad(kat)
+      // Navngitte kategorier først; ukategoriserte linjer vises sist, uten egen overskrift —
+      // slik at ingenting "uten kategori" ligger over en kategori-overskrift.
+      kategoriNokler.filter(Boolean).forEach((kat, i) => {
+        kategorirad(kat, i > 0)
         kategoriMap[kat].forEach(m => rader.push(materialRad(m)))
       })
+      ;(kategoriMap[''] || []).forEach(m => rader.push(materialRad(m)))
     }
   }
 

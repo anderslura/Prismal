@@ -119,6 +119,8 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
 
   // Materialer gruppert etter kategori for redigeringsvisningen (drag-and-drop mellom grupper).
   // Uten kategori i bruk: én gruppe uten overskrift — visuelt identisk med den gamle flate listen.
+  // Navngitte kategorier vises først; "Ikke kategorisert" vises sist (samme rekkefølge som
+  // i forhåndsvisningen og PDF-en — se TilbudPreview.jsx og pdf.js).
   const materialKategoriGrupper = (() => {
     const nokler = []
     const map = {}
@@ -128,8 +130,8 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
       map[key].push(m)
     })
     const grupper = []
-    if (map['']) grupper.push({ kategori: null, rader: map[''] })
     nokler.filter(Boolean).forEach(k => grupper.push({ kategori: k, rader: map[k] }))
+    if (map['']) grupper.push({ kategori: null, rader: map[''] })
     return grupper
   })()
   const visKategoriOverskrift = materialKategoriGrupper.some(g => g.kategori)

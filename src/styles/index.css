@@ -491,17 +491,22 @@ textarea { resize: vertical; }
 }
 .pris-tabell tr.pris-tabell-seksjon:hover td { background: var(--blaa-lys); }
 
-/* Kategori-underoverskrift for materialer (valgfritt, kun synlig om kategori er i bruk) */
+/* Kategori-underoverskrift for materialer (valgfritt, kun synlig om kategori er i bruk).
+   Mindre/lysere variant av seksjonsoverskriften over (Materialer), med innrykk for å vise
+   at den er underordnet — og ekstra luft (pris-tabell-kategori-luft) før hver kategori
+   utenom den første, så flere kategorier ikke flyter i hverandre. */
 .pris-tabell tr.pris-tabell-kategori td {
   background: var(--bakgrunn);
-  color: var(--tekst-sekundaer);
-  font-weight: 600;
-  font-size: 11.5px;
-  font-style: italic;
-  padding: 6px 12px 6px 22px;
+  color: var(--blaa);
+  font-weight: 700;
+  font-size: 11px;
+  padding: 6px 12px 6px 28px;
   border-bottom: 1px solid var(--kant);
 }
 .pris-tabell tr.pris-tabell-kategori:hover td { background: var(--bakgrunn); }
+.pris-tabell tr.pris-tabell-kategori-luft td { border-top: 10px solid var(--hvit); }
+/* Samme luft før første rad i en evt. ukategorisert "rest-gruppe" til slutt */
+.pris-tabell tr.pris-tabell-rad-luft td { border-top: 10px solid var(--hvit); }
 
 .th-antall, .td-antall { text-align: center; width: 70px; }
 .th-pris, .td-pris, .th-sum, .td-sum { text-align: right; width: 100px; }
