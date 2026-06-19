@@ -17,6 +17,7 @@ const SESONG_TEMAER = [
 const ALLE_TEMAER = [...BASE_TEMAER, ...SESONG_TEMAER]
 
 const SPESIALDATOER = [
+  { dato: 'Mars/April', tema: 'paske', tittel: 'Påsketiden',        beskrivelse: 'Varm oransje — vårstemning.' },
   { dato: 'Juni',      tema: 'pride', tittel: 'Pride-måneden',      beskrivelse: 'Vis støtte og inkludering.' },
   { dato: 'Oktober',   tema: 'rosa',  tittel: 'Brystkreft-måneden', beskrivelse: 'Rosa sløyfe — vis støtte.' },
   { dato: 'Desember',  tema: 'jul',   tittel: 'Julehøytiden',       beskrivelse: 'Rød og festlig stil.' },
