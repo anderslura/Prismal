@@ -120,7 +120,7 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
         // Eget vindu/fane: bygg en låst header med Tilbake-knapp over PDF-en, siden et
         // script-åpnet vindu har sin egen historikk (nettleserens "tilbake"-pil i DETTE
         // vinduet kan aldri lande på den opprinnelige fanen — kun window.close() kan det).
-        visPdfMedTilbakeknapp(vindu, url)
+        await visPdfMedTilbakeknapp(vindu, url)
       } else {
         // Popup ble blokkert — fallback: åpne i samme fane (her funker vanlig "tilbake")
         window.location.href = url
@@ -131,25 +131,76 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
     }
   }
 
-  // Skriver en enkel HTML-wrapper inn i det allerede åpne vinduet: en låst (sticky)
-  // header med Tilbake-knapp øverst, og PDF-en flytende i full visning under — slik at
-  // brukeren alltid kan komme seg tilbake til redigeringsvisningen uten å miste noe av
-  // selve PDF-forhåndsvisningen (scroll/zoom for flere sider fungerer som normalt).
-  function visPdfMedTilbakeknapp(vindu, url) {
+  // Skriver en HTML-wrapper inn i det allerede åpne vinduet: en låst (sticky) header med
+  // Tilbake-knapp øverst, og selve PDF-sidene rendret som bilder under med pdf.js.
+  // VIKTIG: vi bruker IKKE <iframe src="blob:..."> — iOS Safari viser da ofte bare side 1
+  // uten skrolling og uten å fylle skjermen (kjent WebKit-begrensning for inline PDF i
+  // iframe/embed). pdf.js rendrer i stedet hver side til et <canvas>, som er vanlig
+  // DOM-innhold og dermed skroller/fyller skjermen helt normalt, på alle enheter.
+  async function visPdfMedTilbakeknapp(vindu, url) {
     vindu.document.title = 'Slik ser kunden tilbudet'
+
+    const viewport = vindu.document.createElement('meta')
+    viewport.name = 'viewport'
+    viewport.content = 'width=device-width, initial-scale=1'
+    vindu.document.head.appendChild(viewport)
+
     vindu.document.body.style.margin = '0'
     vindu.document.body.innerHTML = `
-      <div style="display:flex;flex-direction:column;height:100vh;">
-        <div style="flex:0 0 auto;display:flex;align-items:center;gap:12px;padding:10px 14px;background:#1e50c8;color:#fff;font-family:sans-serif;box-shadow:0 1px 4px rgba(0,0,0,.25);">
-          <button id="btn-tilbake-forhandsvisning" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.45);color:#fff;border-radius:6px;padding:6px 14px;font-size:14px;cursor:pointer;">← Tilbake</button>
-          <span style="font-size:14px;font-weight:600;flex:1;">Slik ser kunden tilbudet</span>
-          <a id="lenke-aapne-ny-fane" href="${url}" target="_blank" rel="noopener" style="color:#fff;font-size:12px;opacity:.8;text-decoration:underline;white-space:nowrap;">Åpne i ny fane ↗</a>
+      <div style="display:flex;flex-direction:column;min-height:100vh;background:#525659;">
+        <div style="position:sticky;top:0;z-index:10;flex:0 0 auto;display:flex;align-items:center;gap:12px;padding:10px 14px;background:#fff;border-bottom:1px solid #d8dde6;font-family:sans-serif;box-shadow:0 1px 4px rgba(0,0,0,.15);">
+          <button id="btn-tilbake-forhandsvisning" style="background:#1e50c8;border:none;color:#fff;border-radius:6px;padding:7px 16px;font-size:14px;font-weight:600;cursor:pointer;flex:0 0 auto;">← Tilbake</button>
+          <span style="font-size:14px;font-weight:600;color:#1f2937;flex:1;">Slik ser kunden tilbudet</span>
+          <a href="${url}" target="_blank" rel="noopener" style="color:#1e50c8;font-size:12px;text-decoration:underline;white-space:nowrap;flex:0 0 auto;">Åpne direkte ↗</a>
         </div>
-        <iframe src="${url}" style="flex:1 1 auto;width:100%;border:none;"></iframe>
+        <div id="pdf-sider" style="flex:1 1 auto;display:flex;flex-direction:column;align-items:center;gap:14px;padding:14px 10px 30px;">
+          <p style="color:#fff;font-family:sans-serif;font-size:14px;">Laster PDF …</p>
+        </div>
       </div>
     `
     const knapp = vindu.document.getElementById('btn-tilbake-forhandsvisning')
     if (knapp) knapp.onclick = () => vindu.close()
+
+    try {
+      if (!vindu.pdfjsLib) {
+        await new Promise((resolve, reject) => {
+          const script = vindu.document.createElement('script')
+          script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js'
+          script.onload = resolve
+          script.onerror = () => reject(new Error('Kunne ikke laste PDF-visningsbibliotek'))
+          vindu.document.head.appendChild(script)
+        })
+        vindu.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'
+      }
+
+      const container = vindu.document.getElementById('pdf-sider')
+      container.innerHTML = ''
+      const pdf = await vindu.pdfjsLib.getDocument(url).promise
+      const dpr = vindu.devicePixelRatio || 1
+      const breddeCss = Math.min(vindu.innerWidth - 20, 900)
+
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const side = await pdf.getPage(i)
+        const grunnViewport = side.getViewport({ scale: 1 })
+        const skala = (breddeCss / grunnViewport.width) * dpr
+        const renderViewport = side.getViewport({ scale: skala })
+
+        const canvas = vindu.document.createElement('canvas')
+        canvas.width = renderViewport.width
+        canvas.height = renderViewport.height
+        canvas.style.width = breddeCss + 'px'
+        canvas.style.height = (renderViewport.height / dpr) + 'px'
+        canvas.style.boxShadow = '0 1px 6px rgba(0,0,0,.35)'
+        canvas.style.background = '#fff'
+        container.appendChild(canvas)
+
+        await side.render({ canvasContext: canvas.getContext('2d'), viewport: renderViewport }).promise
+      }
+    } catch (err) {
+      // pdf.js feilet (f.eks. ingen nett da CDN-skriptet ble hentet) — naviger rett til
+      // PDF-en i stedet. Da forsvinner Tilbake-headeren, men kunden ser i det minste PDF-en.
+      vindu.location.href = url
+    }
   }
 
   return (
