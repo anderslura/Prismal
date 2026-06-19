@@ -718,6 +718,12 @@ textarea { resize: vertical; }
   font-weight: 600;
   color: var(--groen);
 }
+/* Hurtigknappene (10/20/30%) skal flytte som EN enhet når .paaslag-rad wrapper,
+   ikke brekke midt i gruppen (10% alene på linje 1, 20/30% på linje 2). */
+.paaslag-hurtig-gruppe {
+  display: flex;
+  gap: 6px;
+}
 .paaslaginfo {
   font-size: 11px;
   color: var(--tekst-sekundaer);
@@ -935,7 +941,7 @@ textarea { resize: vertical; }
 /* === NY MATERIALTABELL === */
 .mat-header {
   display: grid;
-  grid-template-columns: 4fr 60px 80px 70px 32px auto;
+  grid-template-columns: 4fr 60px 80px minmax(64px, auto) 32px auto;
   gap: 6px;
   font-size: 11px;
   font-weight: 600;
@@ -948,7 +954,7 @@ textarea { resize: vertical; }
 }
 .mat-rad {
   display: grid;
-  grid-template-columns: 4fr 60px 80px 70px 32px auto;
+  grid-template-columns: 4fr 60px 80px minmax(64px, auto) 32px auto;
   gap: 6px;
   align-items: center;
   padding: 5px 2px;
@@ -2537,7 +2543,7 @@ textarea { resize: vertical; }
   /* Material-tabell: tettere på liten skjerm */
   .mat-header,
   .mat-rad {
-    grid-template-columns: 1fr 44px 58px 52px 26px auto;
+    grid-template-columns: 1fr 44px 58px minmax(48px, auto) 26px auto;
     gap: 4px;
   }
   .mat-header span:nth-child(5) { font-size: 0; } /* skjul "Påslag" tekst */
@@ -2851,9 +2857,12 @@ textarea { resize: vertical; }
     flex-wrap: wrap;
   }
 
-  /* Pristabell i preview: scroll horisontalt */
-  .dok-body { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .pris-tabell { min-width: 420px; }
+  /* Pristabell i preview: tabellen krymper til skjermbredden i stedet for å
+     kreve horisontal scroll. (Tidligere forsert min-width gjorde at tekst ble
+     usynlig klippet på venstre side uten at det var synlig at man måtte
+     scrolle for å se resten.) .pris-tabell-scroll har overflow-x:auto som
+     sikkerhetsnett hvis innhold likevel skulle bli for bredt en dag. */
+  .pris-tabell { width: 100%; }
 
   /* Preview knapper: 2-kolonne grid på mobil */
   .preview-knapper {
@@ -2932,8 +2941,10 @@ textarea { resize: vertical; }
     grid-template-columns: 1fr !important;
   }
 
-  /* Pristabell mindre font */
+  /* Pristabell mindre font + smalere tall-kolonner, så beskrivelse får mer plass */
   .pris-tabell th, .pris-tabell td { padding: 7px 8px; font-size: 12px; }
+  .th-antall, .td-antall { width: 46px; }
+  .th-pris, .td-pris, .th-sum, .td-sum { width: 62px; }
 
   /* Ny-material input: full bredde */
   .material-input-rad {

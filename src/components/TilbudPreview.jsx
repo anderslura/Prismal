@@ -1,7 +1,7 @@
 import { useState, useEffect, Fragment } from 'react'
 import { hentTemaFarger } from './PdfTemavelger.jsx'
 import PrismalLogo from './PrismalLogo.jsx'
-import { genererPdfBase64 } from '../api/pdf.js'
+import { genererPdfBase64, genererPdfBlobUrl } from '../api/pdf.js'
 import { supabase } from '../lib/supabase.js'
 
 export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilbake, onNyttTilbud, isPro = true, bruker }) {
@@ -102,6 +102,32 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
     }
   }
 
+  // Åpner den faktiske, ferdig genererte PDF-en i en ny fane (nettleserens egen
+  // PDF-viewer — fullskjerm, scrollbar for flere sider) i stedet for å laste den ned.
+  // Bruk: vise kunden nøyaktig sluttresultatet på jobb/befaring uten en nedlastingsfil
+  // som forstyrrer eller blir liggende i kundens Nedlastinger-mappe.
+  // Vinduet åpnes SYNKRONT (før PDF-en er generert) — ellers blokkerer Safari/iOS
+  // popupen siden den ellers oppfattes som et async-trigget vindu, ikke et direkte klikk-resultat.
+  async function visSomKunde() {
+    const vindu = window.open('', '_blank')
+    if (vindu) {
+      vindu.document.title = 'Genererer tilbud …'
+      vindu.document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;margin:0;font-family:sans-serif;color:#555;font-size:15px;">Genererer PDF …</div>'
+    }
+    try {
+      const url = await genererPdfBlobUrl(skjema, isPro)
+      if (vindu && !vindu.closed) {
+        vindu.location.href = url
+      } else {
+        // Popup ble blokkert — fallback: åpne i samme fane
+        window.location.href = url
+      }
+    } catch (err) {
+      if (vindu && !vindu.closed) vindu.close()
+      alert('Kunne ikke generere PDF: ' + (err.message || 'ukjent feil'))
+    }
+  }
+
   return (
     <div className="preview-layout">
       <div className="preview-actions">
@@ -117,6 +143,13 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
             onClick={() => { setVisSendModal(true); setSenderStatus('idle') }}
           >
             ✉️ Send på e-post
+          </button>
+          <button
+            className="btn btn-secondary"
+            onClick={visSomKunde}
+            title="Åpner den ferdige PDF-en i en ny fane, akkurat slik kunden vil se den — uten å laste ned noe"
+          >
+            👁️ Se som kunden ser det
           </button>
           <button className="btn btn-secondary" onClick={onTilbake} title="Alt du har fylt inn er bevart">
             ✏️ Endre tilbud

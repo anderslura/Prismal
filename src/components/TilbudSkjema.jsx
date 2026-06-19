@@ -476,13 +476,15 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
             <input type="number" min="0" max="200" step="5" placeholder="0" value={skjema.paaslagProsent}
               onChange={e => oppdater('paaslagProsent', e.target.value)} className="paaslag-input" />
             <span className="paaslag-symbol">%</span>
-            {[10, 20, 30].map(p => (
-              <button
-                key={p}
-                className={`paaslag-hurtig${parseFloat(skjema.paaslagProsent) === p ? ' aktiv' : ''}`}
-                onClick={() => oppdater('paaslagProsent', String(p))}
-              >{p}%</button>
-            ))}
+            <div className="paaslag-hurtig-gruppe">
+              {[10, 20, 30].map(p => (
+                <button
+                  key={p}
+                  className={`paaslag-hurtig${parseFloat(skjema.paaslagProsent) === p ? ' aktiv' : ''}`}
+                  onClick={() => oppdater('paaslagProsent', String(p))}
+                >{p}%</button>
+              ))}
+            </div>
             {parseFloat(skjema.paaslagProsent) > 0 && materialerMedPaaslag > 0 && (
               <span className="paaslag-resultat">= +{formaterKr(paaslag)}</span>
             )}
@@ -533,12 +535,14 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
               className="paaslag-input" value={skjema.miljoPaaslagProsent}
               onChange={e => oppdater('miljoPaaslagProsent', e.target.value)} />
             <span className="paaslag-symbol">%</span>
-            {[10, 20, 30].map(pr => (
-              <button key={pr}
-                className={`paaslag-hurtig${parseFloat(skjema.miljoPaaslagProsent) === pr ? ' aktiv' : ''}`}
-                onClick={() => oppdater('miljoPaaslagProsent', pr)}
-              >{pr}%</button>
-            ))}
+            <div className="paaslag-hurtig-gruppe">
+              {[10, 20, 30].map(pr => (
+                <button key={pr}
+                  className={`paaslag-hurtig${parseFloat(skjema.miljoPaaslagProsent) === pr ? ' aktiv' : ''}`}
+                  onClick={() => oppdater('miljoPaaslagProsent', pr)}
+                >{pr}%</button>
+              ))}
+            </div>
             {parseFloat(skjema.miljoPaaslagProsent) > 0 && miljoAvgifterSum > 0 && (
               <span className="paaslag-resultat">= +{formaterKr(miljoPaaslag)}</span>
             )}

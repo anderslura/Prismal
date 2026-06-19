@@ -389,6 +389,12 @@ export async function genererPdfBase64(skjema, isPro = true) {
   return doc.output('datauristring').split(',')[1]
 }
 
+// ── Generer PDF som blob-URL (for forhåndsvisning i nettleser uten nedlasting) ──
+export async function genererPdfBlobUrl(skjema, isPro = true) {
+  const doc = await byggPdfDok(skjema, isPro)
+  return doc.output('bloburl')
+}
+
 function kr(tall) {
   return new Intl.NumberFormat('no-NO', { style: 'currency', currency: 'NOK', maximumFractionDigits: 0 }).format(tall || 0)
 }
