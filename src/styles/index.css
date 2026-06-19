@@ -2786,19 +2786,11 @@ textarea { resize: vertical; }
     gap: 6px;
   }
 
-  /* Sentrer logo på landingssiden (enkleste header) for å holde
-     merkevaren unna kamera-/Dynamic Island-sonen på notch-telefoner.
-     Skjer KUN på 'landing' — andre steg har flere knapper i høyre
-     hjørne, og sentrert logo ville da kollidert med dem. */
-  .header-inner[data-steg="landing"] {
-    position: relative;
-    justify-content: flex-end;
-  }
-  .header-inner[data-steg="landing"] .logo {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-  }
+  /* Logo lå tidligere absolutt-sentrert på 'landing' for å holde merkevaren unna
+     notch-/Dynamic Island-sonen. Det var feil: logoen lå da i et eget stacking-lag
+     over "Logg inn"/"Kom i gang"-knappene til høyre — de overlappet visuelt OG
+     logoen "stjal" klikket, så Logg inn ikke fungerte på mobil. Logo ligger derfor
+     statisk til venstre igjen, samme som på alle andre steg (.header-inner under). */
 
   .btn {
     padding: 7px 12px;
