@@ -206,8 +206,8 @@ async function byggPdfDok(skjema, isPro = true) {
   // slik at flere kategorier ikke flyter i hverandre.
   function kategorirad(navn, ekstraLuft) {
     rader.push([{ content: navn, colSpan: 4, styles: {
-      fontStyle: 'bold', fontSize: 7.5, textColor: fargeGraa, fillColor: [255, 255, 255],
-      cellPadding: { top: ekstraLuft ? 5 : 2, right: 2, bottom: 1, left: 8 },
+      fontStyle: 'bold', fontSize: 9.5, textColor: fargeHoved, fillColor: [255, 255, 255],
+      cellPadding: { top: ekstraLuft ? 5.5 : 2.5, right: 2, bottom: 1.5, left: 8 },
     } }])
   }
 

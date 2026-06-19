@@ -499,8 +499,8 @@ textarea { resize: vertical; }
   background: var(--bakgrunn);
   color: var(--blaa);
   font-weight: 700;
-  font-size: 11px;
-  padding: 6px 12px 6px 28px;
+  font-size: 13.5px;
+  padding: 7px 12px 7px 28px;
   border-bottom: 1px solid var(--kant);
 }
 .pris-tabell tr.pris-tabell-kategori:hover td { background: var(--bakgrunn); }
@@ -978,7 +978,17 @@ textarea { resize: vertical; }
 .mat-ny-rad .mat-paaslag-cb { flex: 0 0 auto; }
 .mat-ny-rad .btn-legg-til-mat { flex: 0 0 auto; }
 .mat-ny-rad .mat-kategori-felt { flex: 1 0 100%; margin-top: 2px; }
-.mat-fast-navn { font-size: 13px; font-weight: 500; }
+.mat-fast-navn {
+  font-size: 13px;
+  font-weight: 500;
+  /* Hindrer tekstmarkering/OS-drag på mobil (Android/iOS kan ellers tolke en
+     "dra markert tekst"-bevegelse som søk-på-web og navigere bort fra siden
+     hvis den slippes på et tomt tekstfelt). Påvirker ikke musbasert
+     HTML5 drag-and-drop på PC, som styres av draggable-attributtet under. */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
 .mat-fast-navn[draggable="true"] { cursor: grab; }
 .mat-fast-navn[draggable="true"]:active { cursor: grabbing; }
 
@@ -3436,6 +3446,24 @@ textarea { resize: vertical; }
   align-items: center;
   gap: 4px;
 }
+
+/* Miljøavgift-rad: beskrivelsen får hele bredden på egen rad over, med
+   antall/pris/sum/slett på raden under — i stedet for å dele samme trange
+   1fr-kolonne som resten av .trans-rad. Løser at lengre standardtekster
+   (f.eks. "Kildesortering (kubikk / henger)") ble klippet i feltet. */
+.miljo-rad {
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "navn navn navn navn navn"
+    ".    ant  pris sum  slett";
+  row-gap: 5px;
+  padding: 7px 2px 9px;
+}
+.miljo-navn { grid-area: navn; text-align: left !important; }
+.miljo-antall { grid-area: ant; }
+.miljo-pris { grid-area: pris; }
+.miljo-sum { grid-area: sum; }
+.miljo-slett { grid-area: slett; justify-self: end; }
 
 .btn-legg-til-mat {
   padding: 0 14px;

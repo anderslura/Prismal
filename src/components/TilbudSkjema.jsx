@@ -378,6 +378,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
             <span></span>
           </div>
           <p className="mat-info-tekst mat-info-antall">Kun linjer med antall kommer med i tilbudet.</p>
+          <p className="mat-info-tekst mat-info-kategori">Tips: skriv eller velg kategori i feltet under hver linje for å gruppere materialer. På PC kan du også dra navnet til en annen gruppe.</p>
 
           {/* EKSISTERENDE LINJER — gruppert etter kategori (overskrift vises kun når kategori er i bruk) */}
 
@@ -506,18 +507,18 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
           {(skjema.miljoavgifter || []).map((m) => {
             const sum = (parseFloat(m.antall)||0)*(parseFloat(m.pris)||0)
             return (
-              <div key={m.id} className="trans-rad">
+              <div key={m.id} className="trans-rad miljo-rad">
                 <input type="text" placeholder="Beskrivelse" maxLength={40}
-                  className="trans-input trans-input-navn" value={m.navn}
+                  className="trans-input trans-input-navn miljo-navn" value={m.navn}
                   onChange={e => oppdaterMiljoRad(m.id, 'navn', e.target.value)} />
                 <input type="number" min="0" placeholder="0"
-                  className="trans-input" value={m.antall}
+                  className="trans-input miljo-antall" value={m.antall}
                   onChange={e => oppdaterMiljoRad(m.id, 'antall', e.target.value)} />
                 <input type="number" min="0" placeholder="0"
-                  className="trans-input" value={m.pris}
+                  className="trans-input miljo-pris" value={m.pris}
                   onChange={e => oppdaterMiljoRad(m.id, 'pris', e.target.value)} />
-                <span className="trans-sum">{sum > 0 ? formaterKr(sum) : ''}</span>
-                <button className="btn-fjern" onClick={() => fjernMiljoRad(m.id)}>×</button>
+                <span className="trans-sum miljo-sum">{sum > 0 ? formaterKr(sum) : ''}</span>
+                <button className="btn-fjern miljo-slett" onClick={() => fjernMiljoRad(m.id)}>×</button>
               </div>
             )
           })}
