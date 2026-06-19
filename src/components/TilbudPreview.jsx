@@ -157,7 +157,6 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
         <div style="position:sticky;top:0;z-index:10;flex:0 0 auto;display:flex;align-items:center;gap:12px;padding:10px 14px;background:#fff;border-bottom:1px solid #d8dde6;font-family:sans-serif;box-shadow:0 1px 4px rgba(0,0,0,.15);">
           <button id="btn-tilbake-forhandsvisning" style="background:#1e50c8;border:none;color:#fff;border-radius:6px;padding:7px 16px;font-size:14px;font-weight:600;cursor:pointer;flex:0 0 auto;">← Tilbake</button>
           <span style="font-size:14px;font-weight:600;color:#1f2937;flex:1;">Slik ser kunden tilbudet</span>
-          <button id="btn-send-forhandsvisning" style="background:#fff;border:1.5px solid #1e50c8;color:#1e50c8;border-radius:6px;padding:6px 14px;font-size:13px;font-weight:600;cursor:pointer;flex:0 0 auto;white-space:nowrap;">✉️ Send tilbud</button>
         </div>
         <div id="pdf-sider" style="flex:1 1 auto;display:flex;flex-direction:column;align-items:center;gap:14px;padding:14px 10px 30px;">
           <p style="color:#fff;font-family:sans-serif;font-size:14px;">Laster PDF …</p>
@@ -166,33 +165,6 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
     `
     const knapp = vindu.document.getElementById('btn-tilbake-forhandsvisning')
     if (knapp) knapp.onclick = () => vindu.close()
-
-    // "Send tilbud" gjenbruker samme send-modal som i redigeringsvisningen (med
-    // e-postfelt, duplikat-varsel og status). VIKTIG: vi kaller IKKE setVisSendModal
-    // direkte fra denne onclick-handleren — selv om den teknisk "eies" av hoved-fanen
-    // (closure), er et kryss-vindu-funksjonskall trigget av en DOM-event i et ANNET
-    // vindu vist seg upålitelig på iOS Safari (samme type WebKit-kvirk som styrte
-    // valget av pdf.js over iframe tidligere). Vi setter i stedet bare en lokal
-    // markør og lukker vinduet — selve setVisSendModal-kallet under skjer fra en
-    // timer i HOVED-vinduet (lukkeSjekk), som kun leser vindu.closed. Det er samme
-    // polling-teknikk alle OAuth-popup-bibliotek har brukt i over 10 år, og er
-    // alltid pålitelig fordi den ikke er avhengig av å kjøre kode på tvers av vinduer.
-    let sendKlikket = false
-    const sendKnapp = vindu.document.getElementById('btn-send-forhandsvisning')
-    if (sendKnapp) sendKnapp.onclick = () => {
-      sendKlikket = true
-      vindu.close()
-    }
-    const lukkeSjekk = setInterval(() => {
-      if (vindu.closed) {
-        clearInterval(lukkeSjekk)
-        if (sendKlikket) {
-          apnetVedRef.current = Date.now()
-          setVisSendModal(true)
-          setSenderStatus('idle')
-        }
-      }
-    }, 150)
 
     try {
       if (!vindu.pdfjsLib) {
