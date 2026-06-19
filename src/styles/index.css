@@ -698,6 +698,7 @@ textarea { resize: vertical; }
 /* === PÅSLAG === */
 .paaslag-rad {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 10px;
 }
@@ -955,7 +956,22 @@ textarea { resize: vertical; }
 }
 .mat-rad:last-child { border-bottom: none; }
 .mat-rad-rask { opacity: 0.7; }
-.mat-ny-rad { padding-top: 10px; border-top: 2px solid var(--blaa-lys); border-bottom: none; }
+/* Ny-materiallinje: flex-wrap (ikke rigid grid) så feltene/knappen flyter ned på
+   egen linje når bredden ikke strekker til. Responsivt på alle skjermbredder
+   uten enhetsspesifikke breakpoints – fungerer likt på iPhone/Android/tablet. */
+.mat-rad.mat-ny-rad {
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: 10px;
+  border-top: 2px solid var(--blaa-lys);
+  border-bottom: none;
+}
+.mat-ny-rad .mat-ant { width: 56px !important; flex: 0 0 56px; }
+.mat-ny-rad .mat-pris { width: 70px !important; flex: 0 0 70px; }
+.mat-ny-rad .mat-sum { flex: 0 0 auto; min-width: 44px; }
+.mat-ny-rad .mat-paaslag-cb { flex: 0 0 auto; }
+.mat-ny-rad .btn-legg-til-mat { flex: 0 0 auto; }
+.mat-ny-rad .mat-kategori-felt { flex: 1 0 100%; margin-top: 2px; }
 .mat-fast-navn { font-size: 13px; font-weight: 500; }
 .mat-fast-navn[draggable="true"] { cursor: grab; }
 .mat-fast-navn[draggable="true"]:active { cursor: grabbing; }
@@ -3231,7 +3247,8 @@ textarea { resize: vertical; }
 }
 .mat-ny-navn-wrapper {
   position: relative;
-  flex: 1;
+  flex: 1 1 160px;
+  min-width: 120px;
 }
 .mat-dropdown {
   position: absolute;
