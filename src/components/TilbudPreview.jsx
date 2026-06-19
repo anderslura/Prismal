@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from 'react'
+import { useState, useEffect, useRef, Fragment } from 'react'
 import { hentTemaFarger } from './PdfTemavelger.jsx'
 import PrismalLogo from './PrismalLogo.jsx'
 import { genererPdfBase64, genererPdfBlobUrl } from '../api/pdf.js'
@@ -10,6 +10,12 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
   const [senderStatus, setSenderStatus]     = useState('idle') // idle | sending | sendt | feil
   const [feilmelding, setFeilmelding]       = useState('')
   const [tidligereAntall, setTidligereAntall] = useState(null) // null = ikke hentet ennå
+  // Tidspunkt for siste åpning av send-modalen. Brukes til å ignorere et eventuelt
+  // "ghost click" på overlay-bakgrunnen rett etter at popup-vinduet ("se som kunden
+  // ser det") lukkes og fokus går tilbake til denne fanen — noen mobilnettlesere kan
+  // i sjeldne tilfeller sende et syntetisk klikk på samme skjermposisjon i siden som
+  // får fokus igjen, noe som ellers ville lukket modalen i samme stund som den åpnes.
+  const apnetVedRef = useRef(0)
 
   // Hent antall tidligere tilbud til samme kunde
   useEffect(() => {
@@ -181,6 +187,7 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
       if (vindu.closed) {
         clearInterval(lukkeSjekk)
         if (sendKlikket) {
+          apnetVedRef.current = Date.now()
           setVisSendModal(true)
           setSenderStatus('idle')
         }
@@ -241,7 +248,7 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
           <button
             className="btn btn-primary"
             style={{ background: '#6366f1', borderColor: '#6366f1' }}
-            onClick={() => { setVisSendModal(true); setSenderStatus('idle') }}
+            onClick={() => { apnetVedRef.current = Date.now(); setVisSendModal(true); setSenderStatus('idle') }}
           >
             ✉️ Send på e-post
           </button>
@@ -271,7 +278,7 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
 
       {/* ── Send e-post modal ── */}
       {visSendModal && (
-        <div className="modal-overlay" onClick={() => { if (senderStatus !== 'sending') setVisSendModal(false) }}>
+        <div className="modal-overlay" onClick={() => { if (senderStatus !== 'sending' && Date.now() - apnetVedRef.current > 400) setVisSendModal(false) }}>
           <div className="modal-boks send-modal" onClick={e => e.stopPropagation()}>
             <h3 className="modal-tittel">Send tilbud på e-post</h3>
 
