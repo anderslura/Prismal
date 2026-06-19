@@ -162,14 +162,30 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
     if (knapp) knapp.onclick = () => vindu.close()
 
     // "Send tilbud" gjenbruker samme send-modal som i redigeringsvisningen (med
-    // e-postfelt, duplikat-varsel og status) — lukker forhåndsvisnings-fanen samtidig
-    // slik at brukeren automatisk er tilbake der modalen faktisk vises.
+    // e-postfelt, duplikat-varsel og status). VIKTIG: vi kaller IKKE setVisSendModal
+    // direkte fra denne onclick-handleren — selv om den teknisk "eies" av hoved-fanen
+    // (closure), er et kryss-vindu-funksjonskall trigget av en DOM-event i et ANNET
+    // vindu vist seg upålitelig på iOS Safari (samme type WebKit-kvirk som styrte
+    // valget av pdf.js over iframe tidligere). Vi setter i stedet bare en lokal
+    // markør og lukker vinduet — selve setVisSendModal-kallet under skjer fra en
+    // timer i HOVED-vinduet (lukkeSjekk), som kun leser vindu.closed. Det er samme
+    // polling-teknikk alle OAuth-popup-bibliotek har brukt i over 10 år, og er
+    // alltid pålitelig fordi den ikke er avhengig av å kjøre kode på tvers av vinduer.
+    let sendKlikket = false
     const sendKnapp = vindu.document.getElementById('btn-send-forhandsvisning')
     if (sendKnapp) sendKnapp.onclick = () => {
-      setVisSendModal(true)
-      setSenderStatus('idle')
+      sendKlikket = true
       vindu.close()
     }
+    const lukkeSjekk = setInterval(() => {
+      if (vindu.closed) {
+        clearInterval(lukkeSjekk)
+        if (sendKlikket) {
+          setVisSendModal(true)
+          setSenderStatus('idle')
+        }
+      }
+    }, 150)
 
     try {
       if (!vindu.pdfjsLib) {
