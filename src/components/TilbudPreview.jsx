@@ -117,15 +117,39 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
     try {
       const url = await genererPdfBlobUrl(skjema, isPro)
       if (vindu && !vindu.closed) {
-        vindu.location.href = url
+        // Eget vindu/fane: bygg en låst header med Tilbake-knapp over PDF-en, siden et
+        // script-åpnet vindu har sin egen historikk (nettleserens "tilbake"-pil i DETTE
+        // vinduet kan aldri lande på den opprinnelige fanen — kun window.close() kan det).
+        visPdfMedTilbakeknapp(vindu, url)
       } else {
-        // Popup ble blokkert — fallback: åpne i samme fane
+        // Popup ble blokkert — fallback: åpne i samme fane (her funker vanlig "tilbake")
         window.location.href = url
       }
     } catch (err) {
       if (vindu && !vindu.closed) vindu.close()
       alert('Kunne ikke generere PDF: ' + (err.message || 'ukjent feil'))
     }
+  }
+
+  // Skriver en enkel HTML-wrapper inn i det allerede åpne vinduet: en låst (sticky)
+  // header med Tilbake-knapp øverst, og PDF-en flytende i full visning under — slik at
+  // brukeren alltid kan komme seg tilbake til redigeringsvisningen uten å miste noe av
+  // selve PDF-forhåndsvisningen (scroll/zoom for flere sider fungerer som normalt).
+  function visPdfMedTilbakeknapp(vindu, url) {
+    vindu.document.title = 'Slik ser kunden tilbudet'
+    vindu.document.body.style.margin = '0'
+    vindu.document.body.innerHTML = `
+      <div style="display:flex;flex-direction:column;height:100vh;">
+        <div style="flex:0 0 auto;display:flex;align-items:center;gap:12px;padding:10px 14px;background:#1e50c8;color:#fff;font-family:sans-serif;box-shadow:0 1px 4px rgba(0,0,0,.25);">
+          <button id="btn-tilbake-forhandsvisning" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.45);color:#fff;border-radius:6px;padding:6px 14px;font-size:14px;cursor:pointer;">← Tilbake</button>
+          <span style="font-size:14px;font-weight:600;flex:1;">Slik ser kunden tilbudet</span>
+          <a id="lenke-aapne-ny-fane" href="${url}" target="_blank" rel="noopener" style="color:#fff;font-size:12px;opacity:.8;text-decoration:underline;white-space:nowrap;">Åpne i ny fane ↗</a>
+        </div>
+        <iframe src="${url}" style="flex:1 1 auto;width:100%;border:none;"></iframe>
+      </div>
+    `
+    const knapp = vindu.document.getElementById('btn-tilbake-forhandsvisning')
+    if (knapp) knapp.onclick = () => vindu.close()
   }
 
   return (
