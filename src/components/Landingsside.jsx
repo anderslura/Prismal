@@ -167,11 +167,16 @@ export default function Landingsside({ onStart, onRegistrer }) {
             </div>
 
             <div className="l2-hero-bilde-wrapper">
-              <div className="l2-hero-bilde-clip" onClick={() => setLightbox(true)} title="Trykk for å forstørre">
+              <div className="l2-hero-bilde-stack" onClick={() => setLightbox(true)} title="Trykk for å se begge sider i full størrelse">
+                <img
+                  src="/demo/pdf_forside_side2.png"
+                  alt="Side 2 av Prismal-tilbud"
+                  className="l2-hero-bilde-kort l2-hero-bilde-bak"
+                />
                 <img
                   src="/demo/pdf_forside.png"
-                  alt="Eksempel på Prismal-tilbud"
-                  className="l2-hero-bilde l2-hero-bilde-klikkbar"
+                  alt="Eksempel på Prismal-tilbud, side 1"
+                  className="l2-hero-bilde-kort l2-hero-bilde-frem l2-hero-bilde-klikkbar"
                 />
               </div>
             </div>
@@ -307,12 +312,10 @@ export default function Landingsside({ onStart, onRegistrer }) {
       {lightbox && (
         <div className="l2-lightbox" onClick={() => setLightbox(false)}>
           <button className="l2-lightbox-lukk" onClick={() => setLightbox(false)} aria-label="Lukk">✕</button>
-          <img
-            src="/demo/pdf_forside.png"
-            alt="Prismal tilbud forhåndsvisning"
-            className="l2-lightbox-bilde"
-            onClick={(e) => e.stopPropagation()}
-          />
+          <div className="l2-lightbox-sider" onClick={(e) => e.stopPropagation()}>
+            <img src="/demo/pdf_forside.png" alt="Prismal tilbud forhåndsvisning, side 1" className="l2-lightbox-bilde" />
+            <img src="/demo/pdf_forside_side2.png" alt="Prismal tilbud forhåndsvisning, side 2" className="l2-lightbox-bilde" />
+          </div>
         </div>
       )}
 

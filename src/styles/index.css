@@ -1263,13 +1263,6 @@ textarea { resize: vertical; }
 .l2-hero-bilde-klikkbar {
   cursor: zoom-in;
 }
-.l2-hero-bilde-clip {
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-.l2-hero-bilde-clip:hover {
-  transform: scale(1.02);
-  box-shadow: 0 20px 48px rgba(59,130,246,0.28);
-}
 .l2-lightbox {
   position: fixed;
   inset: 0;
@@ -1303,9 +1296,23 @@ textarea { resize: vertical; }
 .l2-lightbox-lukk:hover {
   background: rgba(255,255,255,0.22);
 }
-.l2-lightbox-bilde {
+.l2-lightbox-sider {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  align-items: flex-start;
   max-width: 100%;
   max-height: 90vh;
+  overflow-y: auto;
+  padding: 4px;
+}
+.l2-lightbox-bilde {
+  max-width: min(80vw, 460px);
+  max-height: 86vh;
+  width: auto;
+  height: auto;
+  display: block;
   border-radius: 10px;
   box-shadow: 0 32px 80px rgba(0,0,0,0.5);
   cursor: default;
@@ -1338,21 +1345,39 @@ textarea { resize: vertical; }
   align-items: center;
   justify-content: center;
 }
-.l2-hero-bilde-clip {
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1.5px solid rgba(99,102,241,0.18);
-  box-shadow: 0 16px 40px rgba(59,130,246,0.18);
+.l2-hero-bilde-stack {
+  position: relative;
+  width: 300px;
+  margin: 22px auto 0;
   cursor: zoom-in;
-  max-width: 360px;
-  line-height: 0;
 }
-.l2-hero-bilde {
+.l2-hero-bilde-kort {
   display: block;
+  width: 100%;
   border: none;
   outline: none;
-  width: calc(100% + 6px);
-  margin: -3px;
+  border-radius: 12px;
+  background: #fff;
+}
+.l2-hero-bilde-bak {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  z-index: 1;
+  opacity: 0.92;
+  box-shadow: 0 12px 30px rgba(59,130,246,0.16);
+  border: 1.5px solid rgba(99,102,241,0.22);
+}
+.l2-hero-bilde-frem {
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 16px 40px rgba(59,130,246,0.18);
+  border: 1.5px solid rgba(99,102,241,0.18);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.l2-hero-bilde-stack:hover .l2-hero-bilde-frem {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 48px rgba(59,130,246,0.28);
 }
 .l2-hero-cta {
   margin-top: 40px;
@@ -2048,6 +2073,8 @@ textarea { resize: vertical; }
   .l2-hero-tekst { text-align: center; }
   .l2-punkter { text-align: left; }
   .l2-hero-bilde-wrapper { flex: 0 0 auto; width: 100%; max-width: 300px; margin: 0 auto; }
+  .l2-hero-bilde-stack { width: 250px; margin-top: 16px; }
+  .l2-hero-bilde-bak { top: -16px; right: -16px; }
   .l2-features { grid-template-columns: 1fr 1fr; padding: 28px 20px 32px; gap: 14px; }
 }
 @media (max-width: 520px) {
