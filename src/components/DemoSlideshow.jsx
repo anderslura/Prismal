@@ -41,7 +41,7 @@ const STEG = [
   {
     nr: '07', label: 'Miljøgebyr',
     tittel: 'Miljøgebyr og avfallshåndtering',
-    tekst: 'Legg til kildesortering, spesialavfall eller eget miljøgebyr som egne linjer, eller beregn automatisk som prosentpåslag (10%, 20%, 30%) av materialkostnaden.',
+    tekst: 'Legg til kildesortering, spesialavfall eller eget miljøgebyr som egne linjer. Du kan også legge et ekstra prosentpåslag (10%, 20%, 30%) på toppen av miljøavgiftene, uavhengig av materialpåslaget.',
     img: '/demo/miljoavgift_v2.png',
   },
   {
