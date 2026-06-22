@@ -1337,36 +1337,21 @@ textarea { resize: vertical; }
 .l2-lightbox-lukk:hover {
   background: rgba(255,255,255,0.22);
 }
-.l2-lightbox-sider {
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-  justify-content: flex-start;
-  align-items: center;
-  max-width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
-  padding: 4px;
-  scrollbar-width: none; /* Firefox — skjul scrollbar-linjen, musehjul-scroll fungerer som normalt */
-}
-.l2-lightbox-sider::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Edge, Brave */
-}
-.l2-lightbox-bilde {
-  /* Større visningsbredde enn før (var min(80vw,460px)) — én side om
-     gangen i stedet for side-ved-side gir mindre nedskalering av PNG-en,
-     som var årsaken til at teksten så uskarp ut på vanlige (ikke-retina)
-     skjermer på web. Mobil var alt skarp siden retina-skjermer kompenserer. */
-  max-width: min(92vw, 720px);
-  max-height: 86vh;
-  width: auto;
-  height: auto;
-  display: block;
+.l2-lightbox-pdf {
+  /* Ekte PDF i lightbox (vektortekst) i stedet for PNG-skjermbilder —
+     PNG-tilnærmingen (med side-om-side, kolonne-layout, srcset 1x/2x,
+     fjernet backdrop-filter) løste aldri uskarphet på vanlige
+     (ikke-Retina) skjermer, fordi et rastrert bilde av tekst alltid er
+     litt softere enn vektortekst — usynlig på Retina (høy PPI), synlig
+     på vanlige skjermer (lav PPI). PDF løser dette permanent: alltid
+     skarp, uansett skjerm, uansett zoom, fordi teksten er vektor. */
+  width: min(92vw, 900px);
+  height: 86vh;
+  border: none;
   border-radius: 10px;
   box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+  background: #fff;
   cursor: default;
-  border: none;
-  outline: none;
 }
 
 /* ── HERO split layout ── */

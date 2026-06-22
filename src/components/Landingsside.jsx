@@ -167,7 +167,19 @@ export default function Landingsside({ onStart, onRegistrer }) {
             </div>
 
             <div className="l2-hero-bilde-wrapper">
-              <div className="l2-hero-bilde-stack" onClick={() => setLightbox(true)} title="Trykk for å se begge sider i full størrelse">
+              <div
+                className="l2-hero-bilde-stack"
+                onClick={() => {
+                  // Mobil: åpne PDF-en direkte i egen fane — mer stabilt enn iframe i lightbox-overlay
+                  // på mobile nettlesere. Desktop: vis i egendefinert lightbox med ekte PDF (vektor-skarp).
+                  if (window.innerWidth <= 760) {
+                    window.open('/demo/pdf_forside_v2.pdf', '_blank')
+                  } else {
+                    setLightbox(true)
+                  }
+                }}
+                title="Trykk for å se tilbudet i full størrelse"
+              >
                 <img
                   src="/demo/pdf_forside_side2_v2.png"
                   alt="Side 2 av Prismal-tilbud"
@@ -312,20 +324,12 @@ export default function Landingsside({ onStart, onRegistrer }) {
       {lightbox && (
         <div className="l2-lightbox" onClick={() => setLightbox(false)}>
           <button className="l2-lightbox-lukk" onClick={() => setLightbox(false)} aria-label="Lukk">✕</button>
-          <div className="l2-lightbox-sider" onClick={(e) => e.stopPropagation()}>
-            <img
-              src="/demo/pdf_forside_v2_1x.png"
-              srcSet="/demo/pdf_forside_v2_1x.png 1x, /demo/pdf_forside_v2_2x.png 2x"
-              alt="Prismal tilbud forhåndsvisning, side 1"
-              className="l2-lightbox-bilde"
-            />
-            <img
-              src="/demo/pdf_forside_side2_v2_1x.png"
-              srcSet="/demo/pdf_forside_side2_v2_1x.png 1x, /demo/pdf_forside_side2_v2_2x.png 2x"
-              alt="Prismal tilbud forhåndsvisning, side 2"
-              className="l2-lightbox-bilde"
-            />
-          </div>
+          <iframe
+            src="/demo/pdf_forside_v2.pdf"
+            title="Prismal tilbud forhåndsvisning"
+            className="l2-lightbox-pdf"
+            onClick={(e) => e.stopPropagation()}
+          />
         </div>
       )}
 
