@@ -413,7 +413,7 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
                     <tr className="pris-tabell-seksjon"><td colSpan={4}>Arbeid</td></tr>
                     {arbeidRaderListe.map(a => (
                       <tr key={a.id}>
-                        <td>Arbeid</td>
+                        <td>Timearbeid</td>
                         <td className="td-antall">{a.timer} t</td>
                         <td className="td-pris">{formaterKr(parseFloat(a.timepris))}</td>
                         <td className="td-sum">{formaterKr((parseFloat(a.timer)||0)*(parseFloat(a.timepris)||0))}</td>

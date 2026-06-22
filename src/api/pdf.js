@@ -216,7 +216,7 @@ async function byggPdfDok(skjema, isPro = true) {
   // ARBEID
   const arbeidRader = (skjema.arbeidere || []).filter(a => a.timer && a.timepris).map(a => {
     const sum = (parseFloat(a.timer)||0)*(parseFloat(a.timepris)||0)
-    return ['Arbeid', `${a.timer} t`, kr(parseFloat(a.timepris)), kr(sum)]
+    return ['Timearbeid', `${a.timer} t`, kr(parseFloat(a.timepris)), kr(sum)]
   })
   if (arbeidRader.length) { seksjonsrad('Arbeid'); rader.push(...arbeidRader) }
 
