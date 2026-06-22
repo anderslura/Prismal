@@ -1302,20 +1302,19 @@ textarea { resize: vertical; }
   padding: 20px;
   cursor: zoom-out;
 }
-/* Mørk, blurret bakgrunn ligger i et eget ::before-lag BAK innholdet —
-   ikke på .l2-lightbox selv. Grunn: når backdrop-filter ligger på samme
-   element som barna (bildene), kan Chromium (Chrome/Brave) flate hele
-   elementet til ett GPU-rasteriseringslag og blur-effekten lekker inn på
-   selve bildet — sett som "uskarpt på web, skarpt på mobil" og at
-   nettleser-zoom kun påvirket siden i bakgrunnen, ikke PDF-bildet. */
+/* Mørk bakgrunn UTEN backdrop-filter/blur. Forrige to forsøk på å
+   strukturere backdrop-filter riktig (egen ::before, z-index -1) løste
+   ikke at PDF-bildet fortsatt var uskarpt og at sidezoom ikke påvirket
+   bildet — tegn på at GPU-kompositeringslaget backdrop-filter krever
+   (uavhengig av hvor i DOM-en det ligger) rasteriseres uavhengig av
+   resten av siden på enkelte skjermer/skaleringer. Fjerner blur-effekten
+   helt for å eliminere det laget — bare solid mørk overlay igjen. */
 .l2-lightbox::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: rgba(10, 12, 24, 0.88);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  background: rgba(8, 10, 20, 0.94);
 }
 .l2-lightbox-lukk {
   position: fixed;
