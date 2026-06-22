@@ -1345,8 +1345,8 @@ textarea { resize: vertical; }
      litt softere enn vektortekst — usynlig på Retina (høy PPI), synlig
      på vanlige skjermer (lav PPI). PDF løser dette permanent: alltid
      skarp, uansett skjerm, uansett zoom, fordi teksten er vektor. */
-  width: min(92vw, 900px);
-  height: 86vh;
+  width: min(96vw, 1400px);
+  height: 92vh;
   border: none;
   border-radius: 10px;
   box-shadow: 0 32px 80px rgba(0,0,0,0.5);

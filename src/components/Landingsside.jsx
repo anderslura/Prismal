@@ -169,15 +169,7 @@ export default function Landingsside({ onStart, onRegistrer }) {
             <div className="l2-hero-bilde-wrapper">
               <div
                 className="l2-hero-bilde-stack"
-                onClick={() => {
-                  // Mobil: åpne PDF-en direkte i egen fane — mer stabilt enn iframe i lightbox-overlay
-                  // på mobile nettlesere. Desktop: vis i egendefinert lightbox med ekte PDF (vektor-skarp).
-                  if (window.innerWidth <= 760) {
-                    window.open('/demo/pdf_forside_v2.pdf', '_blank')
-                  } else {
-                    setLightbox(true)
-                  }
-                }}
+                onClick={() => setLightbox(true)}
                 title="Trykk for å se tilbudet i full størrelse"
               >
                 <img
