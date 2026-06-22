@@ -87,7 +87,7 @@ export default function SendteHistorikk({ onTilbake }) {
             </thead>
             <tbody>
               {historikk.map(rad => (
-                <tr key={rad.id}>
+                <tr key={rad.id} className={bekreftId === rad.id ? 'historikk-rad-bekreft' : ''}>
                   <td className="historikk-dato">{formaterDato(rad.sendt_dato)}</td>
                   <td className="historikk-nr">{rad.tilbudsnummer || '—'}</td>
                   <td>{rad.kundenavn || '—'}</td>

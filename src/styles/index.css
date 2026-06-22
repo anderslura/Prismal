@@ -3727,6 +3727,10 @@ textarea { resize: vertical; }
 .historikk-tabell tbody tr:hover {
   background: var(--bg-secondary, #f9fafb);
 }
+.historikk-tabell tbody tr.historikk-rad-bekreft,
+.historikk-tabell tbody tr.historikk-rad-bekreft:hover {
+  background: #fef2f2;
+}
 .historikk-dato {
   white-space: nowrap;
   color: var(--text-muted, #6b7280);
