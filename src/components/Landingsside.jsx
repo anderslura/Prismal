@@ -5,7 +5,7 @@ import DemoSlideshow from './DemoSlideshow'
 const FAQ_LISTE = [
   {
     sp: 'Hva koster Prismal?',
-    sv: 'Du starter gratis og får 3 fulle tilbud med alle funksjoner — ingen kredittkort nødvendig. Etter det koster Prismal Pro 99 kr/mnd eks. mva (124 kr inkl. mva). Ingen bindingstid, avslutt når du vil.'
+    sv: 'Du starter gratis og får 3 fulle tilbud med alle funksjoner — ingen kredittkort nødvendig. Etter det koster Prismal Pro 99 kr/mnd. Ingen bindingstid, avslutt når du vil.'
   },
   {
     sp: 'Kan jeg bruke min egen logo og firmainformasjon?',
@@ -333,7 +333,7 @@ export default function Landingsside({ onStart, onRegistrer }) {
           <div className="l2-pro-solo-topp">
             <div>
               <div className="l2-plan-navn">Prismal Pro</div>
-              <div className="l2-plan-pris l2-plan-pris-gull">99 <span>kr / mnd eks. mva</span></div>
+              <div className="l2-plan-pris l2-plan-pris-gull">99 <span>kr / mnd</span></div>
             </div>
             <div className="l2-trial-boks">
               <div className="l2-trial-tall">3</div>
@@ -342,21 +342,21 @@ export default function Landingsside({ onStart, onRegistrer }) {
           </div>
           <p className="l2-plan-sub">
             Registrer deg gratis — ingen kredittkort. Du får 3 fulle tilbud med alle funksjoner: 
-            firmalogo, kundedatabase og materialbibliotek. Deretter 99 kr/mnd eks. mva (124 kr inkl. mva). 
+            firmalogo, kundedatabase og materialbibliotek. Deretter 99 kr/mnd. 
             Ingen bindingstid — avslutt når du vil.
           </p>
           <div className="l2-pro-kolonner">
             <ul className="l2-plan-liste">
               <li className="ok">Ubegrenset antall tilbud</li>
               <li className="ok">AI-generert tilbudstekst</li>
-              <li className="ok">PDF med din firmalogo</li>
+              <li className="ok">PDF med klikkbar nettside- og Facebook-lenke</li>
               <li className="ok">Kundedatabase med søk</li>
               <li className="ok">Materialbibliotek med priser</li>
             </ul>
             <ul className="l2-plan-liste">
               <li className="ok">Påslagskalkulator</li>
               <li className="ok">Last ned eller send PDF — ett klikk</li>
-              <li className="ok">Send tilbud direkte på e-post</li>
+              <li className="ok">Se tilbudet slik kunden ser det før du sender</li>
               <li className="ok">Skybasert — logg inn fra mobil, nettbrett og PC</li>
               <li className="ok">All info på din konto — alltid tilgjengelig</li>
             </ul>
@@ -370,7 +370,7 @@ export default function Landingsside({ onStart, onRegistrer }) {
             <span>✓ Ingen skjulte kostnader</span>
           </div>
           <p className="l2-pris-sammenligning">
-            Alle priser eks. mva. Tilsvarende løsninger koster 299–499 kr/mnd. Prismal: 99 kr.
+            Tilsvarende løsninger koster 299–499 kr/mnd. Prismal: 99 kr.
           </p>
         </div>
       </section>
