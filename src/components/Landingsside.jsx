@@ -216,12 +216,12 @@ export default function Landingsside({ onStart, onRegistrer }) {
                 <span className="l2-tittel-grad">På minutter.</span>
               </h1>
               <ul className="l2-punkter">
-                <li>Firmainfo og logo hentes automatisk — samme oversikt uansett om du jobber fra kontoret, bilen eller mobilen</li>
-                <li>Søk opp lagrede kunder på navn eller mobilnummer — nye kunder legges til på sekunder</li>
-                <li>Skriv oppdraget med egne ord — rettskriving er ikke viktig. AI omformer det til en komplett, profesjonell tilbudstekst</li>
-                <li>Send tilbudet direkte til kunden med deg på kopi — ingen nedlasting nødvendig. Lage-og-send fra bilen</li>
-                <li>Nettbasert — logg inn og du er klar. Ingen programvare å installere</li>
-                <li>Optimalisert for PC, mobil og nettbrett</li>
+                <li>Firmainfo og logo hentes automatisk — samme oversikt på kontor, i bilen eller på mobilen</li>
+                <li>Søk opp lagrede kunder på navn eller mobilnummer — nye kunder lagt til på sekunder</li>
+                <li>Skriv oppdraget med egne ord — AI lager en komplett, profesjonell tilbudstekst</li>
+                <li>Send tilbudet direkte til kunden, med deg på kopi — rett fra bilen, ingen nedlasting</li>
+                <li>Tilbudet viser din nettside og Facebook-side med klikkbare lenker — bygger tillit hos kunden</li>
+                <li>Nettbasert — fungerer på PC, mobil og nettbrett uten installasjon</li>
               </ul>
             </div>
 
