@@ -116,6 +116,22 @@ function AppInnhold() {
     }
   }, [])
 
+  // ── Mobil: sørg for at tallfelt (Antall/Kr/time osv.) ikke blir liggende
+  // bak det mobile tastaturet når de får fokus. Global handler — fanger
+  // alle number-input uten at hvert enkelt felt må kobles til manuelt.
+  useEffect(() => {
+    function handleFocusIn(e) {
+      const el = e.target
+      if (el?.tagName === 'INPUT' && el.type === 'number') {
+        setTimeout(() => {
+          el.scrollIntoView({ block: 'center', behavior: 'smooth' })
+        }, 300) // venter til tastaturet har åpnet seg på mobil
+      }
+    }
+    document.addEventListener('focusin', handleFocusIn)
+    return () => document.removeEventListener('focusin', handleFocusIn)
+  }, [])
+
   useEffect(() => {
     if (bruker && visLogin) {
       setVisLogin(false)
