@@ -274,7 +274,7 @@ export default function Landingsside({ onStart, onRegistrer }) {
             </div>
             <div className="l2-pitch-kort">
               <h3>Imponer — og vinn mot konkurrentene</h3>
-              <p>Et gjennomarbeidet tilbud med logo, pristabell og akseptklausul signaliserer seriøsitet. Kunden velger den som ser mest profesjonell ut.</p>
+              <p>Et gjennomarbeidet tilbud med logo, pristabell, akseptklausul og klikkbare lenker til nettside og Facebook signaliserer seriøsitet. Kunden velger den som ser mest profesjonell ut.</p>
             </div>
             <div className="l2-pitch-kort">
               <h3>Spar tid — send flere — få flere jobber</h3>
