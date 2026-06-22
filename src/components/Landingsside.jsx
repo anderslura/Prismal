@@ -12,6 +12,10 @@ const FAQ_LISTE = [
     sv: 'Ja. Du laster opp logo og fyller inn firmainfo én gang — det hentes automatisk på alle fremtidige tilbud, uavhengig av hvilken enhet du bruker.'
   },
   {
+    sp: 'Hvor finner jeg lenken til Facebook-siden min?',
+    sv: 'Gå til Facebook-siden til bedriften din (ikke din private profil). På mobil: trykk de tre prikkene (•••) under profilbildet og velg «Kopier lenke». På PC: åpne siden og kopier adressen i nettleserens adressefelt (f.eks. facebook.com/firmanavn). Lim lenken inn under «Facebook – lenke» i Din bedrift, og den vises som en klikkbar knapp på tilbudene dine.'
+  },
+  {
     sp: 'Hva gjør AI-tekstfunksjonen?',
     sv: 'Du beskriver oppdraget med egne ord — rettskriving er ikke viktig. AI-en omformer det til en komplett, profesjonell tilbudstekst. Du kan lese gjennom og redigere teksten før du sender.'
   },
