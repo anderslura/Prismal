@@ -6,3 +6,6 @@ dist/
 
 # Local Netlify folder
 .netlify
+
+# Råskjermbilder til demo-oppdateringer (ikke for produksjon)
+bilde_dump/

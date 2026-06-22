@@ -5,8 +5,8 @@ const STEG = [
   {
     nr: '01', label: 'Bedriftsprofil',
     tittel: 'Legg inn info om din bedrift',
-    tekst: 'Firmanavn, logo, e-post og org.nr lagres i skyen og hentes automatisk på alle enheter.',
-    img: '/demo/bedrift.jpg',
+    tekst: 'Firmanavn, logo, e-post, org.nr, Facebook-side og MVA-status lagres i skyen og hentes automatisk på alle enheter.',
+    img: '/demo/bedrift_v2.png',
   },
   {
     nr: '02', label: 'Kunden',
@@ -29,26 +29,32 @@ const STEG = [
   {
     nr: '05', label: 'Materialer',
     tittel: 'Komplett materialliste',
-    tekst: 'Materiallisten lagres i ditt personlige bibliotek — neste oppdrag oppdaterer du kun antall. Kun linjer med antall utfylt vises på PDF-en som sendes kunden. Huk av en linje for å inkludere den i påslagskalkylen. Vil du fjerne en linje permanent? Trykk papirkurvikonet — linjen slettes fra biblioteket ditt i skyen.',
-    img: '/demo/materialer.jpg',
+    tekst: 'Materiallisten lagres i ditt personlige bibliotek — neste oppdrag oppdaterer du kun antall. Grupper linjer i egne kategorier for bedre oversikt. Kun linjer med antall utfylt vises på PDF-en som sendes kunden. Huk av en linje for å inkludere den i påslagskalkylen.',
+    img: '/demo/materialer_v2.png',
   },
   {
     nr: '06', label: 'Påslag',
     tittel: 'Påslag og transport',
-    tekst: 'Velg raskt mellom forhåndsinnstilte påslagsprosenter (10%, 20%, 30%), eller skriv inn et egendefinert tall. Legg til kjøring (kr/km), bom, parkering og ferge som egne linjer — transport spesifiseres separat og legges ikke inn i materialkalkylen.',
-    img: '/demo/paaslag.jpg',
+    tekst: 'Velg raskt mellom forhåndsinnstilte påslagsprosenter (10%, 20%, 30%), eller skriv inn et egendefinert tall. Legg til kjøring, bil + henger, maskinleie, bom, parkering og ferge som egne linjer — transport spesifiseres separat og legges ikke inn i materialkalkylen.',
+    img: '/demo/paaslag_v2.png',
   },
   {
-    nr: '07', label: 'Totaloversikt',
+    nr: '07', label: 'Miljøgebyr',
+    tittel: 'Miljøgebyr og avfallshåndtering',
+    tekst: 'Legg til kildesortering, spesialavfall eller eget miljøgebyr som egne linjer, eller beregn automatisk som prosentpåslag (10%, 20%, 30%) av materialkostnaden.',
+    img: '/demo/miljoavgift_v2.png',
+  },
+  {
+    nr: '08', label: 'Totaloversikt',
     tittel: 'Total og PDF-tema',
     tekst: 'Full oversikt eks. og inkl. mva. Velg tema — Standard, Mørk, Grå eller Hvit. Du kan også velge sesongbaserte temaer som Påske, Pride, Rosa sløyfe eller Julestil.',
     img: '/demo/total.jpg',
   },
   {
-    nr: '08', label: 'Forhåndsvisning',
+    nr: '09', label: 'Forhåndsvisning',
     tittel: 'Forhåndsvis og send tilbudet',
-    tekst: 'Se det ferdige tilbudet før sending — og rediger tilbudsteksten direkte om du ønsker det. Du er aldri låst til det AI-genererte forslaget. Når du er fornøyd: send direkte til kundens e-post med PDF vedlagt. Du får kopi i innboksen din, og tilbudet lagres i Prismal-historikken.',
-    img: '/demo/forhandsvisning.png',
+    tekst: 'Trykk «Se som kunden ser det» for å se nøyaktig hva kunden mottar — eller rediger tilbudsteksten direkte. Du er aldri låst til det AI-genererte forslaget. Når du er fornøyd: send direkte til kundens e-post med PDF vedlagt. Du får kopi i innboksen din, og tilbudet lagres i Prismal-historikken.',
+    img: '/demo/forhandsvisning_v2.png',
   },
   {
     nr: '✓', label: 'Ferdig tilbud',
