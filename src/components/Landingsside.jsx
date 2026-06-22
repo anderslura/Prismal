@@ -337,7 +337,7 @@ export default function Landingsside({ onStart, onRegistrer }) {
               <ul className="l2-fe-liste l2-fe-liste-etter">
                 <li>Tilbud klart på under 10 minutter — gjerne fra bilen</li>
                 <li>AI skriver en komplett, profesjonell tilbudstekst</li>
-                <li>Priser, påslag og miljøgebyr beregnes automatisk</li>
+                <li>Priser, påslag, miljøgebyr og transport beregnes automatisk</li>
                 <li>Sendes som polert PDF med klikkbare lenker til nettside og Facebook</li>
               </ul>
             </div>
