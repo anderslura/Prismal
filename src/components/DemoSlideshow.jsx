@@ -60,7 +60,7 @@ const STEG = [
     nr: '✓', label: 'Ferdig tilbud',
     tittel: 'Profesjonelt tilbud — klart til sending',
     tekst: 'Med logo, pristabell, betalingsbetingelser og akseptklausul. Leveres direkte i kundens innboks.',
-    img: '/demo/pdf_combined.png',
+    img: '/demo/pdf_combined_v2.png',
   },
 ]
 
