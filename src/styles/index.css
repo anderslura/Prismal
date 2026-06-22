@@ -231,6 +231,14 @@ textarea { resize: vertical; }
   transition: color 0.15s;
 }
 .btn-fjern:hover { color: var(--rod); }
+.btn-fjern.bekreft {
+  color: #fff;
+  background: var(--rod);
+  border-radius: 50%;
+  font-weight: 700;
+}
+.btn-fjern.bekreft:hover { color: #fff; }
+.btn-fjern:disabled { opacity: 0.6; cursor: not-allowed; }
 
 /* === KALKYLE === */
 .kalkyle-linje {

@@ -5,7 +5,8 @@ export default function SendteHistorikk({ onTilbake }) {
   const [historikk, setHistorikk] = useState([])
   const [laster, setLaster]       = useState(true)
   const [feil, setFeil]           = useState('')
-  const [sletterId, setSletterId] = useState(null) // id på raden som slettes nå (hindrer dobbelklikk)
+  const [sletterId, setSletterId] = useState(null) // id på raden som slettes nå
+  const [bekreftId, setBekreftId] = useState(null) // id på raden som er "armert" for bekreftelse
 
   useEffect(() => {
     async function hent() {
@@ -34,11 +35,17 @@ export default function SendteHistorikk({ onTilbake }) {
     })
   }
 
+  // To-trinns bekreftelse uten nettleserens egen confirm()-dialog (som viser
+  // "På <domene> står det" — ulik/uelegant stil på tvers av nettlesere). Samme
+  // mønster som "Slett lagret kunde" i KundeInfo.jsx: første klikk armerer i
+  // 4 sek, andre klikk i det vinduet utfører selve slettingen.
   async function slettRad(rad) {
-    const bekreft = window.confirm(
-      `Slette tilbud ${rad.tilbudsnummer || ''} (${rad.kundenavn || rad.kunde_epost}) fra historikken? Dette kan ikke angres.`
-    )
-    if (!bekreft) return
+    if (bekreftId !== rad.id) {
+      setBekreftId(rad.id)
+      setTimeout(() => setBekreftId(prev => prev === rad.id ? null : prev), 4000)
+      return
+    }
+    setBekreftId(null)
     setSletterId(rad.id)
     try {
       const { error } = await supabase.from('sendte_tilbud').delete().eq('id', rad.id)
@@ -91,11 +98,11 @@ export default function SendteHistorikk({ onTilbake }) {
                   </td>
                   <td className="historikk-slett-celle">
                     <button
-                      className="btn-fjern"
-                      title="Slett fra historikk"
+                      className={`btn-fjern${bekreftId === rad.id ? ' bekreft' : ''}`}
+                      title={bekreftId === rad.id ? 'Klikk igjen for å bekrefte sletting' : 'Slett fra historikk'}
                       disabled={sletterId === rad.id}
                       onClick={() => slettRad(rad)}
-                    >×</button>
+                    >{sletterId === rad.id ? '…' : bekreftId === rad.id ? '✓' : '×'}</button>
                   </td>
                 </tr>
               ))}
