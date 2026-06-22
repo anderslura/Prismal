@@ -6,7 +6,7 @@ export default function SendteHistorikk({ onTilbake }) {
   const [laster, setLaster]       = useState(true)
   const [feil, setFeil]           = useState('')
   const [sletterId, setSletterId] = useState(null) // id på raden som slettes nå
-  const [bekreftId, setBekreftId] = useState(null) // id på raden som er "armert" for bekreftelse
+  const [slettKandidat, setSlettKandidat] = useState(null) // raden bekreftelses-modalen spør om
 
   useEffect(() => {
     async function hent() {
@@ -35,22 +35,18 @@ export default function SendteHistorikk({ onTilbake }) {
     })
   }
 
-  // To-trinns bekreftelse uten nettleserens egen confirm()-dialog (som viser
-  // "På <domene> står det" — ulik/uelegant stil på tvers av nettlesere). Samme
-  // mønster som "Slett lagret kunde" i KundeInfo.jsx: første klikk armerer i
-  // 4 sek, andre klikk i det vinduet utfører selve slettingen.
-  async function slettRad(rad) {
-    if (bekreftId !== rad.id) {
-      setBekreftId(rad.id)
-      setTimeout(() => setBekreftId(prev => prev === rad.id ? null : prev), 4000)
-      return
-    }
-    setBekreftId(null)
+  // Egen popup-modal (samme .modal-overlay/.modal-boks-stil som "Send tilbud")
+  // i stedet for nettleserens window.confirm() — slipper "På <domene> står
+  // det"-prefikset, og gir tydelig spørsmålstekst med tilbudsnummer.
+  async function bekreftSlett() {
+    const rad = slettKandidat
+    if (!rad) return
     setSletterId(rad.id)
     try {
       const { error } = await supabase.from('sendte_tilbud').delete().eq('id', rad.id)
       if (error) throw error
       setHistorikk(prev => prev.filter(r => r.id !== rad.id))
+      setSlettKandidat(null)
     } catch (e) {
       console.error('Sletting feilet:', e)
       alert('Kunne ikke slette. Prøv igjen.')
@@ -87,7 +83,7 @@ export default function SendteHistorikk({ onTilbake }) {
             </thead>
             <tbody>
               {historikk.map(rad => (
-                <tr key={rad.id} className={bekreftId === rad.id ? 'historikk-rad-bekreft' : ''}>
+                <tr key={rad.id}>
                   <td className="historikk-dato">{formaterDato(rad.sendt_dato)}</td>
                   <td className="historikk-nr">{rad.tilbudsnummer || '—'}</td>
                   <td>{rad.kundenavn || '—'}</td>
@@ -98,16 +94,45 @@ export default function SendteHistorikk({ onTilbake }) {
                   </td>
                   <td className="historikk-slett-celle">
                     <button
-                      className={`btn-fjern${bekreftId === rad.id ? ' bekreft' : ''}`}
-                      title={bekreftId === rad.id ? 'Klikk igjen for å bekrefte sletting' : 'Slett fra historikk'}
+                      className="btn-fjern"
+                      title="Slett fra historikk"
                       disabled={sletterId === rad.id}
-                      onClick={() => slettRad(rad)}
-                    >{sletterId === rad.id ? '…' : bekreftId === rad.id ? '✓' : '×'}</button>
+                      onClick={() => setSlettKandidat(rad)}
+                    >{sletterId === rad.id ? '…' : '×'}</button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {slettKandidat && (
+        <div className="modal-overlay" onClick={() => { if (sletterId !== slettKandidat.id) setSlettKandidat(null) }}>
+          <div className="modal-boks send-modal" onClick={e => e.stopPropagation()}>
+            <h3 className="modal-tittel">Slette tilbud?</h3>
+            <p className="modal-bekreft-tekst">
+              Sikker på at du vil slette tilbud <strong>{slettKandidat.tilbudsnummer || '—'}</strong>
+              {slettKandidat.kundenavn ? <> ({slettKandidat.kundenavn})</> : null} fra historikken?
+              Dette kan ikke angres.
+            </p>
+            <div className="modal-knapper">
+              <button
+                className="btn btn-fare"
+                onClick={bekreftSlett}
+                disabled={sletterId === slettKandidat.id}
+              >
+                {sletterId === slettKandidat.id ? 'Sletter …' : 'Slett'}
+              </button>
+              <button
+                className="btn btn-secondary"
+                onClick={() => setSlettKandidat(null)}
+                disabled={sletterId === slettKandidat.id}
+              >
+                Avbryt
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

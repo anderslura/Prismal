@@ -231,13 +231,6 @@ textarea { resize: vertical; }
   transition: color 0.15s;
 }
 .btn-fjern:hover { color: var(--rod); }
-.btn-fjern.bekreft {
-  color: #fff;
-  background: var(--rod);
-  border-radius: 50%;
-  font-weight: 700;
-}
-.btn-fjern.bekreft:hover { color: #fff; }
 .btn-fjern:disabled { opacity: 0.6; cursor: not-allowed; }
 
 /* === KALKYLE === */
@@ -290,6 +283,17 @@ textarea { resize: vertical; }
   box-shadow: 0 4px 14px rgba(30,80,200,0.35);
 }
 .btn-primary:disabled { background: #a0b4e0; cursor: not-allowed; }
+
+.btn-fare {
+  background: var(--rod);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(220,38,38,0.25);
+}
+.btn-fare:hover:not(:disabled) {
+  background: #b91c1c;
+  box-shadow: 0 4px 14px rgba(220,38,38,0.35);
+}
+.btn-fare:disabled { background: #f0a8a8; cursor: not-allowed; }
 
 .btn-secondary {
   background: var(--hvit);
@@ -3642,6 +3646,13 @@ textarea { resize: vertical; }
   margin: 0 0 1rem;
 }
 
+.modal-bekreft-tekst {
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.5;
+  margin: 0 0 1.25rem;
+}
+
 .modal-knapper {
   display: flex;
   gap: 10px;
@@ -3726,10 +3737,6 @@ textarea { resize: vertical; }
 }
 .historikk-tabell tbody tr:hover {
   background: var(--bg-secondary, #f9fafb);
-}
-.historikk-tabell tbody tr.historikk-rad-bekreft,
-.historikk-tabell tbody tr.historikk-rad-bekreft:hover {
-  background: #fef2f2;
 }
 .historikk-dato {
   white-space: nowrap;
