@@ -3727,6 +3727,7 @@ textarea { resize: vertical; }
 .historikk-nr {
   font-family: monospace;
   font-size: 0.85rem;
+  white-space: nowrap;
 }
 .historikk-epost {
   color: #4f46e5;
@@ -3734,12 +3735,6 @@ textarea { resize: vertical; }
 }
 .historikk-epost:hover {
   text-decoration: underline;
-}
-@media (max-width: 600px) {
-  .historikk-tabell th:nth-child(2),
-  .historikk-tabell td:nth-child(2) {
-    display: none;
-  }
 }
 
 /* Historikk-knapp: synlig på alle skjermstørrelser */
