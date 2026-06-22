@@ -1339,19 +1339,32 @@ textarea { resize: vertical; }
 }
 .l2-lightbox-pdf {
   /* Ekte PDF i lightbox (vektortekst) i stedet for PNG-skjermbilder —
-     PNG-tilnærmingen (med side-om-side, kolonne-layout, srcset 1x/2x,
-     fjernet backdrop-filter) løste aldri uskarphet på vanlige
-     (ikke-Retina) skjermer, fordi et rastrert bilde av tekst alltid er
-     litt softere enn vektortekst — usynlig på Retina (høy PPI), synlig
-     på vanlige skjermer (lav PPI). PDF løser dette permanent: alltid
-     skarp, uansett skjerm, uansett zoom, fordi teksten er vektor. */
+     PNG-tilnærmingen løste aldri uskarphet på vanlige (ikke-Retina) skjermer,
+     fordi et rastrert bilde av tekst alltid er litt softere enn vektortekst.
+     Sidene rendres til <canvas> med pdf.js (samme mønster som i
+     TilbudPreview.jsx/"se som kunde") i stedet for <iframe src="...pdf"> —
+     iOS Safari viser ofte bare side 1 av en inline PDF-iframe uten skrolling
+     og uten å fylle bredden (kjent WebKit-begrensning). Canvas er vanlig
+     DOM-innhold og skrolling/fyller skjermen normalt på alle enheter. */
   width: min(96vw, 1400px);
   height: 92vh;
   border: none;
   border-radius: 10px;
   box-shadow: 0 32px 80px rgba(0,0,0,0.5);
-  background: #fff;
+  background: #525659;
   cursor: default;
+  box-sizing: border-box;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 10px;
+}
+.l2-lightbox-pdf canvas {
+  max-width: 100%;
+  box-shadow: 0 1px 6px rgba(0,0,0,.35);
+  background: #fff;
 }
 
 /* ── HERO split layout ── */

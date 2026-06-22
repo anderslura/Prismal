@@ -1,5 +1,5 @@
 /* ── Landingsside v5 — lys, moderne, demo-karusell ── */
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import DemoSlideshow from './DemoSlideshow'
 
 const FAQ_LISTE = [
@@ -126,12 +126,71 @@ function IkonDokument() {
 
 export default function Landingsside({ onStart, onRegistrer }) {
   const [lightbox, setLightbox] = useState(false)
+  const pdfContainerRef = useRef(null)
 
   useEffect(() => {
     if (!lightbox) return
     const onKey = (e) => { if (e.key === 'Escape') setLightbox(false) }
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
+  }, [lightbox])
+
+  // Rendrer PDF-sidene til <canvas> med pdf.js i stedet for <iframe src="...pdf">.
+  // VIKTIG: iOS Safari viser ofte bare side 1 av en inline PDF-iframe, uten skrolling
+  // og uten å fylle bredden (kjent WebKit-begrensning) — samme problem som ble løst i
+  // TilbudPreview.jsx ("se som kunde"). pdf.js rendrer hver side til et canvas, som er
+  // vanlig DOM-innhold og dermed skrolling/fyller skjermen normalt på alle enheter.
+  useEffect(() => {
+    if (!lightbox) return
+    const container = pdfContainerRef.current
+    if (!container) return
+    let avbrutt = false
+
+    ;(async () => {
+      container.innerHTML = '<p style="color:#fff;font-family:sans-serif;font-size:14px;margin:40px 0;">Laster PDF …</p>'
+      try {
+        if (!window.pdfjsLib) {
+          await new Promise((resolve, reject) => {
+            const script = document.createElement('script')
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js'
+            script.onload = resolve
+            script.onerror = () => reject(new Error('Kunne ikke laste PDF-visningsbibliotek'))
+            document.head.appendChild(script)
+          })
+          window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'
+        }
+        if (avbrutt) return
+
+        const pdf = await window.pdfjsLib.getDocument('/demo/pdf_forside_v2.pdf').promise
+        if (avbrutt) return
+        container.innerHTML = ''
+        const dpr = window.devicePixelRatio || 1
+        const breddeCss = Math.min(container.clientWidth - 20, 900)
+
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const side = await pdf.getPage(i)
+          const grunnViewport = side.getViewport({ scale: 1 })
+          const skala = (breddeCss / grunnViewport.width) * dpr
+          const renderViewport = side.getViewport({ scale: skala })
+
+          const canvas = document.createElement('canvas')
+          canvas.width = renderViewport.width
+          canvas.height = renderViewport.height
+          canvas.style.width = breddeCss + 'px'
+          canvas.style.height = (renderViewport.height / dpr) + 'px'
+          container.appendChild(canvas)
+          if (avbrutt) return
+
+          await side.render({ canvasContext: canvas.getContext('2d'), viewport: renderViewport }).promise
+        }
+      } catch {
+        if (!avbrutt) {
+          container.innerHTML = '<a href="/demo/pdf_forside_v2.pdf" target="_blank" style="color:#fff;font-family:sans-serif;font-size:14px;">Åpne PDF i ny fane</a>'
+        }
+      }
+    })()
+
+    return () => { avbrutt = true }
   }, [lightbox])
 
   return (
@@ -316,9 +375,8 @@ export default function Landingsside({ onStart, onRegistrer }) {
       {lightbox && (
         <div className="l2-lightbox" onClick={() => setLightbox(false)}>
           <button className="l2-lightbox-lukk" onClick={() => setLightbox(false)} aria-label="Lukk">✕</button>
-          <iframe
-            src="/demo/pdf_forside_v2.pdf"
-            title="Prismal tilbud forhåndsvisning"
+          <div
+            ref={pdfContainerRef}
             className="l2-lightbox-pdf"
             onClick={(e) => e.stopPropagation()}
           />
