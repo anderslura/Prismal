@@ -1310,8 +1310,9 @@ textarea { resize: vertical; }
    nettleser-zoom kun påvirket siden i bakgrunnen, ikke PDF-bildet. */
 .l2-lightbox::before {
   content: "";
-  position: fixed;
+  position: absolute;
   inset: 0;
+  z-index: -1;
   background: rgba(10, 12, 24, 0.88);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
