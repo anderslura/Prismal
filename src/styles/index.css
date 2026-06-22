@@ -3729,6 +3729,11 @@ textarea { resize: vertical; }
   font-size: 0.85rem;
   white-space: nowrap;
 }
+.historikk-slett-celle {
+  width: 1%;
+  text-align: center;
+  white-space: nowrap;
+}
 .historikk-epost {
   color: #4f46e5;
   text-decoration: none;

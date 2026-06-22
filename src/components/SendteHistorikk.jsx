@@ -5,6 +5,7 @@ export default function SendteHistorikk({ onTilbake }) {
   const [historikk, setHistorikk] = useState([])
   const [laster, setLaster]       = useState(true)
   const [feil, setFeil]           = useState('')
+  const [sletterId, setSletterId] = useState(null) // id på raden som slettes nå (hindrer dobbelklikk)
 
   useEffect(() => {
     async function hent() {
@@ -33,6 +34,24 @@ export default function SendteHistorikk({ onTilbake }) {
     })
   }
 
+  async function slettRad(rad) {
+    const bekreft = window.confirm(
+      `Slette tilbud ${rad.tilbudsnummer || ''} (${rad.kundenavn || rad.kunde_epost}) fra historikken? Dette kan ikke angres.`
+    )
+    if (!bekreft) return
+    setSletterId(rad.id)
+    try {
+      const { error } = await supabase.from('sendte_tilbud').delete().eq('id', rad.id)
+      if (error) throw error
+      setHistorikk(prev => prev.filter(r => r.id !== rad.id))
+    } catch (e) {
+      console.error('Sletting feilet:', e)
+      alert('Kunne ikke slette. Prøv igjen.')
+    } finally {
+      setSletterId(null)
+    }
+  }
+
   return (
     <div className="historikk-wrapper">
       <div className="historikk-header">
@@ -56,6 +75,7 @@ export default function SendteHistorikk({ onTilbake }) {
                 <th>Tilbudsnr.</th>
                 <th>Kunde</th>
                 <th>E-post</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -68,6 +88,14 @@ export default function SendteHistorikk({ onTilbake }) {
                     <a href={`mailto:${rad.kunde_epost}`} className="historikk-epost">
                       {rad.kunde_epost}
                     </a>
+                  </td>
+                  <td className="historikk-slett-celle">
+                    <button
+                      className="btn-fjern"
+                      title="Slett fra historikk"
+                      disabled={sletterId === rad.id}
+                      onClick={() => slettRad(rad)}
+                    >×</button>
                   </td>
                 </tr>
               ))}

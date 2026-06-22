@@ -20,6 +20,11 @@ create policy "Eier kan lese"
   on sendte_tilbud for select
   using (auth.uid() = bruker_id);
 
+-- Brukere kan slette egne rader (f.eks. test-/feiltilbud i historikken)
+create policy "Eier kan slette"
+  on sendte_tilbud for delete
+  using (auth.uid() = bruker_id);
+
 -- Backend (service_role) kan skrive
 -- (service_role bypasser RLS automatisk)
 
