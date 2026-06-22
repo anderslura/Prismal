@@ -131,6 +131,17 @@ function IkonDokument() {
 export default function Landingsside({ onStart, onRegistrer }) {
   const [lightbox, setLightbox] = useState(false)
   const pdfContainerRef = useRef(null)
+  const [visStickyMobilCta, setVisStickyMobilCta] = useState(false)
+
+  const scrollTilDemo = () => {
+    document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  useEffect(() => {
+    const onScroll = () => setVisStickyMobilCta(window.scrollY > 420)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   useEffect(() => {
     if (!lightbox) return
@@ -251,16 +262,30 @@ export default function Landingsside({ onStart, onRegistrer }) {
 
           {/* CTA — sentrert under */}
           <div className="l2-hero-cta">
-            <button className="l2-cta" onClick={onRegistrer}>
-              Registrer deg gratis
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{marginLeft:6}}>
-                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </button>
-            <p className="l2-cta-hint l2-cta-hint-prim">
-              3 fulle tilbud med alle funksjoner<br/>
-              <span>Ingen kredittkort · Ingen bindingstid</span>
-            </p>
+            <div className="l2-cta-rad">
+              <div className="l2-cta-alternativ">
+                <button className="l2-cta" onClick={onRegistrer}>
+                  Registrer deg gratis
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{marginLeft:6}}>
+                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+                <p className="l2-cta-hint l2-cta-hint-prim">
+                  3 fulle tilbud med alle funksjoner<br/>
+                  <span>Ingen kredittkort · Ingen bindingstid</span>
+                </p>
+              </div>
+              <span className="l2-cta-eller">eller</span>
+              <div className="l2-cta-alternativ">
+                <button className="l2-cta-sekundaer" onClick={scrollTilDemo}>
+                  Se hvordan det fungerer
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style={{marginLeft:6}}>
+                    <path d="M8 3v9M4 8l4 4 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+                <p className="l2-cta-hint l2-cta-hint-sek">Ingen registrering nødvendig</p>
+              </div>
+            </div>
           </div>
 
         </div>
@@ -292,35 +317,39 @@ export default function Landingsside({ onStart, onRegistrer }) {
         </div>
       </section>
 
-      {/* ── DEMO KARUSELL ── */}
-      <DemoSlideshow />
-
-
-      {/* ── ANMELDELSER ── */}
-      <section className="l2-anm">
-        <div className="l2-anm-inner">
-          <p className="l2-anm-overst">Hva fagfolk sier</p>
-          <h2 className="l2-anm-tittel">Brukt av håndverkere over hele Norge</h2>
-          <div className="l2-anm-rad">
-            <div className="l2-anm-kort">
-              <div className="l2-anm-stjerner">★★★★★</div>
-              <p className="l2-anm-tekst">«Sender nå tilbud samme dag som befaring. Kundene reagerer positivt på hvor profesjonelt det ser ut — og jeg vinner flere jobber.»</p>
-              <div className="l2-anm-navn">Thomas H. — Maler, Stavanger</div>
+      {/* ── FØR / ETTER ── */}
+      <section className="l2-fe">
+        <div className="l2-fe-inner">
+          <p className="l2-fe-overst">Tidsbruk</p>
+          <h2 className="l2-fe-tittel">Slik endrer Prismal arbeidsdagen din</h2>
+          <div className="l2-fe-grid">
+            <div className="l2-fe-kort l2-fe-kort-for">
+              <h3>Uten Prismal</h3>
+              <ul className="l2-fe-liste l2-fe-liste-for">
+                <li>Lager tilbud i Word eller Excel fra bunnen av</li>
+                <li>Kopierer fra forrige jobb og endrer manuelt</li>
+                <li>Regner ut totalsum og påslag for hånd</li>
+                <li>Sender som vedlegg uten lenker til nettside eller Facebook</li>
+              </ul>
             </div>
-            <div className="l2-anm-kort">
-              <div className="l2-anm-stjerner">★★★★★</div>
-              <p className="l2-anm-tekst">«Brukte å bruke halv dag på tilbud i Word. Nå er det gjort på 10 minutter fra mobilen. Materialbiblioteket alene er verdt pengene.»</p>
-              <div className="l2-anm-navn">Kristian B. — Rørlegger, Bergen</div>
-            </div>
-            <div className="l2-anm-kort">
-              <div className="l2-anm-stjerner">★★★★★</div>
-              <p className="l2-anm-tekst">«AI-teksten er overraskende god. Jeg skriver noen stikkord og får et komplett, profesjonelt tilbud tilbake. Enkelt og effektivt.»</p>
-              <div className="l2-anm-navn">Silje M. — Elektriker, Oslo</div>
+            <div className="l2-fe-kort l2-fe-kort-etter">
+              <h3>Med Prismal</h3>
+              <ul className="l2-fe-liste l2-fe-liste-etter">
+                <li>Tilbud klart på under 10 minutter — gjerne fra bilen</li>
+                <li>AI skriver en komplett, profesjonell tilbudstekst</li>
+                <li>Priser, påslag og miljøgebyr beregnes automatisk</li>
+                <li>Sendes som polert PDF med klikkbare lenker til nettside og Facebook</li>
+              </ul>
             </div>
           </div>
-          <p className="l2-anm-kilde">Anmeldelser fra Google</p>
         </div>
       </section>
+
+      {/* ── DEMO KARUSELL ── */}
+      <div id="demo">
+        <DemoSlideshow />
+      </div>
+
 
       {/* ── FAQ ── */}
       <FaqSeksjon />
@@ -345,6 +374,7 @@ export default function Landingsside({ onStart, onRegistrer }) {
             firmalogo, kundedatabase og materialbibliotek. Deretter 99 kr/mnd. 
             Ingen bindingstid — avslutt når du vil.
           </p>
+          <p className="l2-plan-roi">Én vunnet jobb dekker abonnementet i godt over et år.</p>
           <div className="l2-pro-kolonner">
             <ul className="l2-plan-liste">
               <li className="ok">Ubegrenset antall tilbud</li>
@@ -386,6 +416,13 @@ export default function Landingsside({ onStart, onRegistrer }) {
           />
         </div>
       )}
+
+      {/* ── STICKY CTA (mobil) ── */}
+      <div className={`l2-sticky-cta ${visStickyMobilCta ? 'vis' : ''}`}>
+        <button className="l2-cta l2-sticky-cta-knapp" onClick={onRegistrer}>
+          Registrer deg gratis
+        </button>
+      </div>
 
     </div>
   )
