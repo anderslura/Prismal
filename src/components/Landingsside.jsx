@@ -313,8 +313,18 @@ export default function Landingsside({ onStart, onRegistrer }) {
         <div className="l2-lightbox" onClick={() => setLightbox(false)}>
           <button className="l2-lightbox-lukk" onClick={() => setLightbox(false)} aria-label="Lukk">✕</button>
           <div className="l2-lightbox-sider" onClick={(e) => e.stopPropagation()}>
-            <img src="/demo/pdf_forside_v2.png" alt="Prismal tilbud forhåndsvisning, side 1" className="l2-lightbox-bilde" />
-            <img src="/demo/pdf_forside_side2_v2.png" alt="Prismal tilbud forhåndsvisning, side 2" className="l2-lightbox-bilde" />
+            <img
+              src="/demo/pdf_forside_v2_1x.png"
+              srcSet="/demo/pdf_forside_v2_1x.png 1x, /demo/pdf_forside_v2_2x.png 2x"
+              alt="Prismal tilbud forhåndsvisning, side 1"
+              className="l2-lightbox-bilde"
+            />
+            <img
+              src="/demo/pdf_forside_side2_v2_1x.png"
+              srcSet="/demo/pdf_forside_side2_v2_1x.png 1x, /demo/pdf_forside_side2_v2_2x.png 2x"
+              alt="Prismal tilbud forhåndsvisning, side 2"
+              className="l2-lightbox-bilde"
+            />
           </div>
         </div>
       )}

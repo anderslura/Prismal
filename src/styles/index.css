@@ -1348,6 +1348,10 @@ textarea { resize: vertical; }
   max-height: 90vh;
   overflow-y: auto;
   padding: 4px;
+  scrollbar-width: none; /* Firefox — skjul scrollbar-linjen, musehjul-scroll fungerer som normalt */
+}
+.l2-lightbox-sider::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge, Brave */
 }
 .l2-lightbox-bilde {
   /* Større visningsbredde enn før (var min(80vw,460px)) — én side om
