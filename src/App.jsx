@@ -447,7 +447,7 @@ function AppInnhold() {
             </span>
           )}
           <button className="btn-pro-oppgrader" onClick={() => setVisOppgrader(true)}>
-            Oppgrader til Pro — 99 kr/mnd eks. mva
+            Oppgrader til Pro — 99 kr/mnd
           </button>
         </div>
       )}
@@ -465,6 +465,7 @@ function AppInnhold() {
             prisliste={prisliste}
             setPrisliste={setPrisliste}
             isPro={isPro}
+            onOppgrader={() => setVisOppgrader(true)}
           />
         ) : steg === 'historikk' ? (
           <SendteHistorikk onTilbake={() => setSteg('skjema')} />
@@ -524,7 +525,7 @@ function AppInnhold() {
               <li>✓ Ingen Prismal-branding</li>
               <li>✓ Lagrede prislinjer og historikk</li>
             </ul>
-            <div className="oppgrader-pris">99 kr <span>/mnd eks. mva</span></div>
+            <div className="oppgrader-pris">99 kr <span>/mnd</span></div>
             <button
               className="btn btn-primary"
               style={{ width: '100%', padding: '12px', fontSize: '15px' }}

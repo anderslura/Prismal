@@ -113,7 +113,7 @@ function Vilkaar() {
 
       <h3>Betaling og abonnement</h3>
       <p>
-        Pro-abonnement koster 99 kr/mnd eks. mva (124 kr inkl. mva). Betaling skjer
+        Pro-abonnement koster 99 kr/mnd. Betaling skjer
         via Stripe. Abonnementet fornyes automatisk månedlig. Det er ingen bindingstid —
         du kan si opp når som helst via abonnementsportalen, og beholder tilgang ut
         inneværende betalingsperiode.
