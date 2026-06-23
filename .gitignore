@@ -9,3 +9,6 @@ dist/
 
 # Råskjermbilder til demo-oppdateringer (ikke for produksjon)
 bilde_dump/
+
+# Sesjon-handover (ikke for produksjon)
+HANDOVER.md
