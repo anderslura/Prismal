@@ -10,10 +10,12 @@ export default function LoginModal({ onLukk }) {
   const [feil, setFeil] = useState('')
   const [laster, setLaster] = useState(false)
   const [bekreftelse, setBekreftelse] = useState(false)
+  const [visOpprettHint, setVisOpprettHint] = useState(false)
 
   async function handleSubmit(e) {
     e.preventDefault()
     setFeil('')
+    setVisOpprettHint(false)
     setLaster(true)
     try {
       if (modus === 'logginn') {
@@ -31,12 +33,18 @@ export default function LoginModal({ onLukk }) {
       }
     } catch (err) {
       const meldinger = {
-        'Invalid login credentials': 'Feil e-post eller passord.',
+        'Invalid login credentials': 'Feil e-post eller passord — eller du har ikke opprettet konto enda.',
         'Email not confirmed': 'Bekreft e-posten din før du logger inn.',
         'User already registered': 'Denne e-posten er allerede registrert.',
         'Password should be at least 6 characters': 'Passordet må være minst 6 tegn.',
       }
       setFeil(meldinger[err.message] || err.message)
+      // Nytt forsøk på et ikke-eksisterende passord ER det vanligste tegnet på at
+      // brukeren aldri opprettet konto (Supabase gir samme feil for begge tilfeller
+      // av sikkerhetsgrunner). Vis en direkte vei til "Opprett konto" her.
+      if (err.message === 'Invalid login credentials' && modus === 'logginn') {
+        setVisOpprettHint(true)
+      }
     } finally {
       setLaster(false)
     }
@@ -95,7 +103,7 @@ export default function LoginModal({ onLukk }) {
                 <button
                   type="button"
                   className="modal-lenke"
-                  onClick={() => { setModus('glemt'); setFeil('') }}
+                  onClick={() => { setModus('glemt'); setFeil(''); setVisOpprettHint(false) }}
                 >
                   Glemt passord?
                 </button>
@@ -103,6 +111,16 @@ export default function LoginModal({ onLukk }) {
             )}
 
             {feil && <p className="modal-feil">{feil}</p>}
+
+            {visOpprettHint && (
+              <button
+                type="button"
+                className="btn btn-secondary btn-sm"
+                onClick={() => { setModus('registrer'); setFeil(''); setVisOpprettHint(false) }}
+              >
+                Opprett konto med denne e-posten →
+              </button>
+            )}
 
             <button className="btn btn-primary" type="submit" disabled={laster}>
               {laster ? 'Venter...' :
@@ -113,11 +131,11 @@ export default function LoginModal({ onLukk }) {
 
             <p className="modal-bytt">
               {modus === 'logginn' ? (
-                <>Ny bruker? <button type="button" onClick={() => { setModus('registrer'); setFeil('') }}>Opprett konto</button></>
+                <>Ny bruker? <button type="button" onClick={() => { setModus('registrer'); setFeil(''); setVisOpprettHint(false) }}>Opprett konto</button></>
               ) : modus === 'registrer' ? (
-                <>Har konto? <button type="button" onClick={() => { setModus('logginn'); setFeil('') }}>Logg inn</button></>
+                <>Har konto? <button type="button" onClick={() => { setModus('logginn'); setFeil(''); setVisOpprettHint(false) }}>Logg inn</button></>
               ) : (
-                <><button type="button" onClick={() => { setModus('logginn'); setFeil('') }}>← Tilbake til innlogging</button></>
+                <><button type="button" onClick={() => { setModus('logginn'); setFeil(''); setVisOpprettHint(false) }}>← Tilbake til innlogging</button></>
               )}
             </p>
           </form>
