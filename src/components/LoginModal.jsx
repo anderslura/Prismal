@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext.jsx'
 import { supabase } from '../lib/supabase.js'
 
-export default function LoginModal({ onLukk }) {
+export default function LoginModal({ onLukk, initialModus = 'logginn' }) {
   const { loggInn, registrer } = useAuth()
-  const [modus, setModus] = useState('logginn') // 'logginn' | 'registrer' | 'glemt'
+  const [modus, setModus] = useState(initialModus) // 'logginn' | 'registrer' | 'glemt'
   const [epost, setEpost] = useState('')
   const [passord, setPassord] = useState('')
   const [feil, setFeil] = useState('')

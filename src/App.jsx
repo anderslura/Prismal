@@ -283,7 +283,7 @@ function AppInnhold() {
 
   // ── Stripe: start checkout ───────────────────────────────────────────
   async function startCheckout() {
-    if (!bruker) { setVisOppgrader(false); setVisLogin(true); return }
+    if (!bruker) { setVisOppgrader(false); setVisLogin('registrer'); return }
     setCheckoutLaster(true)
     try {
       const res = await fetch('/.netlify/functions/create-checkout', {
@@ -358,10 +358,10 @@ function AppInnhold() {
               </button>
             )}
             {!bruker && (
-              <button className="btn btn-secondary" onClick={() => setVisLogin(true)}>Logg inn</button>
+              <button className="btn btn-secondary" onClick={() => setVisLogin('logginn')}>Logg inn</button>
             )}
             {steg === 'landing' && (
-              <button className="btn btn-primary" onClick={() => bruker ? setSteg('skjema') : setVisLogin(true)}>
+              <button className="btn btn-primary" onClick={() => bruker ? setSteg('skjema') : setVisLogin('registrer')}>
                 {bruker ? 'Lag tilbud →' : 'Kom i gang →'}
               </button>
             )}
@@ -461,7 +461,7 @@ function AppInnhold() {
 
       <main className={`app-main${steg === 'landing' ? ' app-main--landing' : ''}`}>
         {steg === 'landing' ? (
-          <Landingsside onStart={() => bruker ? setSteg('skjema') : setVisLogin(true)} onRegistrer={() => bruker ? setSteg('skjema') : setVisLogin(true)} />
+          <Landingsside onStart={() => bruker ? setSteg('skjema') : setVisLogin('registrer')} onRegistrer={() => bruker ? setSteg('skjema') : setVisLogin('registrer')} />
         ) : steg === 'skjema' ? (
           <TilbudSkjema
             skjema={skjema}
@@ -512,7 +512,7 @@ function AppInnhold() {
         </p>
       </footer>
 
-      {visLogin && <LoginModal onLukk={() => setVisLogin(false)} />}
+      {visLogin && <LoginModal onLukk={() => setVisLogin(false)} initialModus={visLogin} />}
 
       {visPersonvern && (
         <PersonvernModal side={visPersonvern} onLukk={() => setVisPersonvern(null)} />
@@ -543,7 +543,7 @@ function AppInnhold() {
             </button>
             {!bruker && (
               <p className="oppgrader-logginn">
-                Allerede Pro? <button onClick={() => { setVisOppgrader(false); setVisLogin(true) }}>Logg inn</button>
+                Allerede Pro? <button onClick={() => { setVisOppgrader(false); setVisLogin('logginn') }}>Logg inn</button>
               </p>
             )}
           </div>
