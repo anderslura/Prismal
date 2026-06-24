@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="no">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Personvernerklæring — Prismal</title>
+    <meta name="description" content="Personvernerklæring for Prismal — hvordan Hjelpeportalen AS behandler dine personopplysninger." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://prismal.no/personvern" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <style>
+      :root {
+        --blaa: #1e50c8;
+        --blaa-mork: #1540a0;
+        --blaa-lys: #e8eefb;
+        --tekst: #1a1a2e;
+        --tekst-sekundaer: #6b7280;
+        --kant: #e2e6f0;
+        --bakgrunn: #f5f7fb;
+        --hvit: #ffffff;
+        --radius: 10px;
+        --skygge: 0 2px 12px rgba(30,80,200,0.08);
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: var(--bakgrunn);
+        color: var(--tekst);
+        line-height: 1.6;
+      }
+      header {
+        background: var(--blaa);
+        padding: 1.1rem 1.5rem;
+      }
+      header a {
+        color: #fff;
+        font-weight: 700;
+        font-size: 1.15rem;
+        text-decoration: none;
+        letter-spacing: -0.01em;
+      }
+      main {
+        max-width: 680px;
+        margin: 2.5rem auto 4rem;
+        padding: 2.25rem 2rem;
+        background: var(--hvit);
+        border-radius: var(--radius);
+        box-shadow: var(--skygge);
+      }
+      h1 { font-size: 1.6rem; margin-bottom: 0.25rem; }
+      .sist-oppdatert { color: var(--tekst-sekundaer); font-size: 0.85rem; margin-bottom: 1.75rem; }
+      h2 { font-size: 1.05rem; color: var(--blaa-mork); margin: 1.75rem 0 0.5rem; }
+      p, li { color: var(--tekst); font-size: 0.96rem; }
+      ul { margin: 0.5rem 0 0.5rem 1.25rem; }
+      li { margin-bottom: 0.3rem; }
+      a { color: var(--blaa); }
+      footer {
+        max-width: 680px;
+        margin: 0 auto 3rem;
+        padding: 0 2rem;
+        font-size: 0.85rem;
+        color: var(--tekst-sekundaer);
+      }
+      footer a { color: var(--tekst-sekundaer); }
+    </style>
+  </head>
+  <body>
+    <header><a href="/">Prismal</a></header>
+    <main>
+      <h1>Personvernerklæring</h1>
+      <p class="sist-oppdatert">Sist oppdatert: juni 2025</p>
+
+      <h2>Behandlingsansvarlig</h2>
+      <p>
+        Hjelpeportalen AS<br />
+        Org.nr: 937141319<br />
+        E-post: <a href="mailto:kontakt@prismal.no">kontakt@prismal.no</a>
+      </p>
+
+      <h2>Hvilke data samler vi inn?</h2>
+      <p>
+        Vi samler inn e-postadresse ved registrering. Når du bruker tjenesten lagres antall
+        genererte tilbud og abonnementsstatus. Betalingsinformasjon (kortnummer o.l.) behandles
+        utelukkende av Stripe og lagres aldri hos oss.
+      </p>
+
+      <h2>Formål</h2>
+      <p>
+        Data brukes til å levere tjenesten, håndtere innlogging, administrere abonnement og
+        sende nødvendige systemvarsler. Vi bruker ikke dine data til markedsføring fra tredjeparter.
+      </p>
+
+      <h2>Databehandlere og lagring</h2>
+      <p>Vi benytter følgende underleverandører:</p>
+      <ul>
+        <li><strong>Supabase</strong> — databaselagring (EU-region)</li>
+        <li><strong>Stripe</strong> — betalingsbehandling</li>
+        <li><strong>Resend</strong> — e-postutsending</li>
+        <li><strong>Netlify</strong> — hosting</li>
+      </ul>
+      <p>
+        Alle leverandører er underlagt databehandleravtale og håndterer persondata i tråd med GDPR.
+      </p>
+
+      <h2>Cookies og lokal lagring</h2>
+      <p>
+        Prismal bruker lokal lagring (localStorage) i nettleseren din for å lagre innstillinger
+        som timepris, materialmal og firmainformasjon. Dette er funksjonelt nødvendig og ikke
+        markedsføringscookies.
+      </p>
+
+      <h2>Dine rettigheter</h2>
+      <p>
+        Du har rett til innsyn i, retting av og sletting av dine personopplysninger.
+        Ta kontakt på <a href="mailto:kontakt@prismal.no">kontakt@prismal.no</a> for å utøve disse rettighetene.
+        Du kan også klage til <strong>Datatilsynet</strong> (datatilsynet.no) dersom du mener
+        vi behandler dine data i strid med personvernlovgivningen.
+      </p>
+
+      <h2>Sletting</h2>
+      <p>
+        Dersom du avslutter abonnementet og ber om sletting, vil dine personopplysninger
+        bli slettet innen 30 dager. Noen data kan beholdes lengre der det kreves av regnskapslov.
+      </p>
+    </main>
+    <footer>
+      <a href="/vilkar">Vilkår for bruk</a> · <a href="/">Tilbake til prismal.no</a>
+    </footer>
+  </body>
+</html>
