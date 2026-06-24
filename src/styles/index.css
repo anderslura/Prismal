@@ -3515,6 +3515,7 @@ textarea { resize: vertical; }
 .kjoring-henger {
   grid-area: henger;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
   font-size: 13px;
@@ -3523,6 +3524,9 @@ textarea { resize: vertical; }
 }
 .kjoring-henger input[type="checkbox"] { width: 15px; height: 15px; cursor: pointer; flex-shrink: 0; }
 .kjoring-henger-sats { width: 130px !important; margin-left: 2px; }
+/* Hint faller ned på egen linje (flex-basis: 100%) i stedet for å trykke
+   resten av raden sammen på smale skjermer. */
+.kjoring-henger-hint { flex-basis: 100%; margin-top: 0; margin-left: 23px; }
 
 /* "Leie av utstyr" — kollapsbar seksjon. Gjenbruker .seksjon-tittel-rad for
    layout; denne klassen resetter kun knappe-default-styling siden den her

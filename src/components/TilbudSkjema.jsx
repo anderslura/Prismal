@@ -600,9 +600,12 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                     onChange={e => oppdaterKjoringRad(k.id, 'harHenger', e.target.checked)} />
                   Med henger
                   {k.harHenger && (
-                    <input type="number" min="0" step="0.1" placeholder="+ kr/km m/henger"
-                      className="trans-input kjoring-henger-sats" value={k.hengerSats}
-                      onChange={e => oppdaterKjoringRad(k.id, 'hengerSats', e.target.value)} />
+                    <>
+                      <input type="number" min="0" step="0.1" placeholder="+ kr/km m/henger"
+                        className="trans-input kjoring-henger-sats" value={k.hengerSats}
+                        onChange={e => oppdaterKjoringRad(k.id, 'hengerSats', e.target.value)} />
+                      <span className="felt-hint kjoring-henger-hint">Legges på kjøring og summeres automatisk</span>
+                    </>
                   )}
                 </label>
               </div>
