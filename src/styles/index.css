@@ -3483,6 +3483,53 @@ textarea { resize: vertical; }
 .miljo-sum { grid-area: sum; }
 .miljo-slett { grid-area: slett; justify-self: end; }
 
+/* Kjøring-rad: km/sats på hovedlinjen, henger-tillegg på linje 2 (samme
+   multi-rad-grid-teknikk som .miljo-rad over) — kollapser tidligere "Kjøring"
+   og "Bil + henger" til én radtype med valgfritt hengertillegg. */
+.kjoring-rad {
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "navn km sats sum knapper"
+    "henger henger henger henger henger";
+  row-gap: 6px;
+}
+.kjoring-navn { grid-area: navn; }
+.kjoring-km { grid-area: km; }
+.kjoring-sats { grid-area: sats; }
+.kjoring-sum { grid-area: sum; }
+.kjoring-knapper { grid-area: knapper; }
+.kjoring-henger {
+  grid-area: henger;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--tekst-sekundaer);
+  cursor: pointer;
+}
+.kjoring-henger input[type="checkbox"] { width: 15px; height: 15px; cursor: pointer; flex-shrink: 0; }
+.kjoring-henger-sats { width: 130px !important; margin-left: 2px; }
+
+/* "Leie av utstyr" — kollapsbar seksjon. Gjenbruker .seksjon-tittel-rad for
+   layout; denne klassen resetter kun knappe-default-styling siden den her
+   ligger på en <button> i stedet for en <div>. Chevron-rotasjon speiler
+   .l2-faq-chevron-mønsteret fra landingssiden. */
+.utstyrsleie-toggle {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+}
+.utstyrsleie-chevron {
+  flex-shrink: 0;
+  color: var(--tekst-sekundaer);
+  transition: transform 0.2s;
+}
+.utstyrsleie-chevron.aapen { transform: rotate(180deg); }
+
 .btn-legg-til-mat {
   padding: 0 14px;
   height: 34px;

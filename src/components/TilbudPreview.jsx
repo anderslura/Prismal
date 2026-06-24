@@ -58,10 +58,14 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
     if (map['']) grupper.push({ kategori: null, rader: map[''] })
     return grupper
   })()
-  const kjoringSum       = (parseFloat(skjema.kjoringKm)||0) * (parseFloat(skjema.kjoringSats)||0)
-  const kjoringHengerSum = (parseFloat(skjema.kjoringHengerKm)||0) * (parseFloat(skjema.kjoringHengerSats)||0)
-  const hengerleieSum    = (parseFloat(skjema.hengerleieDager)||0) * (parseFloat(skjema.hengerleieSats)||0)
-  const maskinleieSum    = (parseFloat(skjema.maskinleieDager)||0) * (parseFloat(skjema.maskinleieSats)||0)
+  function kjoringRadSum(k) {
+    const km = parseFloat(k.km)||0, sats = parseFloat(k.sats)||0
+    const hengerSats = k.harHenger ? (parseFloat(k.hengerSats)||0) : 0
+    return km * (sats + hengerSats)
+  }
+  const kjoringSum     = (skjema.kjoring     || []).reduce((s, k) => s + kjoringRadSum(k), 0)
+  const utstyrsleieRaderListe = (skjema.utstyrsleie || []).filter(u => (parseFloat(u.dager)||0)*(parseFloat(u.sats)||0) > 0)
+  const utstyrsleieSum = utstyrsleieRaderListe.reduce((s, u) => s + (parseFloat(u.dager)||0)*(parseFloat(u.sats)||0), 0)
   const bomSum       = (skjema.bom       || []).reduce((s, b) => s + (parseFloat(b.antall)||0)*(parseFloat(b.pris)||0), 0)
   const parkeringSum = (skjema.parkering  || []).reduce((s, p) => s + (parseFloat(p.antall)||0)*(parseFloat(p.pris)||0), 0)
   const fergeSum     = (skjema.ferge      || []).reduce((s, f) => s + (parseFloat(f.antall)||0)*(parseFloat(f.pris)||0), 0)
@@ -71,12 +75,14 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
 
   // Forhåndsberegnede lister/flagg for seksjonsoverskrifter i pristabellen (speiler pdf.js)
   const arbeidRaderListe = (skjema.arbeidere || []).filter(a => a.timer && a.timepris)
+  const kjoringRaderListe = (skjema.kjoring || []).filter(k => kjoringRadSum(k) > 0)
   const bomRaderListe = (skjema.bom || []).filter(b => (parseFloat(b.antall)||0)*(parseFloat(b.pris)||0) > 0)
   const parkeringRaderListe = (skjema.parkering || []).filter(p => (parseFloat(p.antall)||0)*(parseFloat(p.pris)||0) > 0)
   const fergeRaderListe = (skjema.ferge || []).filter(f => (parseFloat(f.antall)||0)*(parseFloat(f.pris)||0) > 0)
-  const transportVis = kjoringSum > 0 || kjoringHengerSum > 0 || hengerleieSum > 0 || maskinleieSum > 0 || bomRaderListe.length > 0 || parkeringRaderListe.length > 0 || fergeRaderListe.length > 0
+  const transportVis = kjoringSum > 0 || bomRaderListe.length > 0 || parkeringRaderListe.length > 0 || fergeRaderListe.length > 0
+  const utstyrsleieVis = utstyrsleieRaderListe.length > 0
   const miljoPaaslag = miljoAvgifterSum * (parseFloat(skjema.miljoPaaslagProsent)||0) / 100
-  const totalEksMva = totalArbeid + totalMaterialer + paaslag + miljoAvgifterSum + miljoPaaslag + kjoringSum + kjoringHengerSum + hengerleieSum + maskinleieSum + bomSum + parkeringSum + fergeSum
+  const totalEksMva = totalArbeid + totalMaterialer + paaslag + miljoAvgifterSum + miljoPaaslag + kjoringSum + utstyrsleieSum + bomSum + parkeringSum + fergeSum
   const totalInklMva = totalEksMva * 1.25
 
   async function sendTilbud() {
@@ -475,38 +481,18 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
                 {transportVis && (
                   <Fragment>
                     <tr className="pris-tabell-seksjon"><td colSpan={4}>Transport</td></tr>
-                    {kjoringSum > 0 && (
-                      <tr>
-                        <td>Kjøring</td>
-                        <td className="td-antall">{skjema.kjoringKm} km</td>
-                        <td className="td-pris">{formaterKr(skjema.kjoringSats)}/km</td>
-                        <td className="td-sum">{formaterKr(kjoringSum)}</td>
-                      </tr>
-                    )}
-                    {kjoringHengerSum > 0 && (
-                      <tr>
-                        <td>Kjøring (bil + henger)</td>
-                        <td className="td-antall">{skjema.kjoringHengerKm} km</td>
-                        <td className="td-pris">{formaterKr(skjema.kjoringHengerSats)}/km</td>
-                        <td className="td-sum">{formaterKr(kjoringHengerSum)}</td>
-                      </tr>
-                    )}
-                    {hengerleieSum > 0 && (
-                      <tr>
-                        <td>Leie av henger</td>
-                        <td className="td-antall">{skjema.hengerleieDager} dag(er)</td>
-                        <td className="td-pris">{formaterKr(skjema.hengerleieSats)}/dag</td>
-                        <td className="td-sum">{formaterKr(hengerleieSum)}</td>
-                      </tr>
-                    )}
-                    {maskinleieSum > 0 && (
-                      <tr>
-                        <td>Maskinleie</td>
-                        <td className="td-antall">{skjema.maskinleieDager} dag(er)</td>
-                        <td className="td-pris">{formaterKr(skjema.maskinleieSats)}/dag</td>
-                        <td className="td-sum">{formaterKr(maskinleieSum)}</td>
-                      </tr>
-                    )}
+                    {kjoringRaderListe.map((k, i) => {
+                      const hengerSats = k.harHenger ? (parseFloat(k.hengerSats)||0) : 0
+                      const sats = (parseFloat(k.sats)||0) + hengerSats
+                      return (
+                        <tr key={k.id || i}>
+                          <td>{k.harHenger ? 'Kjøring (med henger)' : 'Kjøring'}</td>
+                          <td className="td-antall">{k.km} km</td>
+                          <td className="td-pris">{formaterKr(sats)}/km</td>
+                          <td className="td-sum">{formaterKr(kjoringRadSum(k))}</td>
+                        </tr>
+                      )
+                    })}
                     {bomRaderListe.map((b, i) => (
                       <tr key={b.id || i}>
                         <td>Bom</td><td className="td-antall">{b.antall}</td>
@@ -526,6 +512,19 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
                         <td>Ferge</td><td className="td-antall">{f.antall}</td>
                         <td className="td-pris">{formaterKr(f.pris)}</td>
                         <td className="td-sum">{formaterKr((parseFloat(f.antall)||0)*(parseFloat(f.pris)||0))}</td>
+                      </tr>
+                    ))}
+                  </Fragment>
+                )}
+                {utstyrsleieVis && (
+                  <Fragment>
+                    <tr className="pris-tabell-seksjon"><td colSpan={4}>Leie av utstyr</td></tr>
+                    {utstyrsleieRaderListe.map((u, i) => (
+                      <tr key={u.id || i}>
+                        <td>{u.navn || 'Utstyrsleie'}</td>
+                        <td className="td-antall">{u.dager} dag(er)</td>
+                        <td className="td-pris">{formaterKr(u.sats)}/dag</td>
+                        <td className="td-sum">{formaterKr((parseFloat(u.dager)||0)*(parseFloat(u.sats)||0))}</td>
                       </tr>
                     ))}
                   </Fragment>

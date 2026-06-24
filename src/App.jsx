@@ -19,10 +19,7 @@ const TOM_SKJEMA = {
   kundenavn: '', kundeAdresse: '',
   kundeEpost: '', kundeMobil: '', beskrivelse: '', arbeidere: [], materialer: [],
   logoUrl: '', tilbudstekst: '', pdfTema: 'standard',
-  kjoringKm: '', kjoringSats: '',
-  kjoringHengerKm: '', kjoringHengerSats: '',
-  hengerleieDager: '', hengerleieSats: '',
-  maskinleieDager: '', maskinleieSats: '',
+  kjoring: [], utstyrsleie: [],
   bom: [], parkering: [], ferge: [],
   miljoavgifter: [], miljoPaaslagProsent: '',
   tilbudsnummer: '', dato: new Date().toLocaleDateString('no-NO'),
@@ -47,17 +44,31 @@ function hentLagretLogo() {
 function hentLagretPrisliste() {
   try { return JSON.parse(localStorage.getItem('prisliste') || '[]') } catch { return [] }
 }
-function hentLagretKjoringSats() {
-  try { return localStorage.getItem('transport_kjoring_sats') || '' } catch { return '' }
+function hentLagretSats(key) {
+  try { return localStorage.getItem(key) || '' } catch { return '' }
 }
-function hentLagretKjoringHengerSats() {
-  try { return localStorage.getItem('transport_kjoring_henger_sats') || '' } catch { return '' }
+function hentLagretKjoringRad() {
+  return [{
+    id: 'rad-1', km: '', harHenger: false,
+    sats: hentLagretSats('transport_kjoring_sats'),
+    hengerSats: hentLagretSats('transport_kjoring_henger_sats'),
+  }]
 }
-function hentLagretHengerleieSats() {
-  try { return localStorage.getItem('transport_hengerleie_sats') || '' } catch { return '' }
+// Faste, navngitte utstyrsleie-rader. id er en stabil slug (IKKE Date.now())
+// slik at vi kan slå opp riktig localStorage-nøkkel ved lagring av siste sats.
+const UTSTYRSLEIE_NOKLER = {
+  henger: 'transport_hengerleie_sats',
+  aggregat: 'transport_aggregatleie_sats',
+  lys: 'transport_lysleie_sats',
+  maskin: 'transport_maskinleie_sats',
 }
-function hentLagretMaskinleieSats() {
-  try { return localStorage.getItem('transport_maskinleie_sats') || '' } catch { return '' }
+function hentLagretUtstyrsleie() {
+  return [
+    { id: 'henger',   navn: 'Leie av henger',   dager: '', fast: true, sats: hentLagretSats(UTSTYRSLEIE_NOKLER.henger) },
+    { id: 'aggregat', navn: 'Leie av aggregat', dager: '', fast: true, sats: hentLagretSats(UTSTYRSLEIE_NOKLER.aggregat) },
+    { id: 'lys',      navn: 'Leie av lys',      dager: '', fast: true, sats: hentLagretSats(UTSTYRSLEIE_NOKLER.lys) },
+    { id: 'maskin',   navn: 'Maskinleie',       dager: '', fast: true, sats: hentLagretSats(UTSTYRSLEIE_NOKLER.maskin) },
+  ]
 }
 function hentLagretTransportMal(key) {
   try {
@@ -79,10 +90,8 @@ function AppInnhold() {
     logoUrl: isPro ? hentLagretLogo() : '',
     arbeidere: [{ id: 1, navn: 'Fagarbeider', timer: '', timepris: hentLagretTimepris() }],
     materialer: hentLagretMaterialMal(),
-    kjoringSats: hentLagretKjoringSats(),
-    kjoringHengerSats: hentLagretKjoringHengerSats(),
-    hengerleieSats: hentLagretHengerleieSats(),
-    maskinleieSats: hentLagretMaskinleieSats(),
+    kjoring: hentLagretKjoringRad(),
+    utstyrsleie: hentLagretUtstyrsleie(),
     bom: hentLagretTransportMal('transport_bom_priser'),
     parkering: hentLagretTransportMal('transport_parkering_priser'),
     ferge: hentLagretTransportMal('transport_ferge_priser'),
@@ -210,14 +219,19 @@ function AppInnhold() {
   }, [prisliste])
 
   useEffect(() => {
-    localStorage.setItem('transport_kjoring_sats', skjema.kjoringSats || '')
-    localStorage.setItem('transport_kjoring_henger_sats', skjema.kjoringHengerSats || '')
-    localStorage.setItem('transport_hengerleie_sats', skjema.hengerleieSats || '')
-    localStorage.setItem('transport_maskinleie_sats', skjema.maskinleieSats || '')
+    const kjoringRad = (skjema.kjoring || [])[0]
+    if (kjoringRad) {
+      localStorage.setItem('transport_kjoring_sats', kjoringRad.sats || '')
+      localStorage.setItem('transport_kjoring_henger_sats', kjoringRad.hengerSats || '')
+    }
+    ;(skjema.utstyrsleie || []).forEach(r => {
+      const key = UTSTYRSLEIE_NOKLER[r.id]
+      if (key) localStorage.setItem(key, r.sats || '')
+    })
     if (skjema.bom?.length)      localStorage.setItem('transport_bom_priser',      JSON.stringify(skjema.bom.map(b => b.pris)))
     if (skjema.parkering?.length) localStorage.setItem('transport_parkering_priser', JSON.stringify(skjema.parkering.map(p => p.pris)))
     if (skjema.ferge?.length)    localStorage.setItem('transport_ferge_priser',     JSON.stringify(skjema.ferge.map(f => f.pris)))
-  }, [skjema.kjoringSats, skjema.kjoringHengerSats, skjema.hengerleieSats, skjema.maskinleieSats, skjema.bom, skjema.parkering, skjema.ferge])
+  }, [skjema.kjoring, skjema.utstyrsleie, skjema.bom, skjema.parkering, skjema.ferge])
 
   function oppdater(felt, verdi) {
     setSkjema(prev => ({ ...prev, [felt]: verdi }))
@@ -255,14 +269,8 @@ function AppInnhold() {
       logoUrl: isPro ? hentLagretLogo() : '',
       arbeidere: [{ id: Date.now(), navn: 'Fagarbeider', timer: '', timepris: hentLagretTimepris() }],
       materialer: forhandslagte,
-      kjoringKm: '',
-      kjoringSats: hentLagretKjoringSats(),
-      kjoringHengerKm: '',
-      kjoringHengerSats: hentLagretKjoringHengerSats(),
-      hengerleieDager: '',
-      hengerleieSats: hentLagretHengerleieSats(),
-      maskinleieDager: '',
-      maskinleieSats: hentLagretMaskinleieSats(),
+      kjoring: hentLagretKjoringRad(),
+      utstyrsleie: hentLagretUtstyrsleie(),
       bom: hentLagretTransportMal('transport_bom_priser'),
       parkering: hentLagretTransportMal('transport_parkering_priser'),
       ferge: hentLagretTransportMal('transport_ferge_priser'),
