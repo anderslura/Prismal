@@ -758,6 +758,20 @@ textarea { resize: vertical; }
   color: var(--tekst-sekundaer);
 }
 
+/* Checkbox-gatet påslag (f.eks. "Leie av utstyr") — i motsetning til
+   miljøavgifter/materialer-påslagene over, som alltid er aktive ved >0%,
+   krever denne varianten et eksplisitt avhuk før prosentfeltet vises. */
+.paaslag-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--tekst);
+  cursor: pointer;
+}
+.paaslag-checkbox-label input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; }
+
 .paaslag-tag {
   font-size: 10px;
   background: #fef3c7;

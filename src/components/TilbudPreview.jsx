@@ -66,6 +66,7 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
   const kjoringSum     = (skjema.kjoring     || []).reduce((s, k) => s + kjoringRadSum(k), 0)
   const utstyrsleieRaderListe = (skjema.utstyrsleie || []).filter(u => (parseFloat(u.dager)||0)*(parseFloat(u.sats)||0) > 0)
   const utstyrsleieSum = utstyrsleieRaderListe.reduce((s, u) => s + (parseFloat(u.dager)||0)*(parseFloat(u.sats)||0), 0)
+  const utstyrsleiePaaslag = skjema.utstyrsleiePaaslagAktiv ? utstyrsleieSum * (parseFloat(skjema.utstyrsleiePaaslagProsent)||0) / 100 : 0
   const bomSum       = (skjema.bom       || []).reduce((s, b) => s + (parseFloat(b.antall)||0)*(parseFloat(b.pris)||0), 0)
   const parkeringSum = (skjema.parkering  || []).reduce((s, p) => s + (parseFloat(p.antall)||0)*(parseFloat(p.pris)||0), 0)
   const fergeSum     = (skjema.ferge      || []).reduce((s, f) => s + (parseFloat(f.antall)||0)*(parseFloat(f.pris)||0), 0)
@@ -82,7 +83,7 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
   const transportVis = kjoringSum > 0 || bomRaderListe.length > 0 || parkeringRaderListe.length > 0 || fergeRaderListe.length > 0
   const utstyrsleieVis = utstyrsleieRaderListe.length > 0
   const miljoPaaslag = miljoAvgifterSum * (parseFloat(skjema.miljoPaaslagProsent)||0) / 100
-  const totalEksMva = totalArbeid + totalMaterialer + paaslag + miljoAvgifterSum + miljoPaaslag + kjoringSum + utstyrsleieSum + bomSum + parkeringSum + fergeSum
+  const totalEksMva = totalArbeid + totalMaterialer + paaslag + miljoAvgifterSum + miljoPaaslag + kjoringSum + utstyrsleieSum + utstyrsleiePaaslag + bomSum + parkeringSum + fergeSum
   const totalInklMva = totalEksMva * 1.25
 
   async function sendTilbud() {
@@ -527,6 +528,14 @@ export default function TilbudPreview({ skjema, oppdaterTekst, onLastNed, onTilb
                         <td className="td-sum">{formaterKr((parseFloat(u.dager)||0)*(parseFloat(u.sats)||0))}</td>
                       </tr>
                     ))}
+                    {utstyrsleiePaaslag > 0 && (
+                      <tr>
+                        <td>Påslag leie av utstyr ({skjema.utstyrsleiePaaslagProsent}%)</td>
+                        <td className="td-antall"></td>
+                        <td className="td-pris"></td>
+                        <td className="td-sum">{formaterKr(utstyrsleiePaaslag)}</td>
+                      </tr>
+                    )}
                   </Fragment>
                 )}
               </tbody>

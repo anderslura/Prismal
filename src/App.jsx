@@ -22,6 +22,7 @@ const TOM_SKJEMA = {
   kjoring: [], utstyrsleie: [],
   bom: [], parkering: [], ferge: [],
   miljoavgifter: [], miljoPaaslagProsent: '',
+  utstyrsleiePaaslagAktiv: false, utstyrsleiePaaslagProsent: '',
   tilbudsnummer: '', dato: new Date().toLocaleDateString('no-NO'),
 }
 
@@ -57,17 +58,15 @@ function hentLagretKjoringRad() {
 // Faste, navngitte utstyrsleie-rader. id er en stabil slug (IKKE Date.now())
 // slik at vi kan slå opp riktig localStorage-nøkkel ved lagring av siste sats.
 const UTSTYRSLEIE_NOKLER = {
+  maskin: 'transport_maskinleie_sats',
   henger: 'transport_hengerleie_sats',
   aggregat: 'transport_aggregatleie_sats',
-  lys: 'transport_lysleie_sats',
-  maskin: 'transport_maskinleie_sats',
 }
 function hentLagretUtstyrsleie() {
   return [
+    { id: 'maskin',   navn: 'Maskinleie',       dager: '', fast: true, sats: hentLagretSats(UTSTYRSLEIE_NOKLER.maskin) },
     { id: 'henger',   navn: 'Leie av henger',   dager: '', fast: true, sats: hentLagretSats(UTSTYRSLEIE_NOKLER.henger) },
     { id: 'aggregat', navn: 'Leie av aggregat', dager: '', fast: true, sats: hentLagretSats(UTSTYRSLEIE_NOKLER.aggregat) },
-    { id: 'lys',      navn: 'Leie av lys',      dager: '', fast: true, sats: hentLagretSats(UTSTYRSLEIE_NOKLER.lys) },
-    { id: 'maskin',   navn: 'Maskinleie',       dager: '', fast: true, sats: hentLagretSats(UTSTYRSLEIE_NOKLER.maskin) },
   ]
 }
 function hentLagretTransportMal(key) {

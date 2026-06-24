@@ -186,6 +186,7 @@ async function byggPdfDok(skjema, isPro = true) {
   }
   const kjoringSum2     = (skjema.kjoring     || []).reduce((s, k) => s + kjoringRadSum2(k), 0)
   const utstyrsleieSum2 = (skjema.utstyrsleie || []).reduce((s, u) => s + (parseFloat(u.dager)||0)*(parseFloat(u.sats)||0), 0)
+  const utstyrsleiePaaslag2 = skjema.utstyrsleiePaaslagAktiv ? utstyrsleieSum2 * (parseFloat(skjema.utstyrsleiePaaslagProsent)||0) / 100 : 0
   const bomSum2       = (skjema.bom       || []).reduce((s, b) => s + (parseFloat(b.antall)||0)*(parseFloat(b.pris)||0), 0)
   const parkeringSum2 = (skjema.parkering  || []).reduce((s, p) => s + (parseFloat(p.antall)||0)*(parseFloat(p.pris)||0), 0)
   const fergeSum2     = (skjema.ferge      || []).reduce((s, f) => s + (parseFloat(f.antall)||0)*(parseFloat(f.pris)||0), 0)
@@ -193,7 +194,7 @@ async function byggPdfDok(skjema, isPro = true) {
   const miljoPaaslagFaktor = 1 + (parseFloat(skjema.miljoPaaslagProsent) || 0) / 100
   const miljoAvgifterSum2 = miljoAvgifterListe.reduce((s, m) => s + (parseFloat(m.antall)||0)*(parseFloat(m.pris)||0), 0)
   const miljoPaaslag2 = miljoAvgifterSum2 * (parseFloat(skjema.miljoPaaslagProsent) || 0) / 100
-  const totalEksMva = totalArbeid + totalMaterialer + paaslag + miljoAvgifterSum2 + miljoPaaslag2 + kjoringSum2 + utstyrsleieSum2 + bomSum2 + parkeringSum2 + fergeSum2
+  const totalEksMva = totalArbeid + totalMaterialer + paaslag + miljoAvgifterSum2 + miljoPaaslag2 + kjoringSum2 + utstyrsleieSum2 + utstyrsleiePaaslag2 + bomSum2 + parkeringSum2 + fergeSum2
   const mva = totalEksMva * 0.25
   const totalInklMva = totalEksMva + mva
 
@@ -287,6 +288,8 @@ async function byggPdfDok(skjema, isPro = true) {
     if (dager > 0 && sats > 0)
       utstyrsleieRader.push([u.navn || 'Utstyrsleie', `${dager} dag(er)`, kr(sats) + '/dag', kr(dager * sats)])
   })
+  if (utstyrsleiePaaslag2 > 0 && utstyrsleieRader.length)
+    utstyrsleieRader.push([`Påslag leie av utstyr (${skjema.utstyrsleiePaaslagProsent}%)`, '', '', kr(utstyrsleiePaaslag2)])
   if (utstyrsleieRader.length) { seksjonsrad('Leie av utstyr'); rader.push(...utstyrsleieRader) }
 
   const mvaPliktig = skjema.firmaMvaPliktig !== false

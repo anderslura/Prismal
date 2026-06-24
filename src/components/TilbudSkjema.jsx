@@ -120,13 +120,14 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
   }
   const kjoringSum     = (skjema.kjoring     || []).reduce((s, k) => s + kjoringRadSum(k), 0)
   const utstyrsleieSum = (skjema.utstyrsleie || []).reduce((s, u) => s + (parseFloat(u.dager)||0)*(parseFloat(u.sats)||0), 0)
+  const utstyrsleiePaaslag = skjema.utstyrsleiePaaslagAktiv ? utstyrsleieSum * (parseFloat(skjema.utstyrsleiePaaslagProsent)||0) / 100 : 0
   const bomSum        = (skjema.bom       || []).reduce((s, b) => s + (parseFloat(b.antall)||0)*(parseFloat(b.pris)||0), 0)
   const parkeringSum  = (skjema.parkering  || []).reduce((s, p) => s + (parseFloat(p.antall)||0)*(parseFloat(p.pris)||0), 0)
   const fergeSum      = (skjema.ferge      || []).reduce((s, f) => s + (parseFloat(f.antall)||0)*(parseFloat(f.pris)||0), 0)
   const miljoAvgifterSum = (skjema.miljoavgifter || []).reduce((s, m) => s + (parseFloat(m.antall)||0)*(parseFloat(m.pris)||0), 0)
   const miljoPaaslag = miljoAvgifterSum * (parseFloat(skjema.miljoPaaslagProsent)||0) / 100
   const totalTransport = kjoringSum + bomSum + parkeringSum + fergeSum
-  const totalSum = totalArbeid + totalMaterialer + paaslag + miljoAvgifterSum + miljoPaaslag + totalTransport + utstyrsleieSum
+  const totalSum = totalArbeid + totalMaterialer + paaslag + miljoAvgifterSum + miljoPaaslag + totalTransport + utstyrsleieSum + utstyrsleiePaaslag
   const kategoriListe = [...new Set((skjema.materialer || []).map(m => m.kategori).filter(Boolean))]
 
   // Materialer gruppert etter kategori for redigeringsvisningen (drag-and-drop mellom grupper).
@@ -722,10 +723,10 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                 return u.fast ? (
                   <div key={u.id} className="trans-rad">
                     <span className="trans-navn">{u.navn}</span>
-                    <input type="number" min="0" placeholder="dager"
+                    <input type="number" min="0" placeholder="0"
                       className="trans-input" value={u.dager}
                       onChange={e => oppdaterUtstyrsleieRad(u.id, 'dager', e.target.value)} />
-                    <input type="number" min="0" placeholder="kr/dag"
+                    <input type="number" min="0" placeholder="0"
                       className="trans-input" value={u.sats}
                       onChange={e => oppdaterUtstyrsleieRad(u.id, 'sats', e.target.value)} />
                     <span className="trans-sum">{sum > 0 ? formaterKr(sum) : ''}</span>
@@ -736,10 +737,10 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                     <input type="text" placeholder="Beskrivelse" maxLength={40}
                       className="trans-input trans-input-navn miljo-navn" value={u.navn}
                       onChange={e => oppdaterUtstyrsleieRad(u.id, 'navn', e.target.value)} />
-                    <input type="number" min="0" placeholder="dager"
+                    <input type="number" min="0" placeholder="0"
                       className="trans-input miljo-antall" value={u.dager}
                       onChange={e => oppdaterUtstyrsleieRad(u.id, 'dager', e.target.value)} />
-                    <input type="number" min="0" placeholder="kr/dag"
+                    <input type="number" min="0" placeholder="0"
                       className="trans-input miljo-pris" value={u.sats}
                       onChange={e => oppdaterUtstyrsleieRad(u.id, 'sats', e.target.value)} />
                     <span className="trans-sum miljo-sum">{sum > 0 ? formaterKr(sum) : ''}</span>
@@ -749,6 +750,33 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
               })}
 
               <button className="trans-legg-til" onClick={leggTilUtstyrsleieRad}>+ Legg til egendefinert</button>
+
+              <div className="paaslag-rad utstyrsleie-paaslag-rad">
+                <label className="paaslag-checkbox-label">
+                  <input type="checkbox" checked={!!skjema.utstyrsleiePaaslagAktiv}
+                    onChange={e => oppdater('utstyrsleiePaaslagAktiv', e.target.checked)} />
+                  Påslag leie av utstyr
+                </label>
+                {skjema.utstyrsleiePaaslagAktiv && (
+                  <>
+                    <input type="number" min="0" max="100" placeholder="0"
+                      className="paaslag-input" value={skjema.utstyrsleiePaaslagProsent}
+                      onChange={e => oppdater('utstyrsleiePaaslagProsent', e.target.value)} />
+                    <span className="paaslag-symbol">%</span>
+                    <div className="paaslag-hurtig-gruppe">
+                      {[10, 20, 30].map(pr => (
+                        <button key={pr}
+                          className={`paaslag-hurtig${parseFloat(skjema.utstyrsleiePaaslagProsent) === pr ? ' aktiv' : ''}`}
+                          onClick={() => oppdater('utstyrsleiePaaslagProsent', pr)}
+                        >{pr}%</button>
+                      ))}
+                    </div>
+                    {parseFloat(skjema.utstyrsleiePaaslagProsent) > 0 && utstyrsleieSum > 0 && (
+                      <span className="paaslag-resultat">= +{formaterKr(utstyrsleiePaaslag)}</span>
+                    )}
+                  </>
+                )}
+              </div>
             </>
           )}
         </section>
@@ -765,6 +793,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
               {miljoPaaslag > 0 && <div className="sum-linje"><span>Påslag miljøavgifter {skjema.miljoPaaslagProsent}%</span><span>{formaterKr(miljoPaaslag)}</span></div>}
               {kjoringSum > 0 && <div className="sum-linje"><span>Kjøring</span><span>{formaterKr(kjoringSum)}</span></div>}
               {utstyrsleieSum > 0 && <div className="sum-linje"><span>Leie av utstyr</span><span>{formaterKr(utstyrsleieSum)}</span></div>}
+              {utstyrsleiePaaslag > 0 && <div className="sum-linje"><span>Påslag leie av utstyr {skjema.utstyrsleiePaaslagProsent}%</span><span>{formaterKr(utstyrsleiePaaslag)}</span></div>}
               {bomSum       > 0 && <div className="sum-linje"><span>Bom</span><span>{formaterKr(bomSum)}</span></div>}
               {parkeringSum > 0 && <div className="sum-linje"><span>Parkering</span><span>{formaterKr(parkeringSum)}</span></div>}
               {fergeSum     > 0 && <div className="sum-linje"><span>Ferge</span><span>{formaterKr(fergeSum)}</span></div>}
