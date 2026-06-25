@@ -391,7 +391,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
             <span></span>
           </div>
           <p className="mat-info-tekst mat-info-antall">Kun linjer med antall kommer med i tilbudet.</p>
-          <p className="mat-info-tekst mat-info-kategori">Tips: skriv eller velg kategori i feltet under hver linje for å gruppere materialer — eller dra navnet til en annen gruppe.</p>
+          <p className="mat-info-tekst mat-info-kategori">Tips: skriv kategorinavn i feltet under én linje for å lage en gruppe — kun nødvendig én gang per kategori. Dra deretter øvrige linjer inn i gruppen.</p>
 
           {/* EKSISTERENDE LINJER — gruppert etter kategori (overskrift vises kun når kategori er i bruk) */}
 
