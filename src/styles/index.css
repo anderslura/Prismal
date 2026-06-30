@@ -2378,11 +2378,13 @@ textarea { resize: vertical; }
 }
 
 /* ── TIDLIG KUNDE / LANSERING ── */
-.l2-tidlig {
+.l2-tidlig-card {
   background: linear-gradient(135deg, #eef2ff 0%, #f0f9ff 100%);
-  border-top: 1px solid rgba(99,102,241,0.10);
-  border-bottom: 1px solid rgba(99,102,241,0.10);
-  padding: 48px 32px;
+  border: 1px solid rgba(99,102,241,0.16);
+  border-radius: 16px;
+  padding: 28px 32px;
+  margin-top: 36px;
+  box-shadow: 0 2px 16px rgba(99,102,241,0.08);
 }
 .l2-tidlig-inner {
   max-width: 1000px;
@@ -2486,13 +2488,13 @@ textarea { resize: vertical; }
   margin-top: 10px;
 }
 @media (max-width: 840px) {
-  .l2-tidlig { padding: 36px 24px; }
+  .l2-tidlig-card { padding: 24px 22px; margin-top: 28px; }
   .l2-tidlig-inner { flex-direction: column; gap: 24px; text-align: center; }
   .l2-tidlig-tekst { text-align: center; }
   .l2-tidlig-kode-boks { width: 100%; max-width: 360px; }
 }
 @media (max-width: 520px) {
-  .l2-tidlig { padding: 32px 16px; }
+  .l2-tidlig-card { padding: 20px 16px; margin-top: 24px; }
   .l2-tidlig-tittel { font-size: 21px; }
   .l2-tidlig-body, .l2-tidlig-frist { font-size: 13.5px; }
   .l2-tidlig-kode { font-size: 17px; padding: 8px 10px; }

@@ -87,7 +87,7 @@ function TidligKundeSeksjon() {
   }
 
   return (
-    <section className="l2-tidlig">
+    <div className="l2-tidlig-card">
       <div className="l2-tidlig-inner">
         <div className="l2-tidlig-tekst">
           <p className="l2-tidlig-emoji">🎉</p>
@@ -131,7 +131,7 @@ function TidligKundeSeksjon() {
           <p className="l2-tidlig-kode-hint">Brukes ved oppgradering til Pro · gjelder i 6 måneder</p>
         </div>
       </div>
-    </section>
+    </div>
   )
 }
 
@@ -331,6 +331,9 @@ export default function Landingsside({ onStart, onRegistrer }) {
             </div>
           </div>
 
+          {/* ── TIDLIG KUNDE / LANSERING — over CTA, ikke til å misse ── */}
+          <TidligKundeSeksjon />
+
           {/* CTA — sentrert under */}
           <div className="l2-hero-cta">
             <div className="l2-cta-rad">
@@ -361,9 +364,6 @@ export default function Landingsside({ onStart, onRegistrer }) {
 
         </div>
       </section>
-
-      {/* ── TIDLIG KUNDE / LANSERING ── */}
-      <TidligKundeSeksjon />
 
       {/* ── PITCH ── */}
       <section className="l2-pitch">
