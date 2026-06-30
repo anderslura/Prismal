@@ -2377,6 +2377,128 @@ textarea { resize: vertical; }
   color: #111827;
 }
 
+/* ── TIDLIG KUNDE / LANSERING ── */
+.l2-tidlig {
+  background: linear-gradient(135deg, #eef2ff 0%, #f0f9ff 100%);
+  border-top: 1px solid rgba(99,102,241,0.10);
+  border-bottom: 1px solid rgba(99,102,241,0.10);
+  padding: 48px 32px;
+}
+.l2-tidlig-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+}
+.l2-tidlig-tekst {
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: left;
+}
+.l2-tidlig-emoji {
+  font-size: 28px;
+  margin-bottom: 6px;
+}
+.l2-tidlig-tittel {
+  font-size: 24px;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 8px;
+}
+.l2-tidlig-body {
+  font-size: 15px;
+  color: #374151;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+.l2-tidlig-frist {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4338ca;
+}
+.l2-tidlig-frist strong {
+  color: #1e50c8;
+}
+.l2-tidlig-kode-boks {
+  flex: 0 0 auto;
+  background: #fff;
+  border: 1.5px solid rgba(99,102,241,0.22);
+  border-radius: 14px;
+  padding: 18px 22px;
+  box-shadow: var(--skygge);
+  text-align: center;
+  min-width: 250px;
+}
+.l2-tidlig-kode-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #9ca3af;
+  margin-bottom: 8px;
+}
+.l2-tidlig-kode-rad {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.l2-tidlig-kode {
+  font-family: 'SF Mono', Menlo, monospace;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #111827;
+  background: var(--blaa-lys);
+  border: 1px dashed rgba(99,102,241,0.35);
+  border-radius: 8px;
+  padding: 8px 14px;
+  flex: 1 1 auto;
+  white-space: nowrap;
+}
+.l2-tidlig-kopier {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 9px 14px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+}
+.l2-tidlig-kopier:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(99,102,241,0.35);
+}
+.l2-tidlig-kopier.kopiert {
+  background: var(--groen);
+}
+.l2-tidlig-kode-hint {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 10px;
+}
+@media (max-width: 840px) {
+  .l2-tidlig { padding: 36px 24px; }
+  .l2-tidlig-inner { flex-direction: column; gap: 24px; text-align: center; }
+  .l2-tidlig-tekst { text-align: center; }
+  .l2-tidlig-kode-boks { width: 100%; max-width: 360px; }
+}
+@media (max-width: 520px) {
+  .l2-tidlig { padding: 32px 16px; }
+  .l2-tidlig-tittel { font-size: 21px; }
+  .l2-tidlig-body, .l2-tidlig-frist { font-size: 13.5px; }
+  .l2-tidlig-kode { font-size: 17px; padding: 8px 10px; }
+  .l2-tidlig-kopier { padding: 9px 12px; font-size: 12.5px; }
+}
+
 /* ── PITCH-SEKSJON ── */
 .l2-pitch {
   background: #fff;

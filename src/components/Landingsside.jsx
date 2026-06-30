@@ -64,6 +64,77 @@ function FaqSeksjon() {
   )
 }
 
+function TidligKundeSeksjon() {
+  const [kopiert, setKopiert] = useState(false)
+  const kode = 'TIDLIG40'
+
+  const kopierKode = async () => {
+    try {
+      await navigator.clipboard.writeText(kode)
+    } catch {
+      // Fallback for nettlesere uten Clipboard API-støtte
+      const temp = document.createElement('textarea')
+      temp.value = kode
+      temp.style.position = 'fixed'
+      temp.style.opacity = '0'
+      document.body.appendChild(temp)
+      temp.select()
+      try { document.execCommand('copy') } catch {}
+      document.body.removeChild(temp)
+    }
+    setKopiert(true)
+    setTimeout(() => setKopiert(false), 2000)
+  }
+
+  return (
+    <section className="l2-tidlig">
+      <div className="l2-tidlig-inner">
+        <div className="l2-tidlig-tekst">
+          <p className="l2-tidlig-emoji">🎉</p>
+          <h2 className="l2-tidlig-tittel">Prismal er nå lansert!</h2>
+          <p className="l2-tidlig-body">
+            Vi har akkurat startet annonsering i Stavanger-regionen — neste byer står for tur.
+            Prismal er åpent for alle håndverkere i hele Norge, uansett hvor du holder til.
+          </p>
+          <p className="l2-tidlig-frist">
+            Som en av våre første 40 kunder får du <strong>40 % rabatt i 6 måneder.</strong> Først til mølla.
+          </p>
+        </div>
+        <div className="l2-tidlig-kode-boks">
+          <span className="l2-tidlig-kode-label">Rabattkode</span>
+          <div className="l2-tidlig-kode-rad">
+            <code className="l2-tidlig-kode">{kode}</code>
+            <button
+              type="button"
+              className={`l2-tidlig-kopier${kopiert ? ' kopiert' : ''}`}
+              onClick={kopierKode}
+              aria-label="Kopier rabattkode"
+            >
+              {kopiert ? (
+                <>
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                    <path d="M3 8.5l3.5 3.5L13 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  Kopiert
+                </>
+              ) : (
+                <>
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                    <rect x="5.5" y="5.5" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.4"/>
+                    <path d="M3.5 10V3.5A1.5 1.5 0 015 2h6.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+                  </svg>
+                  Kopier
+                </>
+              )}
+            </button>
+          </div>
+          <p className="l2-tidlig-kode-hint">Brukes ved oppgradering til Pro · gjelder i 6 måneder</p>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 function IkonLyn() {
   return (
     <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
@@ -290,6 +361,9 @@ export default function Landingsside({ onStart, onRegistrer }) {
 
         </div>
       </section>
+
+      {/* ── TIDLIG KUNDE / LANSERING ── */}
+      <TidligKundeSeksjon />
 
       {/* ── PITCH ── */}
       <section className="l2-pitch">
