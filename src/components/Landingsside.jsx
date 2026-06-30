@@ -384,8 +384,8 @@ export default function Landingsside({ onStart, onRegistrer }) {
               <p>Når et tilbud tar minutter i stedet for timer, sender du mer. Mer tilbud gir mer jobb. Prismal er investering i din egen kapasitet.</p>
             </div>
             <div className="l2-pitch-kort l2-pitch-kort-norsk">
-              <h3>Laget i Norge — for norske fagfolk</h3>
-              <p>Prismal er utviklet av en norsk fagmann, for fagmenn og -damer i Norge. Norsk kundeservice, og alle oppdateringer og forbedringer er alltid inkludert i abonnementet — uten ekstra kostnad. Kom med innspill, følg oss på Facebook, og bli med på å forme Norges beste verktøy for tilbud.</p>
+              <h3>Bygget i Norge — for håndverkere i hele landet</h3>
+              <p>Prismal er bygget i Norge, for håndverkere i hele landet. Norsk kundeservice, og alle oppdateringer og forbedringer er alltid inkludert i abonnementet — uten ekstra kostnad. Kom med innspill, følg oss på Facebook, og bli med på å forme Norges beste verktøy for tilbud.</p>
             </div>
           </div>
         </div>
