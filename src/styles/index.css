@@ -2501,6 +2501,118 @@ textarea { resize: vertical; }
   .l2-tidlig-kopier { padding: 9px 12px; font-size: 12.5px; }
 }
 
+/* ── GRATIS BADGE — over CTA-knapp ── */
+.l2-gratis-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(22,163,74,0.10);
+  border: 1.5px solid rgba(22,163,74,0.30);
+  color: #15803d;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 7px 18px;
+  border-radius: 20px;
+  letter-spacing: 0.01em;
+  margin-bottom: 4px;
+}
+@media (max-width: 520px) {
+  .l2-gratis-badge { font-size: 12px; padding: 6px 14px; text-align: center; }
+}
+
+/* ── TESTIMONIAL-SEKSJON ── */
+.l2-testimonial {
+  background: #fff;
+  padding: 56px 32px;
+  border-bottom: 1px solid var(--kant);
+}
+.l2-testimonial-inner {
+  max-width: 820px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+.l2-testimonial-kort {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  background: linear-gradient(135deg, #f8faff 0%, #eef2ff 100%);
+  border: 1px solid rgba(99,102,241,0.12);
+  border-radius: 20px;
+  padding: 36px 40px;
+  width: 100%;
+  box-shadow: var(--skygge-stor);
+}
+.l2-testimonial-foto-wrapper {
+  flex: 0 0 auto;
+}
+.l2-testimonial-foto {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top center;
+  border: 3px solid rgba(99,102,241,0.22);
+  box-shadow: 0 4px 16px rgba(99,102,241,0.16);
+}
+.l2-testimonial-innhold {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.l2-testimonial-sitattegn {
+  font-size: 64px;
+  line-height: 0.6;
+  color: #c7d2fe;
+  font-family: Georgia, serif;
+  margin-bottom: 12px;
+  user-select: none;
+}
+.l2-testimonial-sitat {
+  font-size: 17px;
+  font-weight: 500;
+  color: #1f2937;
+  line-height: 1.65;
+  margin: 0 0 18px;
+  font-style: italic;
+}
+.l2-testimonial-person {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.l2-testimonial-navn {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+}
+.l2-testimonial-firma {
+  font-size: 13px;
+  color: #6b7280;
+}
+.l2-testimonial-cta {
+  font-size: 16px;
+}
+@media (max-width: 720px) {
+  .l2-testimonial { padding: 40px 20px; }
+  .l2-testimonial-kort {
+    flex-direction: column;
+    text-align: center;
+    padding: 28px 24px;
+    gap: 20px;
+  }
+  .l2-testimonial-person { justify-content: center; flex-wrap: wrap; gap: 6px; }
+  .l2-testimonial-sitat { font-size: 15.5px; }
+}
+@media (max-width: 520px) {
+  .l2-testimonial { padding: 32px 16px; }
+  .l2-testimonial-foto { width: 88px; height: 88px; }
+  .l2-testimonial-sitattegn { font-size: 52px; }
+  .l2-testimonial-sitat { font-size: 15px; }
+  .l2-testimonial-cta { font-size: 15px; padding: 13px 24px; }
+}
+
 /* ── PITCH-SEKSJON ── */
 .l2-pitch {
   background: #fff;

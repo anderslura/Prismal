@@ -135,6 +135,40 @@ function TidligKundeSeksjon() {
   )
 }
 
+function TestimonialSeksjon({ onRegistrer }) {
+  return (
+    <section className="l2-testimonial">
+      <div className="l2-testimonial-inner">
+        <div className="l2-testimonial-kort">
+          <div className="l2-testimonial-foto-wrapper">
+            <img
+              src="/magnus_lura.jpg"
+              alt="Magnus Lura — Bygg og Graving AS"
+              className="l2-testimonial-foto"
+            />
+          </div>
+          <div className="l2-testimonial-innhold">
+            <div className="l2-testimonial-sitattegn">"</div>
+            <blockquote className="l2-testimonial-sitat">
+              Med Prismal er tilbudet klart rett etter befaringen. Ryddigere, mer profesjonelt og raskere enn noe jeg har brukt før — og kundene merker det.
+            </blockquote>
+            <div className="l2-testimonial-person">
+              <span className="l2-testimonial-navn">Magnus Lura</span>
+              <span className="l2-testimonial-firma">Bygg og Graving AS</span>
+            </div>
+          </div>
+        </div>
+        <button className="l2-cta l2-testimonial-cta" onClick={onRegistrer}>
+          Prøv gratis — 3 tilbud uten kredittkort
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{marginLeft:8}}>
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </section>
+  )
+}
+
 function IkonLyn() {
   return (
     <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
@@ -338,16 +372,18 @@ export default function Landingsside({ onStart, onRegistrer }) {
           <div className="l2-hero-cta">
             <div className="l2-cta-rad">
               <div className="l2-cta-alternativ">
+                <p className="l2-gratis-badge">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M3 8.5l3.5 3.5L13 4.5" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  3 gratis tilbud — ingen kredittkort, ingen bindingstid
+                </p>
                 <button className="l2-cta" onClick={onRegistrer}>
                   Registrer deg gratis
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{marginLeft:6}}>
                     <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </button>
-                <p className="l2-cta-hint l2-cta-hint-prim">
-                  3 fulle tilbud med alle funksjoner<br/>
-                  <span>Ingen kredittkort · Ingen bindingstid</span>
-                </p>
               </div>
               <span className="l2-cta-eller">eller</span>
               <div className="l2-cta-alternativ">
@@ -364,6 +400,9 @@ export default function Landingsside({ onStart, onRegistrer }) {
 
         </div>
       </section>
+
+      {/* ── TESTIMONIAL ── */}
+      <TestimonialSeksjon onRegistrer={onRegistrer} />
 
       {/* ── PITCH ── */}
       <section className="l2-pitch">
