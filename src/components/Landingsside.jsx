@@ -439,10 +439,10 @@ export default function Landingsside({ onStart, onRegistrer }) {
             <div className="l2-fe-kort l2-fe-kort-for">
               <h3>Uten Prismal</h3>
               <ul className="l2-fe-liste l2-fe-liste-for">
-                <li>Lager tilbud i Word eller Excel fra bunnen av</li>
-                <li>Kopierer fra forrige jobb og endrer manuelt</li>
-                <li>Regner ut totalsum og påslag for hånd</li>
-                <li>Sender som vedlegg uten lenker til nettside eller Facebook</li>
+                <li>Bruker kvelden på å sette opp tilbud — aldri fra bilen</li>
+                <li>Kopierer fra forrige jobb og risikerer å sende feil info til kunden</li>
+                <li>Glemmer transport, miljøgebyr eller påslag — og taper penger på oppdraget</li>
+                <li>Kunden får en Word-fil uten logo eller lenker — ser ikke profesjonelt ut</li>
               </ul>
             </div>
             <div className="l2-fe-kort l2-fe-kort-etter">
