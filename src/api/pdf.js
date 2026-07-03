@@ -86,15 +86,18 @@ async function byggPdfDok(skjema, isPro = true) {
       tekstStartX = margin + logoW + 4
     }
   } else if (!isPro) {
-    const sx = margin, sy = 6, sh = 16, sw = 14, gap = 1.5, w = 3.5
+    const sx = margin, sy = 6, sh = 16, gap = 1.5, w = 3.5
+    const skew = sh * 0.45
     const striper = [[168,202,255],[102,153,255],[51,102,238]]
     striper.forEach(([r, g, b], i) => {
       const ox = i * (w + gap)
       doc.setFillColor(r, g, b)
-      const skew = sh * 0.45
       doc.lines([[w,0],[skew,-sh],[-w,0],[-skew,sh]], sx+ox+skew, sy+sh, [1,1], 'F', true)
     })
-    tekstStartX = margin + sw * 3 + gap * 2 + 5
+    // Logoens visuelle bredde: skjev topp-venstre (skew) + 2 intervaller + 1 stripe + skjev topp-høyre (skew)
+    // Tidligere bug: margin + sw*3 + gap*2 + 5 = margin+50mm — ga enormt gap mellom logo og tekst
+    const logoBredde = skew + (striper.length - 1) * (w + gap) + w + skew
+    tekstStartX = margin + logoBredde + 4
   }
 
   doc.setTextColor(...(skjema.pdfTema === 'hvit' ? [30,41,59] : [255,255,255]))
