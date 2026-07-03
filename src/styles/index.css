@@ -2205,25 +2205,11 @@ textarea { resize: vertical; }
   box-shadow: 0 4px 18px rgba(99,102,241,0.40);
   transition: transform 0.15s, filter 0.15s, box-shadow 0.15s;
   margin-bottom: 14px;
-  position: relative;
-  overflow: hidden;
-}
-.l2-btn-pro::after {
-  content: '';
-  position: absolute;
-  top: 0; left: -100%;
-  width: 60%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
-  animation: btn-shine 3.5s ease-in-out infinite;
-}
-@keyframes btn-shine {
-  0%   { left: -100%; }
-  40%, 100% { left: 150%; }
 }
 .l2-btn-pro:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.1);
+  background: #4338ca;
+  box-shadow: 0 1px 0 rgba(255,255,255,0.12) inset, 0 6px 20px rgba(79,70,229,0.40);
+  transform: translateY(-1px);
 }
 .l2-pris-sammenligning-topp {
   font-size: 13px;
@@ -2249,9 +2235,9 @@ textarea { resize: vertical; }
   margin: 10px 0 8px;
 }
 .l2-garantier span {
-  font-size: 13px;
-  color: #a5b4fc;
-  font-weight: 600;
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 500;
 }
 
 /* ── RESPONSIVE ── */
