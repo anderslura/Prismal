@@ -3,6 +3,7 @@ import { genererTilbudstekst } from './api/claude.js'
 import Landingsside from './components/Landingsside.jsx'
 import PrismalLogo from './components/PrismalLogo.jsx'
 import { AuthProvider, useAuth } from './contexts/AuthContext.jsx'
+import ErrorBoundary from './components/ErrorBoundary.jsx'
 import { hentFirma } from './api/firmaService.js'
 import { hentMaterialer } from './api/materialService.js'
 
@@ -567,9 +568,11 @@ function AppInnhold() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <AppInnhold />
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <AppInnhold />
+      </AuthProvider>
+    </ErrorBoundary>
   )
 }
 

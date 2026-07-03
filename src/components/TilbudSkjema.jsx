@@ -516,12 +516,11 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
         <section className="skjema-seksjon">
           <h2 className="seksjon-tittel">Miljøavgifter</h2>
 
-          <div className="trans-header">
-            <span>Beskrivelse</span>
-            <span>Antall</span>
-            <span>Kr</span>
-            <span>Sum</span>
-            <span></span>
+          <div className="trans-header miljo-trans-header">
+            <span className="mth-desc">Beskrivelse</span>
+            <span className="mth-ant">Antall</span>
+            <span className="mth-kr">Kr</span>
+            <span className="mth-sum">Sum</span>
           </div>
 
           {(skjema.miljoavgifter || []).map((m) => {

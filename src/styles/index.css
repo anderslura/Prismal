@@ -3818,6 +3818,21 @@ textarea { resize: vertical; }
   gap: 4px;
 }
 
+/* Miljo-seksjons-header: 2-rad grid som matcher miljo-rad nedenfor,
+   slik at «Antall»/«Kr»/«Sum» vises direkte over sine respektive input-felt
+   (ikke over beskrivelsesfeltet som er på rad 1). */
+.miljo-trans-header {
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "desc desc desc desc desc"
+    ".    ant  kr   sum  .   ";
+  row-gap: 4px;
+}
+.miljo-trans-header .mth-desc { grid-area: desc; }
+.miljo-trans-header .mth-ant  { grid-area: ant;  text-align: right; }
+.miljo-trans-header .mth-kr   { grid-area: kr;   text-align: right; }
+.miljo-trans-header .mth-sum  { grid-area: sum; }
+
 /* Miljøavgift-rad: beskrivelsen får hele bredden på egen rad over, med
    antall/pris/sum/slett på raden under — i stedet for å dele samme trange
    1fr-kolonne som resten av .trans-rad. Løser at lengre standardtekster

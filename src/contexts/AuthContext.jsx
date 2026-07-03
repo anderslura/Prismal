@@ -70,10 +70,15 @@ export function AuthProvider({ children }) {
 
     const ny = dbGenerasjoner + 1
     setDbGenerasjoner(ny)
+    // Bruk upsert i stedet for update: nye brukere uten profiles-rad
+    // ville ellers få en stille no-op, slik at telleren aldri persisteres
+    // og gratis-grensen enkelt kan omgås med page-refresh.
     await supabase
       .from('profiles')
-      .update({ generasjoner_brukt: ny })
-      .eq('bruker_id', bruker.id)
+      .upsert(
+        { bruker_id: bruker.id, generasjoner_brukt: ny },
+        { onConflict: 'bruker_id', ignoreDuplicates: false }
+      )
   }
 
   // ── Avledede verdier ─────────────────────────────────────────────────
