@@ -1441,10 +1441,14 @@ textarea { resize: vertical; }
   box-shadow: 0 20px 48px rgba(59,130,246,0.28);
 }
 .l2-hero-cta {
-  margin-top: 40px;
+  margin-top: 32px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+}
+.l2-punkter-hero {
+  grid-template-columns: 1fr;
+  max-width: 480px;
 }
 .l2-badge {
   display: inline-block;

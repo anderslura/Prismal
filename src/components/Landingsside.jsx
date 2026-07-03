@@ -255,14 +255,15 @@ export default function Landingsside({ onStart, onRegistrer }) {
                 Profesjonelle tilbud.<br />
                 <span className="l2-tittel-grad">På minutter.</span>
               </h1>
-              <ul className="l2-punkter">
-                <li>Firmainfo og logo hentes automatisk — samme oversikt på kontor, i bilen eller på mobilen</li>
-                <li>Søk opp lagrede kunder på navn eller mobilnummer — nye kunder lagt til på sekunder</li>
-                <li>Skriv oppdraget med egne ord — AI lager en komplett, profesjonell tilbudstekst</li>
-                <li>Send tilbudet direkte til kunden, med deg på kopi — rett fra bilen, ingen nedlasting</li>
-                <li>Tilbudet viser din nettside og Facebook-side med klikkbare lenker — bygger tillit hos kunden</li>
-                <li>Nettbasert — fungerer på PC, mobil og nettbrett uten installasjon</li>
+              <ul className="l2-punkter l2-punkter-hero">
+                <li>Skriv oppdraget med egne ord — AI lager komplett PDF-tilbud på 2 min</li>
+                <li>Send direkte fra mobilen — ingen installasjon, fungerer rett fra bilen</li>
+                <li>3 gratis tilbud ved registrering — deretter 59 kr/mnd, ingen binding</li>
               </ul>
+              <div className="l2-hero-cta">
+                <button className="l2-cta" onClick={onRegistrer}>Start gratis — 3 tilbud inkludert →</button>
+                <p className="l2-cta-hint">Ingen kredittkort nødvendig</p>
+              </div>
             </div>
 
             <div className="l2-hero-bilde-wrapper">
