@@ -87,14 +87,19 @@ export default function LoginModal({ onLukk, initialModus = 'logginn' }) {
 
             {modus !== 'glemt' && (
               <label>
-                Passord
+                {modus === 'registrer' ? 'Velg et passord for Prismal' : 'Passord'}
                 <input
                   type="password"
                   value={passord}
                   onChange={e => setPassord(e.target.value)}
-                  placeholder={modus === 'registrer' ? 'Minst 6 tegn' : ''}
+                  placeholder={modus === 'registrer' ? 'Velg et passord (minst 6 tegn)' : ''}
                   required
                 />
+                {modus === 'registrer' && (
+                  <p style={{fontSize:'12px',color:'#94a3b8',marginTop:'5px',marginBottom:0}}>
+                    Dette er et nytt passord du velger selv — ikke passordet til e-posten din.
+                  </p>
+                )}
               </label>
             )}
 
