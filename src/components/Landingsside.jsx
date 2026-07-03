@@ -1,6 +1,5 @@
 /* ── Landingsside v5 — lys, moderne, demo-karusell ── */
 import { useState, useEffect, useRef, lazy, Suspense } from 'react'
-import PrismalLogo from './PrismalLogo.jsx'
 const DemoSlideshow = lazy(() => import('./DemoSlideshow'))
 
 const FAQ_LISTE = [
@@ -299,9 +298,6 @@ export default function Landingsside({ onStart, onRegistrer }) {
         <div className="l2-pro-solo">
           <div className="l2-pro-solo-topp">
             <div>
-              <div className="l2-pris-logo-wrapper">
-                <PrismalLogo />
-              </div>
               <div className="l2-plan-navn">Prismal Pro</div>
               <div className="l2-plan-pris l2-plan-pris-gull">59 <span>kr / mnd</span></div>
             </div>
