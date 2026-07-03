@@ -297,7 +297,6 @@ export default function Landingsside({ onStart, onRegistrer }) {
         <p className="l2-pris-overst">Enkel prising</p>
         <h2 className="l2-pris-tittel">Prøv gratis. Fortsett når du er klar.</h2>
         <div className="l2-pro-solo">
-          <div className="l2-anbefalt-badge">✦ Anbefalt</div>
           <div className="l2-pro-solo-topp">
             <div>
               <div className="l2-pris-logo-wrapper">
@@ -311,7 +310,7 @@ export default function Landingsside({ onStart, onRegistrer }) {
               <div className="l2-trial-tekst">gratis tilbud<br/>ved registrering</div>
             </div>
           </div>
-          <p className="l2-plan-roi">Én vunnet jobb dekker abonnementet i godt over et år.</p>
+          <p className="l2-plan-roi">Én glemt kostnadspost i ett tilbud dekker abonnementet i måneder — én vunnet jobb betaler det for et år.</p>
           <div className="l2-pro-kolonner">
             <ul className="l2-plan-liste">
               <li className="ok">Tilbud klart på minutter — fra bilen etter befaringen</li>
