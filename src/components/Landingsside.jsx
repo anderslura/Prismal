@@ -5,7 +5,7 @@ const DemoSlideshow = lazy(() => import('./DemoSlideshow'))
 const FAQ_LISTE = [
   {
     sp: 'Hva koster Prismal?',
-    sv: 'Du starter gratis og får 3 fulle tilbud med alle funksjoner — ingen kredittkort nødvendig. Etter det koster Prismal Pro 59 kr/mnd — lanseringspris. Ingen bindingstid, avslutt når du vil.'
+    sv: 'Du starter gratis og får 3 fulle tilbud med alle funksjoner — ingen kredittkort nødvendig. Etter det koster Prismal Pro 59 kr/mnd. Ingen bindingstid, avslutt når du vil.'
   },
   {
     sp: 'Kan jeg bruke min egen logo og firmainformasjon?',
@@ -64,110 +64,6 @@ function FaqSeksjon() {
   )
 }
 
-function TidligKundeSeksjon() {
-  const [kopiert, setKopiert] = useState(false)
-  const kode = 'TIDLIG40'
-
-  const kopierKode = async () => {
-    try {
-      await navigator.clipboard.writeText(kode)
-    } catch {
-      // Fallback for nettlesere uten Clipboard API-støtte
-      const temp = document.createElement('textarea')
-      temp.value = kode
-      temp.style.position = 'fixed'
-      temp.style.opacity = '0'
-      document.body.appendChild(temp)
-      temp.select()
-      try { document.execCommand('copy') } catch {}
-      document.body.removeChild(temp)
-    }
-    setKopiert(true)
-    setTimeout(() => setKopiert(false), 2000)
-  }
-
-  return (
-    <div className="l2-tidlig-card">
-      <div className="l2-tidlig-inner">
-        <div className="l2-tidlig-tekst">
-          <p className="l2-tidlig-emoji">🎉</p>
-          <h2 className="l2-tidlig-tittel">Prismal er nå lansert!</h2>
-          <p className="l2-tidlig-body">
-            Vi har akkurat startet annonsering i Stavanger-regionen — neste byer står for tur.
-            Prismal er åpent for alle håndverkere i hele Norge, uansett hvor du holder til.
-          </p>
-          <p className="l2-tidlig-frist">
-            Som en av våre første 40 kunder får du <strong>40 % rabatt i 6 måneder.</strong> Først til mølla.
-          </p>
-        </div>
-        <div className="l2-tidlig-kode-boks">
-          <span className="l2-tidlig-kode-label">Rabattkode</span>
-          <div className="l2-tidlig-kode-rad">
-            <code className="l2-tidlig-kode">{kode}</code>
-            <button
-              type="button"
-              className={`l2-tidlig-kopier${kopiert ? ' kopiert' : ''}`}
-              onClick={kopierKode}
-              aria-label="Kopier rabattkode"
-            >
-              {kopiert ? (
-                <>
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                    <path d="M3 8.5l3.5 3.5L13 4.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  Kopiert
-                </>
-              ) : (
-                <>
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                    <rect x="5.5" y="5.5" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.4"/>
-                    <path d="M3.5 10V3.5A1.5 1.5 0 015 2h6.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
-                  </svg>
-                  Kopier
-                </>
-              )}
-            </button>
-          </div>
-          <p className="l2-tidlig-kode-hint">Brukes ved oppgradering til Pro · gjelder i 6 måneder</p>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function TestimonialSeksjon({ onRegistrer }) {
-  return (
-    <section className="l2-testimonial">
-      <div className="l2-testimonial-inner">
-        <div className="l2-testimonial-kort">
-          <div className="l2-testimonial-foto-wrapper">
-            <img
-              src="/magnus_lura.jpg"
-              alt="Magnus Lura — Bygg og Graving AS"
-              className="l2-testimonial-foto"
-            />
-          </div>
-          <div className="l2-testimonial-innhold">
-            <div className="l2-testimonial-sitattegn">"</div>
-            <blockquote className="l2-testimonial-sitat">
-              Med Prismal er tilbudet klart rett etter befaringen. Ryddigere, mer profesjonelt og raskere enn noe jeg har brukt før — og kundene merker det.
-            </blockquote>
-            <div className="l2-testimonial-person">
-              <span className="l2-testimonial-navn">Magnus Lura</span>
-              <span className="l2-testimonial-firma">Bygg og Graving AS</span>
-            </div>
-          </div>
-        </div>
-        <button className="l2-cta l2-testimonial-cta" onClick={onRegistrer}>
-          Prøv gratis — 3 tilbud uten kredittkort
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{marginLeft:8}}>
-            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </button>
-      </div>
-    </section>
-  )
-}
 
 function IkonLyn() {
   return (
@@ -365,9 +261,6 @@ export default function Landingsside({ onStart, onRegistrer }) {
             </div>
           </div>
 
-          {/* ── TIDLIG KUNDE / LANSERING — over CTA, ikke til å misse ── */}
-          <TidligKundeSeksjon />
-
           {/* CTA — sentrert under */}
           <div className="l2-hero-cta">
             <div className="l2-cta-rad">
@@ -403,6 +296,57 @@ export default function Landingsside({ onStart, onRegistrer }) {
 
       {/* ── TESTIMONIAL ── */}
       <TestimonialSeksjon onRegistrer={onRegistrer} />
+
+      {/* ── PRIS ── */}
+      <section className="l2-pris">
+        <p className="l2-pris-overst">Enkel prising</p>
+        <h2 className="l2-pris-tittel">Prøv gratis. Fortsett når du er klar.</h2>
+        <div className="l2-pro-solo">
+          <div className="l2-pro-solo-topp">
+            <div>
+              <div className="l2-plan-navn">Prismal Pro</div>
+              <div className="l2-plan-pris l2-plan-pris-gull">59 <span>kr / mnd</span></div>
+            </div>
+            <div className="l2-trial-boks">
+              <div className="l2-trial-tall">3</div>
+              <div className="l2-trial-tekst">gratis tilbud<br/>ved registrering</div>
+            </div>
+          </div>
+          <p className="l2-plan-sub">
+            Registrer deg gratis — ingen kredittkort. Du får 3 fulle tilbud med alle funksjoner: 
+            firmalogo, kundedatabase og materialbibliotek. Deretter 59 kr/mnd. 
+            Ingen bindingstid — avslutt når du vil.
+          </p>
+          <p className="l2-plan-roi">Én vunnet jobb dekker abonnementet i godt over et år.</p>
+          <div className="l2-pro-kolonner">
+            <ul className="l2-plan-liste">
+              <li className="ok">Ubegrenset antall tilbud</li>
+              <li className="ok">AI-generert tilbudstekst</li>
+              <li className="ok">PDF med klikkbar nettside- og Facebook-lenke</li>
+              <li className="ok">Kundedatabase med søk</li>
+              <li className="ok">Materialbibliotek med priser</li>
+            </ul>
+            <ul className="l2-plan-liste">
+              <li className="ok">Påslagskalkulator</li>
+              <li className="ok">Last ned eller send PDF — ett klikk</li>
+              <li className="ok">Se tilbudet slik kunden ser det før du sender</li>
+              <li className="ok">Skybasert — logg inn fra mobil, nettbrett og PC</li>
+              <li className="ok">All info på din konto — alltid tilgjengelig</li>
+            </ul>
+          </div>
+          <button className="l2-btn-pro" onClick={onRegistrer}>
+            Registrer deg og start gratis
+          </button>
+          <div className="l2-garantier">
+            <span>✓ Ingen bindingstid</span>
+            <span>✓ Avslutt når du vil</span>
+            <span>✓ Ingen skjulte kostnader</span>
+          </div>
+          <p className="l2-pris-sammenligning">
+            Tilsvarende løsninger koster 299–499 kr/mnd. Prismal: 59 kr.
+          </p>
+        </div>
+      </section>
 
       {/* ── PITCH ── */}
       <section className="l2-pitch">
@@ -469,57 +413,6 @@ export default function Landingsside({ onStart, onRegistrer }) {
       {/* ── FAQ ── */}
       <FaqSeksjon />
 
-      {/* ── PRIS ── */}
-      <section className="l2-pris">
-        <p className="l2-pris-overst">Enkel prising</p>
-        <h2 className="l2-pris-tittel">Prøv gratis. Fortsett når du er klar.</h2>
-        <div className="l2-pro-solo">
-          <div className="l2-pro-solo-topp">
-            <div>
-              <div className="l2-plan-navn">Prismal Pro</div>
-              <div className="l2-plan-pris l2-plan-pris-gull">59 <span>kr / mnd</span></div>
-              <div className="l2-plan-lanseringspris">Lanseringspris — øker etter hvert som vi vokser</div>
-            </div>
-            <div className="l2-trial-boks">
-              <div className="l2-trial-tall">3</div>
-              <div className="l2-trial-tekst">gratis tilbud<br/>ved registrering</div>
-            </div>
-          </div>
-          <p className="l2-plan-sub">
-            Registrer deg gratis — ingen kredittkort. Du får 3 fulle tilbud med alle funksjoner: 
-            firmalogo, kundedatabase og materialbibliotek. Deretter 59 kr/mnd. 
-            Ingen bindingstid — avslutt når du vil.
-          </p>
-          <p className="l2-plan-roi">Én vunnet jobb dekker abonnementet i godt over et år.</p>
-          <div className="l2-pro-kolonner">
-            <ul className="l2-plan-liste">
-              <li className="ok">Ubegrenset antall tilbud</li>
-              <li className="ok">AI-generert tilbudstekst</li>
-              <li className="ok">PDF med klikkbar nettside- og Facebook-lenke</li>
-              <li className="ok">Kundedatabase med søk</li>
-              <li className="ok">Materialbibliotek med priser</li>
-            </ul>
-            <ul className="l2-plan-liste">
-              <li className="ok">Påslagskalkulator</li>
-              <li className="ok">Last ned eller send PDF — ett klikk</li>
-              <li className="ok">Se tilbudet slik kunden ser det før du sender</li>
-              <li className="ok">Skybasert — logg inn fra mobil, nettbrett og PC</li>
-              <li className="ok">All info på din konto — alltid tilgjengelig</li>
-            </ul>
-          </div>
-          <button className="l2-btn-pro" onClick={onRegistrer}>
-            Registrer deg og start gratis
-          </button>
-          <div className="l2-garantier">
-            <span>✓ Ingen bindingstid</span>
-            <span>✓ Avslutt når du vil</span>
-            <span>✓ Ingen skjulte kostnader</span>
-          </div>
-          <p className="l2-pris-sammenligning">
-            Tilsvarende løsninger koster 299–499 kr/mnd. Prismal: 59 kr.
-          </p>
-        </div>
-      </section>
 
       {/* ── LIGHTBOX ── */}
       {lightbox && (
