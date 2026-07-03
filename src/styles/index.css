@@ -3755,7 +3755,8 @@ textarea { resize: vertical; }
   margin-bottom: 2px;
 }
 .trans-header span:nth-child(2),
-.trans-header span:nth-child(3) { text-align: right; }
+.trans-header span:nth-child(3),
+.trans-header span:nth-child(4) { text-align: right; padding-right: 6px; }
 .trans-rad:last-of-type { border-bottom: none; }
 .trans-navn { font-size: 13px; font-weight: 500; }
 .trans-input {
@@ -3829,9 +3830,9 @@ textarea { resize: vertical; }
   row-gap: 4px;
 }
 .miljo-trans-header .mth-desc { grid-area: desc; }
-.miljo-trans-header .mth-ant  { grid-area: ant;  text-align: right; }
-.miljo-trans-header .mth-kr   { grid-area: kr;   text-align: right; }
-.miljo-trans-header .mth-sum  { grid-area: sum; }
+.miljo-trans-header .mth-ant  { grid-area: ant;  text-align: right; padding-right: 6px; }
+.miljo-trans-header .mth-kr   { grid-area: kr;   text-align: right; padding-right: 6px; }
+.miljo-trans-header .mth-sum  { grid-area: sum;  text-align: right; padding-right: 6px; }
 
 /* Miljøavgift-rad: beskrivelsen får hele bredden på egen rad over, med
    antall/pris/sum/slett på raden under — i stedet for å dele samme trange
