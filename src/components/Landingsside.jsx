@@ -296,6 +296,7 @@ export default function Landingsside({ onStart, onRegistrer }) {
         <p className="l2-pris-overst">Enkel prising</p>
         <h2 className="l2-pris-tittel">Prøv gratis. Fortsett når du er klar.</h2>
         <div className="l2-pro-solo">
+          <div className="l2-anbefalt-badge">✦ Anbefalt</div>
           <div className="l2-pro-solo-topp">
             <div>
               <div className="l2-plan-navn">Prismal Pro</div>
