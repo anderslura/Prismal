@@ -3029,6 +3029,8 @@ textarea { resize: vertical; }
 }
 
 .modal-form input {
+  width: 100%;
+  box-sizing: border-box;
   padding: 0.65rem 0.85rem;
   border-radius: 8px;
   border: 1px solid #374151;
