@@ -89,7 +89,7 @@ export default function LoginModal({ onLukk, initialModus = 'logginn' }) {
             {modus !== 'glemt' && (
               <label>
                 {modus === 'registrer' ? 'Velg et passord for Prismal' : 'Passord'}
-                <div style={{position:'relative'}}>
+                <div style={{position:'relative', display:'block', width:'100%'}}>
                   <input
                     type={visPassord ? 'text' : 'password'}
                     value={passord}
