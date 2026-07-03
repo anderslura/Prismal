@@ -167,7 +167,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
             {isPro ? (
               <input type="text" placeholder="Ola Nordmann AS" value={skjema.firmanavn} onChange={e => oppdater('firmanavn', e.target.value)} />
             ) : (
-              <div className="pro-locked">🔒 Tilgjengelig på Pro — <a href="#" className="pro-lenke" onClick={e => { e.preventDefault(); onOppgrader() }}>Oppgrader (99 kr/mnd)</a></div>
+              <div className="pro-locked">🔒 Tilgjengelig på Pro — <a href="#" className="pro-lenke" onClick={e => { e.preventDefault(); onOppgrader() }}>Oppgrader (59 kr/mnd)</a></div>
             )}
           </div>
           <div className="felt-rad">
@@ -243,7 +243,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                 )}
               </div>
             ) : (
-              <div className="pro-locked">🔒 Tilgjengelig på Pro-plan (99 kr/mnd)</div>
+              <div className="pro-locked">🔒 Tilgjengelig på Pro-plan (59 kr/mnd)</div>
             )}
           </div>
           {isPro && (
