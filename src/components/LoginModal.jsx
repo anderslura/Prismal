@@ -97,7 +97,7 @@ export default function LoginModal({ onLukk, initialModus = 'logginn' }) {
                 />
                 {modus === 'registrer' && (
                   <p style={{fontSize:'12px',color:'#94a3b8',marginTop:'5px',marginBottom:0}}>
-                    Dette er et nytt passord du velger selv — ikke passordet til e-posten din.
+                    Velg et passord kun for Prismal — trenger ikke være det samme som e-postpassordet ditt.
                   </p>
                 )}
               </label>
