@@ -5,7 +5,7 @@ const DemoSlideshow = lazy(() => import('./DemoSlideshow'))
 const FAQ_LISTE = [
   {
     sp: 'Hva koster Prismal?',
-    sv: 'Du starter gratis og får 3 fulle tilbud med alle funksjoner — ingen kredittkort nødvendig. Etter det koster Prismal Pro 99 kr/mnd. Ingen bindingstid, avslutt når du vil.'
+    sv: 'Du starter gratis og får 3 fulle tilbud med alle funksjoner — ingen kredittkort nødvendig. Etter det koster Prismal Pro 59 kr/mnd — lanseringspris. Ingen bindingstid, avslutt når du vil.'
   },
   {
     sp: 'Kan jeg bruke min egen logo og firmainformasjon?',
@@ -477,7 +477,8 @@ export default function Landingsside({ onStart, onRegistrer }) {
           <div className="l2-pro-solo-topp">
             <div>
               <div className="l2-plan-navn">Prismal Pro</div>
-              <div className="l2-plan-pris l2-plan-pris-gull">99 <span>kr / mnd</span></div>
+              <div className="l2-plan-pris l2-plan-pris-gull">59 <span>kr / mnd</span></div>
+              <div className="l2-plan-lanseringspris">Lanseringspris — øker etter hvert som vi vokser</div>
             </div>
             <div className="l2-trial-boks">
               <div className="l2-trial-tall">3</div>
@@ -486,7 +487,7 @@ export default function Landingsside({ onStart, onRegistrer }) {
           </div>
           <p className="l2-plan-sub">
             Registrer deg gratis — ingen kredittkort. Du får 3 fulle tilbud med alle funksjoner: 
-            firmalogo, kundedatabase og materialbibliotek. Deretter 99 kr/mnd. 
+            firmalogo, kundedatabase og materialbibliotek. Deretter 59 kr/mnd. 
             Ingen bindingstid — avslutt når du vil.
           </p>
           <p className="l2-plan-roi">Én vunnet jobb dekker abonnementet i godt over et år.</p>
@@ -515,7 +516,7 @@ export default function Landingsside({ onStart, onRegistrer }) {
             <span>✓ Ingen skjulte kostnader</span>
           </div>
           <p className="l2-pris-sammenligning">
-            Tilsvarende løsninger koster 299–499 kr/mnd. Prismal: 99 kr.
+            Tilsvarende løsninger koster 299–499 kr/mnd. Prismal: 59 kr.
           </p>
         </div>
       </section>

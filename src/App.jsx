@@ -455,7 +455,7 @@ function AppInnhold() {
             </span>
           )}
           <button className="btn-pro-oppgrader" onClick={() => setVisOppgrader(true)}>
-            Oppgrader til Pro — 99 kr/mnd
+            Oppgrader til Pro — 59 kr/mnd
           </button>
         </div>
       )}
@@ -544,7 +544,7 @@ function AppInnhold() {
               <li>✓ Ingen Prismal-branding</li>
               <li>✓ Lagrede prislinjer og historikk</li>
             </ul>
-            <div className="oppgrader-pris">99 kr <span>/mnd</span></div>
+            <div className="oppgrader-pris">59 kr <span>/mnd</span></div>
             <button
               className="btn btn-primary"
               style={{ width: '100%', padding: '12px', fontSize: '15px' }}
