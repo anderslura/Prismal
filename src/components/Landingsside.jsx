@@ -306,28 +306,22 @@ export default function Landingsside({ onStart, onRegistrer }) {
               <div className="l2-trial-tekst">gratis tilbud<br/>ved registrering</div>
             </div>
           </div>
-          <p className="l2-plan-sub">
-            Registrer deg gratis — ingen kredittkort. Du får 3 fulle tilbud med alle funksjoner: 
-            firmalogo, kundedatabase og materialbibliotek. Deretter 59 kr/mnd. 
-            Ingen bindingstid — avslutt når du vil.
-          </p>
           <p className="l2-plan-roi">Én vunnet jobb dekker abonnementet i godt over et år.</p>
           <div className="l2-pro-kolonner">
             <ul className="l2-plan-liste">
-              <li className="ok">Ubegrenset antall tilbud</li>
-              <li className="ok">AI-generert tilbudstekst</li>
-              <li className="ok">PDF med klikkbar nettside- og Facebook-lenke</li>
-              <li className="ok">Kundedatabase med søk</li>
-              <li className="ok">Materialbibliotek med priser</li>
+              <li className="ok">Tilbud klart på minutter — fra bilen etter befaringen</li>
+              <li className="ok">AI skriver profesjonell tilbudstekst for deg</li>
+              <li className="ok">PDF med logo, pristabell og klikkbare lenker</li>
             </ul>
             <ul className="l2-plan-liste">
-              <li className="ok">Påslagskalkulator</li>
-              <li className="ok">Last ned eller send PDF — ett klikk</li>
-              <li className="ok">Se tilbudet slik kunden ser det før du sender</li>
-              <li className="ok">Skybasert — logg inn fra mobil, nettbrett og PC</li>
-              <li className="ok">All info på din konto — alltid tilgjengelig</li>
+              <li className="ok">Send direkte til kunden — ett klikk</li>
+              <li className="ok">Kundedatabase og materialbibliotek</li>
+              <li className="ok">Fungerer på mobil, nettbrett og PC</li>
             </ul>
           </div>
+          <p className="l2-pris-sammenligning-topp">
+            Tilsvarende løsninger koster 299–499 kr/mnd. <strong>Prismal: 59 kr.</strong>
+          </p>
           <button className="l2-btn-pro" onClick={onRegistrer}>
             Registrer deg og start gratis
           </button>
@@ -336,9 +330,6 @@ export default function Landingsside({ onStart, onRegistrer }) {
             <span>✓ Avslutt når du vil</span>
             <span>✓ Ingen skjulte kostnader</span>
           </div>
-          <p className="l2-pris-sammenligning">
-            Tilsvarende løsninger koster 299–499 kr/mnd. Prismal: 59 kr.
-          </p>
         </div>
       </section>
 
