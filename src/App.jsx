@@ -1,16 +1,17 @@
-import { useState, useEffect } from 'react'
-import TilbudSkjema from './components/TilbudSkjema.jsx'
-import TilbudPreview from './components/TilbudPreview.jsx'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { genererTilbudstekst } from './api/claude.js'
-import { lastNedPDF } from './api/pdf.js'
 import Landingsside from './components/Landingsside.jsx'
-import SendteHistorikk from './components/SendteHistorikk.jsx'
-import PersonvernModal from './components/PersonvernModal.jsx'
 import PrismalLogo from './components/PrismalLogo.jsx'
-import LoginModal from './components/LoginModal.jsx'
 import { AuthProvider, useAuth } from './contexts/AuthContext.jsx'
 import { hentFirma } from './api/firmaService.js'
 import { hentMaterialer } from './api/materialService.js'
+
+// Lazy-loaded: vises aldri på landingssiden — holdes ute av initial bundle
+const TilbudSkjema    = lazy(() => import('./components/TilbudSkjema.jsx'))
+const TilbudPreview   = lazy(() => import('./components/TilbudPreview.jsx'))
+const SendteHistorikk = lazy(() => import('./components/SendteHistorikk.jsx'))
+const LoginModal      = lazy(() => import('./components/LoginModal.jsx'))
+const PersonvernModal = lazy(() => import('./components/PersonvernModal.jsx'))
 
 const TOM_SKJEMA = {
   firmanavn: '', firmaTelefon: '', firmaEpost: '', firmaAdresse: '',
@@ -460,6 +461,7 @@ function AppInnhold() {
       )}
 
       <main className={`app-main${steg === 'landing' ? ' app-main--landing' : ''}`}>
+        <Suspense fallback={<div className="auth-laster">Laster...</div>}>
         {steg === 'landing' ? (
           <Landingsside onStart={() => bruker ? setSteg('skjema') : setVisLogin('registrer')} onRegistrer={() => bruker ? setSteg('skjema') : setVisLogin('registrer')} />
         ) : steg === 'skjema' ? (
@@ -480,13 +482,17 @@ function AppInnhold() {
           <TilbudPreview
             skjema={skjema}
             oppdaterTekst={(tekst) => oppdater('tilbudstekst', tekst)}
-            onLastNed={async () => await lastNedPDF(skjema, isPro)}
+            onLastNed={async () => {
+            const { lastNedPDF } = await import('./api/pdf.js')
+            await lastNedPDF(skjema, isPro)
+          }}
             onTilbake={() => setSteg('skjema')}
             onNyttTilbud={nullstill}
             isPro={isPro}
             bruker={bruker}
           />
         )}
+        </Suspense>
       </main>
 
       <footer className="app-footer">
@@ -512,10 +518,16 @@ function AppInnhold() {
         </p>
       </footer>
 
-      {visLogin && <LoginModal onLukk={() => setVisLogin(false)} initialModus={visLogin} />}
+      {visLogin && (
+        <Suspense fallback={null}>
+          <LoginModal onLukk={() => setVisLogin(false)} initialModus={visLogin} />
+        </Suspense>
+      )}
 
       {visPersonvern && (
-        <PersonvernModal side={visPersonvern} onLukk={() => setVisPersonvern(null)} />
+        <Suspense fallback={null}>
+          <PersonvernModal side={visPersonvern} onLukk={() => setVisPersonvern(null)} />
+        </Suspense>
       )}
 
       {/* Oppgrader til Pro — modal */}

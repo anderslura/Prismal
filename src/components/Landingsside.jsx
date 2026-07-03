@@ -1,6 +1,6 @@
 /* ── Landingsside v5 — lys, moderne, demo-karusell ── */
-import { useState, useEffect, useRef } from 'react'
-import DemoSlideshow from './DemoSlideshow'
+import { useState, useEffect, useRef, lazy, Suspense } from 'react'
+const DemoSlideshow = lazy(() => import('./DemoSlideshow'))
 
 const FAQ_LISTE = [
   {
@@ -460,7 +460,9 @@ export default function Landingsside({ onStart, onRegistrer }) {
 
       {/* ── DEMO KARUSELL ── */}
       <div id="demo">
-        <DemoSlideshow />
+        <Suspense fallback={<div style={{minHeight:'200px'}}/>}>
+          <DemoSlideshow />
+        </Suspense>
       </div>
 
 
