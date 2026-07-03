@@ -246,13 +246,14 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
               <div className="pro-locked">🔒 Tilgjengelig på Pro-plan (59 kr/mnd)</div>
             )}
           </div>
-          {isPro && (
+          {(
             <div className="firma-knapp-rad">
               <div className="firma-knapp-primær">
                 <button
-                  className={`btn-firma-lagre${firmaStatus === 'ok' ? ' lagret' : firmaStatus === 'feil' ? ' feil' : ''}`}
-                  disabled={firmaStatus === 'laster'}
+                  className={`btn-firma-lagre${firmaStatus === 'ok' ? ' lagret' : firmaStatus === 'feil' ? ' feil' : ''}${!isPro ? ' pro-locked-btn' : ''}`}
+                  disabled={firmaStatus === 'laster' || !isPro}
                   onClick={async () => {
+                    if (!isPro) { onOppgrader(); return }
                     setFirmaStatus('laster')
                     try {
                       await lagreFirma({
@@ -271,11 +272,13 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                     }
                   }}
                 >
-                  {firmaStatus === 'laster' ? 'Lagrer…' : firmaStatus === 'ok' ? '✓ Lagret' : firmaStatus === 'feil' ? 'Feil – prøv igjen' : 'Lagre bedriftsprofil'}
+                  {!isPro ? '🔒 Lagre bedriftsprofil' : firmaStatus === 'laster' ? 'Lagrer…' : firmaStatus === 'ok' ? '✓ Lagret' : firmaStatus === 'feil' ? 'Feil – prøv igjen' : 'Lagre bedriftsprofil'}
                 </button>
                 <button
-                  className="btn-firma-hent"
+                  className={`btn-firma-hent${!isPro ? ' pro-locked-btn' : ''}`}
+                  disabled={!isPro}
                   onClick={async () => {
+                    if (!isPro) { onOppgrader(); return }
                     try {
                       const f = await hentFirma()
                       if (!f) return alert('Ingen lagret profil funnet.')
@@ -291,7 +294,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                       if (f.facebook_url)  oppdater('firmaFacebookUrl',  f.facebook_url)
                     } catch (e) { console.error('Hent firma feilet:', e) }
                   }}
-                >↩ Hent lagret profil</button>
+                >{!isPro ? '🔒 Hent lagret profil' : '↩ Hent lagret profil'}</button>
               </div>
               <div className="firma-knapp-sekundær">
                 <button

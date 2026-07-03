@@ -3583,6 +3583,12 @@ textarea { resize: vertical; }
 .btn-firma-lagre:disabled { opacity: 0.5; cursor: not-allowed; }
 .btn-firma-lagre.lagret { background: #16a34a; }
 .btn-firma-lagre.feil    { background: #dc2626; }
+.btn-firma-lagre.pro-locked-btn,
+.btn-firma-hent.pro-locked-btn {
+  opacity: 0.55;
+  cursor: pointer;
+  filter: grayscale(0.3);
+}
 /* Sekundær: Hent lagret */
 .btn-firma-hent {
   padding: 0.5rem 1.1rem;
