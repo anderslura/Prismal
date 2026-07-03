@@ -84,9 +84,6 @@ function TestimonialSeksjon({ onRegistrer }) {
             </div>
           </div>
         </div>
-        <button className="l2-cta l2-testimonial-cta" onClick={onRegistrer}>
-          Prøv gratis — 3 tilbud uten kredittkort
-        </button>
       </div>
     </section>
   )

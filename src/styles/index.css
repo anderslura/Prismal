@@ -2022,24 +2022,25 @@ textarea { resize: vertical; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: rgba(99,102,241,0.14);
-  border: 1px solid rgba(99,102,241,0.28);
+  background: rgba(22,163,74,0.18);
+  border: 1.5px solid rgba(22,163,74,0.5);
   border-radius: 14px;
-  padding: 10px 16px;
+  padding: 12px 20px;
   text-align: center;
   flex-shrink: 0;
 }
 .l2-trial-tall {
-  font-size: 34px;
+  font-size: 38px;
   font-weight: 800;
-  color: #a5b4fc;
+  color: #4ade80;
   line-height: 1;
 }
 .l2-trial-tekst {
-  font-size: 10.5px;
-  color: #7c8db5;
+  font-size: 11.5px;
+  color: #86efac;
+  font-weight: 600;
   line-height: 1.35;
-  margin-top: 3px;
+  margin-top: 4px;
 }
 .l2-plan-navn {
   font-size: 13px;
@@ -2144,9 +2145,9 @@ textarea { resize: vertical; }
   margin: 10px 0 8px;
 }
 .l2-garantier span {
-  font-size: 11.5px;
-  color: #64748b;
-  font-weight: 500;
+  font-size: 12.5px;
+  color: #94a3b8;
+  font-weight: 600;
 }
 
 /* ── RESPONSIVE ── */
