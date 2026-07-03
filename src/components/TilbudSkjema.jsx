@@ -304,27 +304,31 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                     localStorage.removeItem('firma'); localStorage.removeItem('logoUrl')
                   }}
                 >Nullstill felt</button>
-                <span className="firma-skillelinje">|</span>
-                <button
-                  className={`firma-lenke roed${firmaSlett === 'bekreft' ? ' bekreft' : ''}`}
-                  disabled={firmaSlett === 'laster'}
-                  onClick={async () => {
-                    if (firmaSlett !== 'bekreft') {
-                      setFirmaSlett('bekreft')
-                      setTimeout(() => setFirmaSlett(p => p === 'bekreft' ? '' : p), 4000)
-                      return
-                    }
-                    setFirmaSlett('laster')
-                    try {
-                      await slettFirma()
-                      ;['firmanavn','firmaTelefon','firmaEpost','firmaAdresse','firmaOrgnr','firmaNettside','firmaFacebookNavn','firmaFacebookUrl','logoUrl'].forEach(f => oppdater(f, ''))
-                      localStorage.removeItem('firma'); localStorage.removeItem('logoUrl')
-                    } catch (e) { console.error(e) }
-                    setFirmaSlett('')
-                  }}
-                >
-                  {firmaSlett === 'bekreft' ? 'Bekreft sletting?' : firmaSlett === 'laster' ? 'Sletter…' : 'Slett fra sky'}
-                </button>
+                {isPro && (
+                  <>
+                    <span className="firma-skillelinje">|</span>
+                    <button
+                      className={`firma-lenke roed${firmaSlett === 'bekreft' ? ' bekreft' : ''}`}
+                      disabled={firmaSlett === 'laster'}
+                      onClick={async () => {
+                        if (firmaSlett !== 'bekreft') {
+                          setFirmaSlett('bekreft')
+                          setTimeout(() => setFirmaSlett(p => p === 'bekreft' ? '' : p), 4000)
+                          return
+                        }
+                        setFirmaSlett('laster')
+                        try {
+                          await slettFirma()
+                          ;['firmanavn','firmaTelefon','firmaEpost','firmaAdresse','firmaOrgnr','firmaNettside','firmaFacebookNavn','firmaFacebookUrl','logoUrl'].forEach(f => oppdater(f, ''))
+                          localStorage.removeItem('firma'); localStorage.removeItem('logoUrl')
+                        } catch (e) { console.error(e) }
+                        setFirmaSlett('')
+                      }}
+                    >
+                      {firmaSlett === 'bekreft' ? 'Bekreft sletting?' : firmaSlett === 'laster' ? 'Sletter…' : 'Slett fra sky'}
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           )}
