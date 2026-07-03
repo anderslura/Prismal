@@ -2147,15 +2147,11 @@ textarea { resize: vertical; }
   margin-bottom: 20px;
 }
 .l2-plan-roi {
-  font-size: 13.5px;
-  font-weight: 700;
-  color: #818cf8;
+  font-size: 13px;
+  font-weight: 400;
+  color: #ffffff;
   margin: 0 0 22px;
-  padding: 10px 14px;
-  background: rgba(99,102,241,0.10);
-  border-left: 3px solid #6366f1;
-  border-radius: 0 8px 8px 0;
-  display: inline-block;
+  line-height: 1.65;
 }
 .l2-pro-kolonner {
   display: grid;

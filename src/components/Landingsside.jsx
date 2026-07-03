@@ -306,7 +306,7 @@ export default function Landingsside({ onStart, onRegistrer }) {
               <div className="l2-trial-tekst">gratis tilbud<br/>ved registrering</div>
             </div>
           </div>
-          <p className="l2-plan-roi">Én glemt kostnadspost i ett tilbud dekker abonnementet i måneder — én vunnet jobb betaler det for et år.</p>
+          <p className="l2-plan-roi">Glemmer du transport eller påslag på ett tilbud? Det kan koste mer enn måneder med Prismal.<br/>Én vunnet jobb betaler abonnementet — mange ganger over.</p>
           <div className="l2-pro-kolonner">
             <ul className="l2-plan-liste">
               <li className="ok">Tilbud klart på minutter — fra bilen etter befaringen</li>
