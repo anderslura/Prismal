@@ -2,9 +2,12 @@ import { supabase } from '../lib/supabase.js'
 
 // Hent firmaprofil for innlogget bruker
 export async function hentFirma() {
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return null
   const { data, error } = await supabase
     .from('firma')
     .select('*')
+    .eq('bruker_id', user.id)
     .maybeSingle()
   if (error) throw error
   return data
