@@ -288,36 +288,6 @@ export default function Landingsside({ onStart, onRegistrer }) {
             </div>
           </div>
 
-          {/* CTA — sentrert under */}
-          <div className="l2-hero-cta">
-            <div className="l2-cta-rad">
-              <div className="l2-cta-alternativ">
-                <p className="l2-gratis-badge">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <path d="M3 8.5l3.5 3.5L13 4.5" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  3 gratis tilbud — ingen kredittkort, ingen bindingstid
-                </p>
-                <button className="l2-cta" onClick={onRegistrer}>
-                  Registrer deg gratis
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{marginLeft:6}}>
-                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </button>
-              </div>
-              <span className="l2-cta-eller">eller</span>
-              <div className="l2-cta-alternativ">
-                <button className="l2-cta-sekundaer" onClick={scrollTilDemo}>
-                  Se hvordan det fungerer
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style={{marginLeft:6}}>
-                    <path d="M8 3v9M4 8l4 4 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </button>
-                <p className="l2-cta-hint l2-cta-hint-sek">Ingen registrering nødvendig</p>
-              </div>
-            </div>
-          </div>
-
         </div>
       </section>
 
@@ -374,6 +344,17 @@ export default function Landingsside({ onStart, onRegistrer }) {
           </p>
         </div>
       </section>
+
+      {/* ── SE DEMO-KNAPP ── */}
+      <div className="l2-se-demo-wrapper">
+        <button className="l2-cta-sekundaer" onClick={scrollTilDemo}>
+          Se hvordan det fungerer
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style={{marginLeft:6}}>
+            <path d="M8 3v9M4 8l4 4 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+        <p className="l2-cta-hint">Ingen registrering nødvendig</p>
+      </div>
 
       {/* ── PITCH ── */}
       <section className="l2-pitch">
