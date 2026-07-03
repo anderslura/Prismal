@@ -65,6 +65,33 @@ function FaqSeksjon() {
 }
 
 
+function TestimonialSeksjon({ onRegistrer }) {
+  return (
+    <section className="l2-testimonial">
+      <div className="l2-testimonial-inner">
+        <div className="l2-testimonial-kort">
+          <div className="l2-testimonial-foto-wrapper">
+            <img src="/magnus_lura.jpg" alt="Magnus Lura — Bygg og Graving AS" className="l2-testimonial-foto"/>
+          </div>
+          <div className="l2-testimonial-innhold">
+            <div className="l2-testimonial-sitattegn">"</div>
+            <blockquote className="l2-testimonial-sitat">
+              Med Prismal er tilbudet klart rett etter befaringen. Ryddigere, mer profesjonelt og raskere enn noe jeg har brukt før — og kundene merker det.
+            </blockquote>
+            <div className="l2-testimonial-person">
+              <span className="l2-testimonial-navn">Magnus Lura</span>
+              <span className="l2-testimonial-firma">Bygg og Graving AS</span>
+            </div>
+          </div>
+        </div>
+        <button className="l2-cta l2-testimonial-cta" onClick={onRegistrer}>
+          Prøv gratis — 3 tilbud uten kredittkort
+        </button>
+      </div>
+    </section>
+  )
+}
+
 function IkonLyn() {
   return (
     <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
