@@ -58,6 +58,10 @@ export function AuthProvider({ children }) {
   async function registrer(epost, passord) {
     const { error } = await supabase.auth.signUp({ email: epost, password: passord })
     if (error) throw error
+    // Meta Pixel: spor vellykket registrering for konverteringsoptimering
+    if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
+      window.fbq('track', 'CompleteRegistration')
+    }
   }
 
   async function loggUt() {
