@@ -1535,9 +1535,10 @@ textarea { resize: vertical; }
   box-shadow: 0 8px 28px rgba(99,102,241,0.45);
 }
 .l2-cta-hint {
-  margin-top: 10px;
-  font-size: 11px;
-  color: #6b7280;
+  margin-top: 8px;
+  font-size: 13px;
+  color: #374151;
+  font-weight: 500;
   letter-spacing: 0.01em;
 }
 .l2-cta-rad {
