@@ -265,10 +265,7 @@ export default function Landingsside({ onStart, onRegistrer }) {
                 <button className="l2-cta" onClick={onRegistrer}>Start gratis — 3 tilbud inkludert →</button>
                 <p className="l2-cta-hint">Ingen kredittkort nødvendig</p>
                 <p className="l2-stripe-trygg">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" style={{marginRight:4, verticalAlign:'middle'}}>
-                    <path d="M12 2L4 5v6c0 5.25 3.5 10.15 8 11.35C16.5 21.15 20 16.25 20 11V5L12 2z" fill="#4ade80"/>
-                  </svg>
-                  Sikker betaling via <strong>Stripe</strong> — Prismal ser aldri kortopplysningene dine
+                  🔒 Sikker betaling via <strong>Stripe</strong> — vi ser aldri kortopplysningene dine
                 </p>
               </div>
             </div>
