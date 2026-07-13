@@ -9,7 +9,7 @@ const FAQ_LISTE = [
   },
   {
     sp: 'Kan jeg bruke min egen logo og firmainformasjon?',
-    sv: 'Ja. Du laster opp logo og fyller inn firmainfo én gang — det hentes automatisk på alle fremtidige tilbud, uavhengig av hvilken enhet du bruker.'
+    sv: 'Ja. Du laster opp logo og fyller inn firmainfo én gang — det hentes automatisk på alle fremtidige tilbud på samme enhet. Med Pro-abonnement synkroniseres alt i skyen, slik at firmainfo og logo er tilgjengelig på alle enheter du logger inn på.'
   },
   {
     sp: 'Hvor finner jeg lenken til Facebook-siden min?',
@@ -29,7 +29,7 @@ const FAQ_LISTE = [
   },
   {
     sp: 'Kan jeg lagre kunder og materialer?',
-    sv: 'Ja. Kunder lagres ved å trykke «Lagre kunde» — deretter søkes de opp på navn eller mobilnummer i fremtidige tilbud. Materialer lagres automatisk i et personlig bibliotek med priser, og du oppdaterer kun antall fra gang til gang. Alt synkroniseres i skyen og er tilgjengelig på alle enheter.'
+    sv: 'Ja. Kunder lagres ved å trykke «Lagre kunde» — deretter søkes de opp på navn eller mobilnummer i fremtidige tilbud. Materialer lagres automatisk i et personlig bibliotek med priser, og du oppdaterer kun antall fra gang til gang. Med Pro synkroniseres alt i skyen og er tilgjengelig på alle enheter.'
   },
   {
     sp: 'Hvordan avslutter jeg abonnementet?',

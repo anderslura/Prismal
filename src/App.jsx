@@ -388,7 +388,6 @@ function AppInnhold() {
                         setVisHamburger(false)
                         setTimeout(() => {
                           const el = document.getElementById(id)
-                          console.log('[NAV]', id, el, el ? el.getBoundingClientRect() : 'NOT FOUND')
                           if (!el) return
                           el.scrollIntoView({ behavior: 'smooth', block: 'start' })
                         }, 100)
