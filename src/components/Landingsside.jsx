@@ -256,7 +256,7 @@ export default function Landingsside({ onStart, onRegistrer }) {
                 <span className="l2-tittel-grad">På minutter.</span>
               </h1>
               <ul className="l2-punkter l2-punkter-hero">
-                <li>Alt lagres — firmainfo, kunder og prislister. Nytt tilbud på 2 min</li>
+                <li>Firmainfo og prislister huskes — nytt tilbud på 2 min (synkronisert på alle enheter med Pro)</li>
                 <li>Tilbudet sendes til kunden på e-post — du får alltid en kopi</li>
                 <li>Ingen nedlasting — fungerer på mobil og PC, send rett fra bilen</li>
                 <li>3 gratis tilbud — deretter 59 kr/mnd, ingen binding</li>
