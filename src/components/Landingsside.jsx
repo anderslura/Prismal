@@ -309,10 +309,10 @@ export default function Landingsside({ onStart, onRegistrer }) {
       </section>
 
       {/* ── TESTIMONIAL ── */}
-      <TestimonialSeksjon onRegistrer={onRegistrer} />
+      <div id="testimonial"><TestimonialSeksjon onRegistrer={onRegistrer} /></div>
 
       {/* ── PRIS ── */}
-      <section className="l2-pris">
+      <section id="pris" className="l2-pris">
         <p className="l2-pris-overst">Enkel prising</p>
         <h2 className="l2-pris-tittel">Prøv gratis. Fortsett når du er klar.</h2>
         <div className="l2-pro-solo">
@@ -365,7 +365,7 @@ export default function Landingsside({ onStart, onRegistrer }) {
       </div>
 
       {/* ── PITCH ── */}
-      <section className="l2-pitch">
+      <section id="hvorfor" className="l2-pitch">
         <div className="l2-pitch-inner">
           <p className="l2-pitch-overst">Hvorfor Prismal?</p>
           <h2 className="l2-pitch-tittel">Tilbud som vinner jobber — ikke mister dem</h2>
@@ -427,7 +427,7 @@ export default function Landingsside({ onStart, onRegistrer }) {
 
 
       {/* ── FAQ ── */}
-      <FaqSeksjon />
+      <div id="faq"><FaqSeksjon /></div>
 
 
       {/* ── LIGHTBOX ── */}
