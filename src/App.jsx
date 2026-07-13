@@ -387,8 +387,13 @@ function AppInnhold() {
                       <button key={id} className="hamburger-lenke" onClick={() => {
                         setVisHamburger(false)
                         setTimeout(() => {
-                          document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                        }, 80)
+                          const el = document.getElementById(id)
+                          if (!el) return
+                          let y = 0, node = el
+                          while (node) { y += node.offsetTop; node = node.offsetParent }
+                          const headerH = document.querySelector('.app-header')?.offsetHeight || 64
+                          document.documentElement.scrollTo({ top: Math.max(0, y - headerH - 8), behavior: 'smooth' })
+                        }, 150)
                       }}>{label}</button>
                     ))}
                   </nav>
