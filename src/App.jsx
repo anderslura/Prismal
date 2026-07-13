@@ -386,20 +386,10 @@ function AppInnhold() {
                       <button key={id} className="hamburger-lenke" onClick={() => {
                         setVisHamburger(false)
                         setTimeout(() => {
-                          const el = document.getElementById(id)
-                          if (!el) return
-                          const offset = document.querySelector('.app-header')?.offsetHeight || 64
-                          const y = el.getBoundingClientRect().top + window.scrollY - offset - 8
-                          window.scrollTo({ top: y, behavior: 'smooth' })
-                        }, 50)
+                          document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                        }, 80)
                       }}>{label}</button>
                     ))}
-                    <div className="hamburger-divider" />
-                    <button className="hamburger-lenke hamburger-webmal" onClick={() => setVisHamburger(false)}>
-                      <span className="hamburger-webmal-ikon">🌐</span>
-                      Webmal
-                      <span className="hamburger-webmal-tag">Kommer</span>
-                    </button>
                   </nav>
                 </>)}
               </div>
