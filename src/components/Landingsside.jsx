@@ -157,6 +157,7 @@ export default function Landingsside({ onStart, onRegistrer }) {
   const [lightbox, setLightbox] = useState(false)
   const pdfContainerRef = useRef(null)
   const [visStickyMobilCta, setVisStickyMobilCta] = useState(false)
+  const [visStripeInfo, setVisStripeInfo] = useState(false)
 
   const scrollTilDemo = () => {
     document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -245,7 +246,7 @@ export default function Landingsside({ onStart, onRegistrer }) {
 
           {/* Badge — sentrert øverst */}
           <div className="l2-hero-topp">
-            <div className="l2-badge">Spar tid. Fremstå profesjonell. Ikke mist kunden.</div>
+            <div className="l2-badge">Spar tid. Vinn flere kunder.</div>
           </div>
 
           {/* Midtseksjon — tekst + PDF side om side */}
@@ -265,8 +266,22 @@ export default function Landingsside({ onStart, onRegistrer }) {
                 <button className="l2-cta" onClick={onRegistrer}>Start gratis — 3 tilbud inkludert →</button>
                 <p className="l2-cta-hint">Ingen kredittkort nødvendig</p>
                 <p className="l2-stripe-trygg">
-                  🔒 Sikker betaling via <strong>Stripe</strong> — vi ser aldri kortopplysningene dine
+                  <span className="l2-stripe-check">✓</span> Sikker betaling via <strong>Stripe</strong>
+                  <button className="l2-stripe-info-btn" onClick={() => setVisStripeInfo(true)} aria-label="Hva er Stripe?">?</button>
                 </p>
+
+              {visStripeInfo && (
+                <div className="l2-stripe-overlay" onClick={() => setVisStripeInfo(false)}>
+                  <div className="l2-stripe-modal" onClick={e => e.stopPropagation()}>
+                    <button className="l2-stripe-modal-lukk" onClick={() => setVisStripeInfo(false)}>×</button>
+                    <h3>Hvorfor er dette trygt?</h3>
+                    <p><strong>Stripe</strong> er verdens ledende betalingsløsning — brukt av Amazon, Google og millioner av bedrifter verden over.</p>
+                    <p>Kortopplysningene dine går direkte til Stripe. Prismal ser dem aldri — de lagres ikke hos oss.</p>
+                    <p>Du kan verifisere sikkerheten selv: se etter <strong>låseikonet 🔒</strong> i nettleserens adressefelt og at adressen starter med <strong>https://</strong> under betaling.</p>
+                    <p>Stripe er sertifisert til <strong>PCI DSS nivå 1</strong> — den høyeste sikkerhetsstandarden som finnes for kortbetaling.</p>
+                  </div>
+                </div>
+              )}
               </div>
             </div>
 
