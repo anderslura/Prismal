@@ -382,6 +382,7 @@ function AppInnhold() {
                       { label: 'Hvorfor Prismal?', id: 'hvorfor' },
                       { label: 'Se demo', id: 'demo' },
                       { label: 'Spørsmål', id: 'faq' },
+                      { label: 'Kontakt oss', id: 'kontakt' },
                     ].map(({ label, id }) => (
                       <button key={id} className="hamburger-lenke" onClick={() => {
                         setVisHamburger(false)
@@ -523,7 +524,7 @@ function AppInnhold() {
         </Suspense>
       </main>
 
-      <footer className="app-footer">
+      <footer id="kontakt" className="app-footer">
         <p>© {new Date().getFullYear()} Hjelpeportalen AS · Org.nr 937141319 · prismal.no</p>
         <p style={{ marginTop: '4px', fontSize: '0.78rem', opacity: 0.6 }}>
           <button className="footer-lenke" onClick={() => setVisPersonvern('personvern')}>Personvernerklæring</button>

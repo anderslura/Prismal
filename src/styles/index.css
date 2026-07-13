@@ -1262,7 +1262,7 @@ textarea { resize: vertical; }
    LANDING v3 — kompakt hero · Apple glass-kort
    ===================================================== */
 
-.l2-wrapper { width: 100%; overflow-x: hidden; }
+.l2-wrapper { width: 100%; overflow-x: clip; }
 
 /* ── HERO — lys, moderne ── */
 .l2-hero {
