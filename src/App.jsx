@@ -363,6 +363,9 @@ function AppInnhold() {
               <button className="btn btn-secondary" onClick={() => setVisLogin('logginn')}>Logg inn</button>
             )}
             {steg === 'landing' && (<>
+              <button className="btn btn-primary" onClick={() => bruker ? setSteg('skjema') : setVisLogin('registrer')}>
+                {bruker ? 'Lag tilbud →' : 'Kom i gang →'}
+              </button>
               <div className="hamburger-wrapper">
                 <button
                   className="hamburger-knapp"
@@ -383,16 +386,23 @@ function AppInnhold() {
                       <button key={id} className="hamburger-lenke" onClick={() => {
                         setVisHamburger(false)
                         setTimeout(() => {
-                          document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                          const el = document.getElementById(id)
+                          if (!el) return
+                          const offset = document.querySelector('.app-header')?.offsetHeight || 64
+                          const y = el.getBoundingClientRect().top + window.scrollY - offset - 8
+                          window.scrollTo({ top: y, behavior: 'smooth' })
                         }, 50)
                       }}>{label}</button>
                     ))}
+                    <div className="hamburger-divider" />
+                    <button className="hamburger-lenke hamburger-webmal" onClick={() => setVisHamburger(false)}>
+                      <span className="hamburger-webmal-ikon">🌐</span>
+                      Webmal
+                      <span className="hamburger-webmal-tag">Kommer</span>
+                    </button>
                   </nav>
                 </>)}
               </div>
-              <button className="btn btn-primary" onClick={() => bruker ? setSteg('skjema') : setVisLogin('registrer')}>
-                {bruker ? 'Lag tilbud →' : 'Kom i gang →'}
-              </button>
             </>)}
             {/* Profilmeny */}
             {bruker && (
