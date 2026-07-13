@@ -108,6 +108,7 @@ function AppInnhold() {
   const [checkoutLaster, setCheckoutLaster] = useState(false)
   const [portalLaster, setPortalLaster]     = useState(false)
   const [visProfilMeny, setVisProfilMeny]   = useState(false)
+  const [visHamburger, setVisHamburger]     = useState(false)
   const [proMelding, setProMelding]         = useState(null)
 
   // ── Håndter Stripe redirect-parametere ──────────────────────────────
@@ -361,11 +362,38 @@ function AppInnhold() {
             {!bruker && (
               <button className="btn btn-secondary" onClick={() => setVisLogin('logginn')}>Logg inn</button>
             )}
-            {steg === 'landing' && (
+            {steg === 'landing' && (<>
+              <div className="hamburger-wrapper">
+                <button
+                  className="hamburger-knapp"
+                  onClick={() => setVisHamburger(v => !v)}
+                  aria-label="Navigasjonsmeny"
+                >
+                  <span /><span /><span />
+                </button>
+                {visHamburger && (<>
+                  <div className="hamburger-backdrop" onClick={() => setVisHamburger(false)} />
+                  <nav className="hamburger-meny">
+                    {[
+                      { label: 'Pris', id: 'pris' },
+                      { label: 'Hvorfor Prismal?', id: 'hvorfor' },
+                      { label: 'Se demo', id: 'demo' },
+                      { label: 'Spørsmål', id: 'faq' },
+                    ].map(({ label, id }) => (
+                      <button key={id} className="hamburger-lenke" onClick={() => {
+                        setVisHamburger(false)
+                        setTimeout(() => {
+                          document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                        }, 50)
+                      }}>{label}</button>
+                    ))}
+                  </nav>
+                </>)}
+              </div>
               <button className="btn btn-primary" onClick={() => bruker ? setSteg('skjema') : setVisLogin('registrer')}>
                 {bruker ? 'Lag tilbud →' : 'Kom i gang →'}
               </button>
-            )}
+            </>)}
             {/* Profilmeny */}
             {bruker && (
               <div className="profil-meny-wrapper">
