@@ -1,8 +1,5 @@
 /* === RESET & BASE === */
-html { scroll-behavior: smooth; }
-.snap-landing {
-  scroll-snap-type: y proximity;
-}
+html { scroll-behavior: smooth; scroll-snap-type: y proximity; }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -4931,14 +4928,14 @@ textarea { resize: vertical; }
 }
 
 /* ── Scroll snap — landingssiden ─────────────────────────── */
-.snap-landing .l2-hero,
-.snap-landing .l2-testimonial,
-.snap-landing .l2-pris,
-.snap-landing .l2-pitch,
-.snap-landing .l2-fe,
-.snap-landing .demo-seksjon,
-.snap-landing .l2-faq,
-.snap-landing .app-footer {
+.l2-hero,
+.l2-testimonial,
+.l2-pris,
+.l2-pitch,
+.l2-fe,
+.demo-seksjon,
+.l2-faq,
+.app-footer {
   scroll-snap-align: start;
   scroll-snap-stop: normal;
 }

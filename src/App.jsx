@@ -491,7 +491,7 @@ function AppInnhold() {
         </div>
       )}
 
-      <main className={`app-main${steg === 'landing' ? ' app-main--landing snap-landing' : ''}`}>
+      <main className={`app-main${steg === 'landing' ? ' app-main--landing' : ''}`}>
         <Suspense fallback={<div className="auth-laster">Laster...</div>}>
         {steg === 'landing' ? (
           <Landingsside onStart={() => bruker ? setSteg('skjema') : setVisLogin('registrer')} onRegistrer={() => bruker ? setSteg('skjema') : setVisLogin('registrer')} />
