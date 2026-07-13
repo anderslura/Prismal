@@ -256,10 +256,10 @@ export default function Landingsside({ onStart, onRegistrer }) {
                 <span className="l2-tittel-grad">På minutter.</span>
               </h1>
               <ul className="l2-punkter l2-punkter-hero">
-                <li>Firmainfo, kunder og prislister er lagret — nytt tilbud klart på 2 min fra bilen</li>
-                <li>Send PDF-tilbud direkte fra mobilen — ingen nedlasting, fungerer på mobil og PC</li>
-                <li>Du og kunden får kopi på e-post — all historikk lagres på kontoen din</li>
-                <li>3 gratis tilbud ved registrering — deretter 59 kr/mnd, ingen binding</li>
+                <li>Alt lagres — firmainfo, kunder og prislister. Nytt tilbud på 2 min</li>
+                <li>Tilbudet sendes til kunden på e-post — du får alltid en kopi</li>
+                <li>Ingen nedlasting — fungerer på mobil og PC, send rett fra bilen</li>
+                <li>3 gratis tilbud — deretter 59 kr/mnd, ingen binding</li>
               </ul>
               <div className="l2-hero-cta">
                 <button className="l2-cta" onClick={onRegistrer}>Start gratis — 3 tilbud inkludert →</button>
