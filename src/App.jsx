@@ -388,12 +388,10 @@ function AppInnhold() {
                         setVisHamburger(false)
                         setTimeout(() => {
                           const el = document.getElementById(id)
+                          console.log('[NAV]', id, el, el ? el.getBoundingClientRect() : 'NOT FOUND')
                           if (!el) return
-                          let y = 0, node = el
-                          while (node) { y += node.offsetTop; node = node.offsetParent }
-                          const headerH = document.querySelector('.app-header')?.offsetHeight || 64
-                          document.documentElement.scrollTo({ top: Math.max(0, y - headerH - 8), behavior: 'smooth' })
-                        }, 150)
+                          el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                        }, 100)
                       }}>{label}</button>
                     ))}
                   </nav>
