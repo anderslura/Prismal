@@ -163,12 +163,8 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
         <section className="skjema-seksjon">
           <h2 className="seksjon-tittel">Din bedrift</h2>
           <div className="felt-gruppe">
-            <label>Firmanavn {!isPro && <span className="pro-badge">PRO</span>}</label>
-            {isPro ? (
-              <input type="text" placeholder="Ola Nordmann AS" value={skjema.firmanavn} onChange={e => oppdater('firmanavn', e.target.value)} />
-            ) : (
-              <div className="pro-locked">🔒 Tilgjengelig på Pro — <a href="#" className="pro-lenke" onClick={e => { e.preventDefault(); onOppgrader() }}>Oppgrader (59 kr/mnd)</a></div>
-            )}
+            <label>Firmanavn</label>
+            <input type="text" placeholder="Ola Nordmann AS" value={skjema.firmanavn} onChange={e => oppdater('firmanavn', e.target.value)} />
           </div>
           <div className="felt-rad">
             <div className="felt-gruppe">
@@ -215,36 +211,32 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
             <span className="felt-hint">Du blir mva-pliktig når omsetningen passerer 50 000 kr i en 12-måneders periode. Før det — la denne stå uhuket, da vises tilbud uten mva-tillegg.</span>
           </div>
           <div className="felt-gruppe">
-            <label>Logo på PDF {!isPro && <span className="pro-badge">PRO</span>}</label>
-            {isPro ? (
-              <div className="logo-opplasting">
-                {skjema.logoUrl ? (
-                  <div className="logo-preview">
-                    <img src={skjema.logoUrl} alt="Logo" className="logo-img" />
-                    <button className="btn-fjern" onClick={async () => { oppdater('logoUrl', ''); try { await slettLogo() } catch {} }}>×</button>
-                  </div>
-                ) : (
-                  <label className={`logo-velg-knapp${logoLaster ? ' laster' : ''}`}>
-                    {logoLaster ? 'Laster opp…' : 'Velg logofil (PNG/JPG/SVG)'}
-                    <input type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" style={{display:'none'}} disabled={logoLaster} onChange={async e => {
-                      const fil = e.target.files[0]; if (!fil) return
-                      setLogoLaster(true)
-                      try {
-                        const url = await uploadLogo(fil)
-                        oppdater('logoUrl', url)
-                      } catch (err) {
-                        console.error('Logo opplasting feilet:', err)
-                        alert('Logo-opplasting feilet. Prøv en mindre fil.')
-                      } finally {
-                        setLogoLaster(false)
-                      }
-                    }} />
-                  </label>
-                )}
-              </div>
-            ) : (
-              <div className="pro-locked">🔒 Tilgjengelig på Pro-plan (59 kr/mnd)</div>
-            )}
+            <label>Logo på PDF</label>
+            <div className="logo-opplasting">
+              {skjema.logoUrl ? (
+                <div className="logo-preview">
+                  <img src={skjema.logoUrl} alt="Logo" className="logo-img" />
+                  <button className="btn-fjern" onClick={async () => { oppdater('logoUrl', ''); try { await slettLogo() } catch {} }}>×</button>
+                </div>
+              ) : (
+                <label className={`logo-velg-knapp${logoLaster ? ' laster' : ''}`}>
+                  {logoLaster ? 'Laster opp…' : 'Velg logofil (PNG/JPG/SVG)'}
+                  <input type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" style={{display:'none'}} disabled={logoLaster} onChange={async e => {
+                    const fil = e.target.files[0]; if (!fil) return
+                    setLogoLaster(true)
+                    try {
+                      const url = await uploadLogo(fil)
+                      oppdater('logoUrl', url)
+                    } catch (err) {
+                      console.error('Logo opplasting feilet:', err)
+                      alert('Logo-opplasting feilet. Prøv en mindre fil.')
+                    } finally {
+                      setLogoLaster(false)
+                    }
+                  }} />
+                </label>
+              )}
+            </div>
           </div>
           {(
             <div className="firma-knapp-rad">
@@ -253,7 +245,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                   className={`btn-firma-lagre${firmaStatus === 'ok' ? ' lagret' : firmaStatus === 'feil' ? ' feil' : ''}${!isPro ? ' pro-locked-btn' : ''}`}
                   disabled={firmaStatus === 'laster' || !isPro}
                   onClick={async () => {
-                    if (!isPro) { onOppgrader(); return }
+                    if (!isPro) { onOppgrader(); return }  // Supabase-lagring krever Pro
                     setFirmaStatus('laster')
                     try {
                       await lagreFirma({
@@ -272,7 +264,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                     }
                   }}
                 >
-                  {!isPro ? '🔒 Lagre bedriftsprofil' : firmaStatus === 'laster' ? 'Lagrer…' : firmaStatus === 'ok' ? '✓ Lagret' : firmaStatus === 'feil' ? 'Feil – prøv igjen' : 'Lagre bedriftsprofil'}
+                  {firmaStatus === 'laster' ? 'Lagrer…' : firmaStatus === 'ok' ? '✓ Lagret' : firmaStatus === 'feil' ? 'Feil – prøv igjen' : isPro ? 'Lagre bedriftsprofil' : 'Lagre til sky (Pro)'}
                 </button>
                 <button
                   className={`btn-firma-hent${!isPro ? ' pro-locked-btn' : ''}`}
@@ -294,7 +286,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
                       if (f.facebook_url)  oppdater('firmaFacebookUrl',  f.facebook_url)
                     } catch (e) { console.error('Hent firma feilet:', e) }
                   }}
-                >{!isPro ? '🔒 Hent lagret profil' : '↩ Hent lagret profil'}</button>
+                >{'↩ Hent lagret profil'}</button>
               </div>
               <div className="firma-knapp-sekundær">
                 <button

@@ -87,8 +87,8 @@ function AppInnhold() {
 
   const [skjema, setSkjema] = useState(() => ({
     ...TOM_SKJEMA,
-    ...(isPro ? hentLagretFirma() : {}),
-    logoUrl: isPro ? hentLagretLogo() : '',
+    ...hentLagretFirma(),
+    logoUrl: hentLagretLogo(),
     arbeidere: [{ id: 1, navn: 'Fagarbeider', timer: '', timepris: hentLagretTimepris() }],
     materialer: hentLagretMaterialMal(),
     kjoring: hentLagretKjoringRad(),
@@ -190,7 +190,6 @@ function AppInnhold() {
   }, [bruker])
 
   useEffect(() => {
-    if (!isPro) return
     const firma = {
       firmanavn: skjema.firmanavn, firmaTelefon: skjema.firmaTelefon,
       firmaEpost: skjema.firmaEpost, firmaAdresse: skjema.firmaAdresse,
@@ -202,7 +201,7 @@ function AppInnhold() {
   }, [skjema.firmanavn, skjema.firmaTelefon, skjema.firmaEpost, skjema.firmaAdresse, skjema.firmaOrgnr, skjema.firmaNettside, skjema.firmaMvaPliktig, skjema.firmaFacebookNavn, skjema.firmaFacebookUrl, isPro])
 
   useEffect(() => {
-    if (isPro) localStorage.setItem('logoUrl', skjema.logoUrl || '')
+    localStorage.setItem('logoUrl', skjema.logoUrl || '')
   }, [skjema.logoUrl, isPro])
 
   useEffect(() => {
@@ -266,8 +265,8 @@ function AppInnhold() {
     const forhandslagte = lagredeMat.map(l => ({ id: Date.now() + Math.random(), navn: l.navn, antall: 0, pris: Number(l.pris) || 0, sum: 0, hasPaaslag: l.hasPaaslag }))
     setSkjema({
       ...TOM_SKJEMA,
-      ...(isPro ? hentLagretFirma() : {}),
-      logoUrl: isPro ? hentLagretLogo() : '',
+      ...hentLagretFirma(),
+      logoUrl: hentLagretLogo(),
       arbeidere: [{ id: Date.now(), navn: 'Fagarbeider', timer: '', timepris: hentLagretTimepris() }],
       materialer: forhandslagte,
       kjoring: hentLagretKjoringRad(),
@@ -452,7 +451,7 @@ function AppInnhold() {
             <span>Du har brukt alle {MAKS_GRATIS_FORSOK} gratis tilbud — oppgrader til Pro for å fortsette</span>
           ) : (
             <span>
-              <><strong>{forsokGjenstaende} av {MAKS_GRATIS_FORSOK} gratis tilbud</strong> gjenstår · Firmainfo og logo krever Pro</>
+              <><strong>{forsokGjenstaende} av {MAKS_GRATIS_FORSOK} gratis tilbud</strong> gjenstår — oppgrader til Pro for ubegrenset bruk</>
             </span>
           )}
           <button className="btn-pro-oppgrader" onClick={() => setVisOppgrader(true)}>
