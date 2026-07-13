@@ -245,7 +245,7 @@ export default function Landingsside({ onStart, onRegistrer }) {
 
           {/* Badge — sentrert øverst */}
           <div className="l2-hero-topp">
-            <div className="l2-badge">For fagfolk som sender tilbud</div>
+            <div className="l2-badge">Den som svarer først vinner jobben</div>
           </div>
 
           {/* Midtseksjon — tekst + PDF side om side */}
@@ -256,8 +256,9 @@ export default function Landingsside({ onStart, onRegistrer }) {
                 <span className="l2-tittel-grad">På minutter.</span>
               </h1>
               <ul className="l2-punkter l2-punkter-hero">
-                <li>Skriv oppdraget med egne ord — AI lager komplett PDF-tilbud på 2 min</li>
-                <li>Send direkte fra mobilen — ingen installasjon, fungerer rett fra bilen</li>
+                <li>Firmainfo, kunder og prislister er lagret — nytt tilbud klart på 2 min fra bilen</li>
+                <li>Send PDF-tilbud direkte fra mobilen — ingen nedlasting, fungerer på mobil og PC</li>
+                <li>Du og kunden får kopi på e-post — all historikk lagres på kontoen din</li>
                 <li>3 gratis tilbud ved registrering — deretter 59 kr/mnd, ingen binding</li>
               </ul>
               <div className="l2-hero-cta">
