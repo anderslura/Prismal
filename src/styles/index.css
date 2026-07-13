@@ -1,5 +1,8 @@
 /* === RESET & BASE === */
 html { scroll-behavior: smooth; }
+.snap-landing {
+  scroll-snap-type: y proximity;
+}
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -4716,20 +4719,20 @@ textarea { resize: vertical; }
   .demo-intro { margin-bottom: 28px; }
   .demo-grid { flex-direction: column; gap: 20px; }
   .demo-steg-nav {
-    column-count: 2;
-    column-gap: 6px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px;
     width: 100%;
+    justify-content: center;
   }
   .demo-steg-knapp {
-    display: flex;
-    width: 100%;
-    break-inside: avoid;
-    margin-bottom: 6px;
-    padding: 7px 10px;
-    justify-content: flex-start;
+    flex-direction: column;
+    width: auto;
+    padding: 4px;
+    gap: 0;
   }
-  .demo-steg-tekst { font-size: 12px; }
-  .demo-steg-sirkel { width: 22px; height: 22px; font-size: 9px; flex-shrink: 0; }
+  .demo-steg-tekst { display: none; }
+  .demo-steg-sirkel { width: 26px; height: 26px; font-size: 9px; flex-shrink: 0; }
   .demo-bilde-ramme { height: 260px; }
   .demo-bilde { max-height: 260px; }
   .demo-hint-desktop { display: none; }
@@ -4927,3 +4930,15 @@ textarea { resize: vertical; }
   scroll-margin-top: 72px;
 }
 
+/* ── Scroll snap — landingssiden ─────────────────────────── */
+.snap-landing .l2-hero,
+.snap-landing .l2-testimonial,
+.snap-landing .l2-pris,
+.snap-landing .l2-pitch,
+.snap-landing .l2-fe,
+.snap-landing .demo-seksjon,
+.snap-landing .l2-faq,
+.snap-landing .app-footer {
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
+}
