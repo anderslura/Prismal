@@ -1450,6 +1450,18 @@ textarea { resize: vertical; }
   grid-template-columns: 1fr;
   max-width: 480px;
 }
+.l2-stripe-trygg {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #4b5563;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.l2-stripe-trygg strong {
+  color: #1e293b;
+}
 .l2-badge {
   display: inline-block;
   background: rgba(99,102,241,0.10);

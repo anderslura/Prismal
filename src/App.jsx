@@ -497,7 +497,7 @@ function AppInnhold() {
       </main>
 
       <footer className="app-footer">
-        <p>© {new Date().getFullYear()} Hjelpeportalen AS · prismal.no</p>
+        <p>© {new Date().getFullYear()} Hjelpeportalen AS · Org.nr 937141319 · prismal.no</p>
         <p style={{ marginTop: '4px', fontSize: '0.78rem', opacity: 0.6 }}>
           <button className="footer-lenke" onClick={() => setVisPersonvern('personvern')}>Personvernerklæring</button>
           {' · '}
