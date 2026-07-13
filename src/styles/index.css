@@ -1,5 +1,5 @@
 /* === RESET & BASE === */
-html { scroll-behavior: smooth; scroll-snap-type: y proximity; }
+html { scroll-behavior: smooth; }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -4927,15 +4927,3 @@ textarea { resize: vertical; }
   scroll-margin-top: 72px;
 }
 
-/* ── Scroll snap — landingssiden ─────────────────────────── */
-.l2-hero,
-.l2-testimonial,
-.l2-pris,
-.l2-pitch,
-.l2-fe,
-.demo-seksjon,
-.l2-faq,
-.app-footer {
-  scroll-snap-align: start;
-  scroll-snap-stop: normal;
-}
