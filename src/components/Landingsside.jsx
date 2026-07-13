@@ -246,7 +246,7 @@ export default function Landingsside({ onStart, onRegistrer }) {
 
           {/* Badge — sentrert øverst */}
           <div className="l2-hero-topp">
-            <div className="l2-badge">Spar tid. Vinn flere kunder.</div>
+            <div className="l2-badge">Det eneste verktøyet som gir deg jobben</div>
           </div>
 
           {/* Midtseksjon — tekst + PDF side om side */}
