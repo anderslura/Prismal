@@ -109,6 +109,7 @@ function AppInnhold() {
   const [portalLaster, setPortalLaster]     = useState(false)
   const [visProfilMeny, setVisProfilMeny]   = useState(false)
   const [visHamburger, setVisHamburger]     = useState(false)
+  const kanBrukeAppen = isPro || kanBrukeForsok
   const [proMelding, setProMelding]         = useState(null)
 
   // ── Håndter Stripe redirect-parametere ──────────────────────────────
@@ -152,7 +153,7 @@ function AppInnhold() {
 
   // ── Last firmaprofil fra Supabase ved innlogging ─────────────────────
   useEffect(() => {
-    if (!bruker || !isPro) return
+    if (!bruker || !kanBrukeAppen) return
     hentFirma().then(f => {
       if (!f) return
       if (f.firmanavn)  oppdater('firmanavn',    f.firmanavn)
@@ -349,7 +350,7 @@ function AppInnhold() {
             {steg === 'historikk' && (
               <button className="btn btn-secondary" onClick={() => setSteg('skjema')}>← Tilbake</button>
             )}
-            {bruker && isPro && steg !== 'landing' && steg !== 'historikk' && (
+            {bruker && kanBrukeAppen && steg !== 'landing' && steg !== 'historikk' && (
               <button className="btn btn-secondary historikk-btn" style={{ fontSize: '0.85rem' }} onClick={() => setSteg('historikk')}>
                 Historikk
               </button>
@@ -504,7 +505,7 @@ function AppInnhold() {
             feil={feil}
             prisliste={prisliste}
             setPrisliste={setPrisliste}
-            isPro={isPro}
+            isPro={kanBrukeAppen}
             onOppgrader={() => setVisOppgrader(true)}
           />
         ) : steg === 'historikk' ? (
@@ -515,11 +516,11 @@ function AppInnhold() {
             oppdaterTekst={(tekst) => oppdater('tilbudstekst', tekst)}
             onLastNed={async () => {
             const { lastNedPDF } = await import('./api/pdf.js')
-            await lastNedPDF(skjema, isPro)
+            await lastNedPDF(skjema, kanBrukeAppen)
           }}
             onTilbake={() => setSteg('skjema')}
             onNyttTilbud={nullstill}
-            isPro={isPro}
+            isPro={kanBrukeAppen}
             bruker={bruker}
           />
         )}
