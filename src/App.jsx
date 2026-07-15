@@ -253,7 +253,7 @@ function AppInnhold() {
     try {
       const tekst = await genererTilbudstekst(skjema)
       setSkjema(prev => ({ ...prev, tilbudstekst: tekst }))
-      registrerForsok()
+      await registrerForsok()
       setSteg('preview')
     } catch (e) {
       setFeil('Kunne ikke generere tilbudstekst. Prøv igjen.')

@@ -74,15 +74,17 @@ export function AuthProvider({ children }) {
 
     const ny = dbGenerasjoner + 1
     setDbGenerasjoner(ny)
-    // Bruk upsert i stedet for update: nye brukere uten profiles-rad
-    // ville ellers få en stille no-op, slik at telleren aldri persisteres
-    // og gratis-grensen enkelt kan omgås med page-refresh.
-    await supabase
+    // Upsert med INSERT-policy på plass (RLS tillater nå INSERT for egen rad).
+    // generasjoner_brukt settes eksplisitt — ikke inkrementert i DB for å unngå
+    // race conditions. INSERT-policy kreves fordi Postgres sjekker INSERT-rettighet
+    // selv ved conflict (ON CONFLICT DO UPDATE).
+    const { error } = await supabase
       .from('profiles')
       .upsert(
-        { bruker_id: bruker.id, generasjoner_brukt: ny },
+        { bruker_id: bruker.id, generasjoner_brukt: ny, pro: dbPro },
         { onConflict: 'bruker_id', ignoreDuplicates: false }
       )
+    if (error) console.error('[registrerForsok] Supabase-feil:', error)
   }
 
   // ── Avledede verdier ─────────────────────────────────────────────────
