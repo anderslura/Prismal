@@ -149,6 +149,10 @@ function AppInnhold() {
       setVisLogin(false)
       setSteg('skjema')
     }
+    if (!bruker) {
+      setSteg('landing')
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
   }, [bruker])
 
   // ── Last firmaprofil fra Supabase ved innlogging ─────────────────────
