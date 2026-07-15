@@ -373,7 +373,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
               {skjema.arbeidere.length > 1 && <button className="btn-fjern" onClick={() => oppdater('arbeidere', skjema.arbeidere.filter(x => x.id !== a.id))}>×</button>}
             </div>
           ))}
-          {totalArbeid > 0 && <p className="kalkyle-linje">Totalt: <strong>{formaterKr(totalArbeid)}</strong></p>}
+          {totalArbeid > 0 && <p className="kalkyle-linje">Totalt: <strong>{formaterKr(totalArbeid)}</strong>{skjema.firmaMvaPliktig !== false && <span className="kalkyle-mva-hint"> eks. mva</span>}</p>}
         </section>
 
         {/* MATERIALER */}
