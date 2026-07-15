@@ -571,13 +571,13 @@ function AppInnhold() {
         <div className="modal-bakgrunn" onClick={() => setVisOppgrader(false)}>
           <div className="modal-boks oppgrader-modal" onClick={e => e.stopPropagation()}>
             <button className="modal-lukk" onClick={() => setVisOppgrader(false)}>✕</button>
-            <div className="oppgrader-ikon">⚡</div>
+            <div className="oppgrader-logo"><PrismalLogo /></div>
             <h2>Oppgrader til Pro</h2>
             <p>Du har brukt alle {MAKS_GRATIS_FORSOK} gratis forsøk.</p>
             <ul className="oppgrader-liste">
-              <li>✓ Ubegrenset antall tilbud — send så mange du vil</li>
-              <li>✓ Tilbudshistorikk — finn igjen alle tilbud du har sendt</li>
-              <li>✓ Sky-synkronisering — samme data på mobil, nettbrett og PC</li>
+              <li>✓ Ubegrenset antall tilbud</li>
+              <li>✓ Tilbudshistorikk — alle tilbud samlet</li>
+              <li>✓ Sky-synkronisering på alle enheter</li>
               <li>✓ Ingen binding — avslutt når du vil</li>
             </ul>
             <div className="oppgrader-pris">59 kr <span>/mnd</span></div>
