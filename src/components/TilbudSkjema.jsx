@@ -363,7 +363,7 @@ export default function TilbudSkjema({ skjema, oppdater, onGenerer, laster, feil
             <button className="btn-lenke" onClick={leggTilArbeider}>+ Legg til rad</button>
           </div>
           <div className="arbeider-header">
-            <span>Timer</span><span>Kr/time</span><span></span><span></span>
+            <span>Timer</span><span>Kr/time{skjema.firmaMvaPliktig !== false && <small className="kalkyle-mva-hint"> eks. mva</small>}</span><span></span><span></span>
           </div>
           {skjema.arbeidere.map((a, i) => (
             <div key={a.id} className="arbeider-rad-enkel">
