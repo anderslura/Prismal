@@ -575,10 +575,10 @@ function AppInnhold() {
             <h2>Oppgrader til Pro</h2>
             <p>Du har brukt alle {MAKS_GRATIS_FORSOK} gratis forsøk.</p>
             <ul className="oppgrader-liste">
-              <li>✓ Ubegrenset antall tilbud</li>
-              <li>✓ Eget firmanavn og logo i PDF</li>
-              <li>✓ Ingen Prismal-branding</li>
-              <li>✓ Lagrede prislinjer og historikk</li>
+              <li>✓ Ubegrenset antall tilbud — send så mange du vil</li>
+              <li>✓ Tilbudshistorikk — finn igjen alle tilbud du har sendt</li>
+              <li>✓ Sky-synkronisering — samme data på mobil, nettbrett og PC</li>
+              <li>✓ Ingen binding — avslutt når du vil</li>
             </ul>
             <div className="oppgrader-pris">59 kr <span>/mnd</span></div>
             <button
