@@ -255,7 +255,7 @@ export default function Landingsside({ onStart, onRegistrer }) {
                 <span className="l2-tittel-grad">På minutter.</span>
               </h1>
               <ul className="l2-punkter l2-punkter-hero">
-                <li>Husker firma-, kunde- og prisinfo automatisk</li>
+                <li>Husker firma-, kunde- og prisinfo</li>
                 <li>PDF til kunden — du får alltid kopi</li>
                 <li>Fungerer på mobil og PC — ingen app</li>
                 <li>Skriv stikkord — AI formulerer og rettskriver</li>
