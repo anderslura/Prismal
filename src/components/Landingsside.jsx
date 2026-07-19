@@ -256,7 +256,7 @@ export default function Landingsside({ onStart, onRegistrer }) {
           <div className="l2-hero-split">
             <div className="l2-hero-tekst">
               <h1 className="l2-tittel">
-                Profesjonelle tilbud.<br />
+                Profesjonelle pristilbud.<br />
                 <span className="l2-tittel-grad">På minutter.</span>
               </h1>
               <ul className="l2-punkter l2-punkter-hero">
@@ -371,7 +371,7 @@ export default function Landingsside({ onStart, onRegistrer }) {
       <section id="hvorfor" className="l2-pitch">
         <div className="l2-pitch-inner">
           <p className="l2-pitch-overst">Hvorfor Prismal?</p>
-          <h2 className="l2-pitch-tittel">Tilbud som vinner jobber — ikke mister dem</h2>
+          <h2 className="l2-pitch-tittel">Pristilbud som vinner jobber — ikke mister dem</h2>
           <div className="l2-pitch-kort-rad">
             <div className="l2-pitch-kort">
               <h3>Ikke mist kunden på veien</h3>
