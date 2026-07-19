@@ -164,7 +164,10 @@ export default function Landingsside({ onStart, onRegistrer }) {
   }
 
   useEffect(() => {
-    const onScroll = () => setVisStickyMobilCta(window.scrollY > 420)
+    const onScroll = () => {
+      const nærBunn = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 80
+      setVisStickyMobilCta(window.scrollY > 420 && !nærBunn)
+    }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
