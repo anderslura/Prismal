@@ -247,11 +247,6 @@ export default function Landingsside({ onStart, onRegistrer }) {
         <div className="l2-hero-glow l2-glow-3" />
         <div className="l2-hero-inner">
 
-          {/* Badge — sentrert øverst */}
-          <div className="l2-hero-topp">
-            <div className="l2-badge">Det eneste verktøyet som gir deg jobben</div>
-          </div>
-
           {/* Midtseksjon — tekst + PDF side om side */}
           <div className="l2-hero-split">
             <div className="l2-hero-tekst">
@@ -260,12 +255,11 @@ export default function Landingsside({ onStart, onRegistrer }) {
                 <span className="l2-tittel-grad">På minutter.</span>
               </h1>
               <ul className="l2-punkter l2-punkter-hero">
-                <li>Husker firmainfo — nytt tilbud på 2 min</li>
+                <li>Husker firma-, kunde- og prisinfo — klart på 2 min</li>
                 <li>PDF til kunden — du får alltid kopi</li>
                 <li>Fungerer på mobil og PC — ingen app</li>
-                <li>3 gratis tilbud — 59 kr/mnd, ingen binding</li>
-                <li>Lagret i skyen — tilgjengelig på alle enheter</li>
                 <li>Skriv stikkord — AI formulerer og rettskriver</li>
+                <li>3 gratis tilbud — 59 kr/mnd, ingen binding</li>
               </ul>
               <div className="l2-hero-cta">
                 <button className="l2-cta" onClick={onRegistrer}>Start gratis — 3 tilbud inkludert →</button>

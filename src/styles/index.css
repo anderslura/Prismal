@@ -1447,6 +1447,7 @@ textarea { resize: vertical; }
   align-items: center;
 }
 .l2-punkter-hero {
+  margin-top: 24px !important;
   grid-template-columns: 1fr !important;
   max-width: 540px;
 }
