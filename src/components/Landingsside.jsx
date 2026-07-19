@@ -264,6 +264,8 @@ export default function Landingsside({ onStart, onRegistrer }) {
                 <li>PDF til kunden — du får alltid kopi</li>
                 <li>Fungerer på mobil og PC — ingen app</li>
                 <li>3 gratis tilbud — 59 kr/mnd, ingen binding</li>
+                <li>Lagret i skyen — tilgjengelig på alle enheter</li>
+                <li>Skriv stikkord — AI formulerer og rettskriver</li>
               </ul>
               <div className="l2-hero-cta">
                 <button className="l2-cta" onClick={onRegistrer}>Start gratis — 3 tilbud inkludert →</button>
